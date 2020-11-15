@@ -10,11 +10,11 @@ import SwiftUI
 @main
 struct StyleApp: App {
     let persistenceController = PersistenceController.shared
-
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            ContentView().environmentObject(SessionStore())
         }
     }
 }
