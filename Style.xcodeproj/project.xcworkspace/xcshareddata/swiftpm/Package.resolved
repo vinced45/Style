@@ -20,12 +20,30 @@
         }
       },
       {
+        "package": "Facebook",
+        "repositoryURL": "https://github.com/facebook/facebook-ios-sdk",
+        "state": {
+          "branch": null,
+          "revision": "fa5fab33bb440eed75122459965b82c7b944d9d8",
+          "version": "8.2.0"
+        }
+      },
+      {
         "package": "Firebase",
         "repositoryURL": "https://github.com/firebase/firebase-ios-sdk",
         "state": {
           "branch": null,
           "revision": "c227152e84ad215eed0285c9df62f39e0406e455",
           "version": "7.1.0"
+        }
+      },
+      {
+        "package": "GoogleSignIn",
+        "repositoryURL": "https://github.com/darrarski/GoogleSignIn-Swift",
+        "state": {
+          "branch": null,
+          "revision": "503063ce6471ffee1d066486dc1b82a1dccde2a0",
+          "version": "0.0.5"
         }
       },
       {
