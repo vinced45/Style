@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		383A202F4895A07AC87D9B2C /* Pods_Style.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 248C908AC5529A651BECA371 /* Pods_Style.framework */; };
 		616D0D7B2560C7150007F798 /* StyleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D0D7A2560C7150007F798 /* StyleApp.swift */; };
 		616D0D7D2560C7150007F798 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D0D7C2560C7150007F798 /* ContentView.swift */; };
 		616D0D7F2560C7160007F798 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 616D0D7E2560C7160007F798 /* Assets.xcassets */; };
@@ -53,11 +52,9 @@
 		61DF1BC6258915A3005BDA1D /* AddProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DF1BC5258915A3005BDA1D /* AddProjectView.swift */; };
 		61DF1BCA258922B9005BDA1D /* ProjectDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DF1BC9258922B9005BDA1D /* ProjectDetailView.swift */; };
 		61DF1BCE25894D2E005BDA1D /* AddSceneActorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DF1BCD25894D2E005BDA1D /* AddSceneActorView.swift */; };
-		61DF1BD225895A5D005BDA1D /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 61DF1BD125895A5D005BDA1D /* Kingfisher */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		248C908AC5529A651BECA371 /* Pods_Style.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Style.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		616D0D772560C7150007F798 /* Style.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Style.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		616D0D7A2560C7150007F798 /* StyleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleApp.swift; sourceTree = "<group>"; };
 		616D0D7C2560C7150007F798 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -98,8 +95,6 @@
 		61DF1BC5258915A3005BDA1D /* AddProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectView.swift; sourceTree = "<group>"; };
 		61DF1BC9258922B9005BDA1D /* ProjectDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailView.swift; sourceTree = "<group>"; };
 		61DF1BCD25894D2E005BDA1D /* AddSceneActorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSceneActorView.swift; sourceTree = "<group>"; };
-		78381D478604139F466D4AA7 /* Pods-Style.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Style.release.xcconfig"; path = "Target Support Files/Pods-Style/Pods-Style.release.xcconfig"; sourceTree = "<group>"; };
-		A722CE76A53B4881535FDA46 /* Pods-Style.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Style.debug.xcconfig"; path = "Target Support Files/Pods-Style/Pods-Style.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,11 +110,9 @@
 				616D0D932560CADF0007F798 /* FirebaseDatabase in Frameworks */,
 				61DF1BC32588FB4E005BDA1D /* KingfisherSwiftUI in Frameworks */,
 				616D0D992560CADF0007F798 /* FirebaseStorage in Frameworks */,
-				61DF1BD225895A5D005BDA1D /* Kingfisher in Frameworks */,
 				616D0D9D2560CADF0007F798 /* FirebaseAuth in Frameworks */,
 				616D0D912560CADF0007F798 /* FirebaseFirestore in Frameworks */,
 				616D0DAA2560CF6D0007F798 /* FirebaseAnalytics in Frameworks */,
-				383A202F4895A07AC87D9B2C /* Pods_Style.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,8 +124,6 @@
 			children = (
 				616D0D792560C7150007F798 /* Style */,
 				616D0D782560C7150007F798 /* Products */,
-				616D0DA82560CF6D0007F798 /* Frameworks */,
-				DBC616C4269E4B7A221944E3 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -173,14 +164,6 @@
 				616D0D812560C7160007F798 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		616D0DA82560CF6D0007F798 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				248C908AC5529A651BECA371 /* Pods_Style.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		618926AC257F065F004184BB /* Models */ = {
@@ -270,15 +253,6 @@
 			path = "App Flow";
 			sourceTree = "<group>";
 		};
-		DBC616C4269E4B7A221944E3 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				A722CE76A53B4881535FDA46 /* Pods-Style.debug.xcconfig */,
-				78381D478604139F466D4AA7 /* Pods-Style.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -286,12 +260,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 616D0D8B2560C7160007F798 /* Build configuration list for PBXNativeTarget "Style" */;
 			buildPhases = (
-				E229007A1B4BD23A286384F2 /* [CP] Check Pods Manifest.lock */,
 				616D0D732560C7150007F798 /* Sources */,
 				616D0D742560C7150007F798 /* Frameworks */,
 				616D0D752560C7150007F798 /* Resources */,
-				3F9B6AA586DF0F507F794BEF /* [CP] Embed Pods Frameworks */,
-				4365574DF178C01FEF24A83A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -310,7 +281,6 @@
 				616D0DA92560CF6D0007F798 /* FirebaseAnalytics */,
 				6181707225621AD00008ED28 /* FacebookLogin */,
 				61DF1BC22588FB4E005BDA1D /* KingfisherSwiftUI */,
-				61DF1BD125895A5D005BDA1D /* Kingfisher */,
 			);
 			productName = Style;
 			productReference = 616D0D772560C7150007F798 /* Style.app */;
@@ -365,65 +335,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		3F9B6AA586DF0F507F794BEF /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Style/Pods-Style-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Style/Pods-Style-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Style/Pods-Style-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		4365574DF178C01FEF24A83A /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Style/Pods-Style-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Style/Pods-Style-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Style/Pods-Style-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E229007A1B4BD23A286384F2 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Style-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		616D0D732560C7150007F798 /* Sources */ = {
@@ -587,13 +498,12 @@
 		};
 		616D0D8C2560C7160007F798 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A722CE76A53B4881535FDA46 /* Pods-Style.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Style/Style.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Style/Preview Content\"";
 				DEVELOPMENT_TEAM = SP7UUHBXPL;
 				ENABLE_BITCODE = NO;
@@ -608,7 +518,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vincedavis.style;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "Movie Wardrobe Dev";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -616,13 +526,12 @@
 		};
 		616D0D8D2560C7160007F798 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 78381D478604139F466D4AA7 /* Pods-Style.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Style/Style.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Style/Preview Content\"";
 				DEVELOPMENT_TEAM = SP7UUHBXPL;
 				ENABLE_BITCODE = NO;
@@ -637,7 +546,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vincedavis.style;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "Movie Wardrobe Dev";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -748,11 +657,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 61DF1BC12588FB4E005BDA1D /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = KingfisherSwiftUI;
-		};
-		61DF1BD125895A5D005BDA1D /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 61DF1BC12588FB4E005BDA1D /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 
