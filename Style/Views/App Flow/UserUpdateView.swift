@@ -7,6 +7,7 @@
 
 import SwiftUI
 import KingfisherSwiftUI
+import iPhoneNumberField
 
 struct UserUpdateView: View {
     @Binding var showSheetView: Bool
@@ -17,8 +18,10 @@ struct UserUpdateView: View {
     
     @EnvironmentObject var session: SessionStore
     
-    @State private var name: String = ""
+    @State private var lastName: String = ""
+    @State private var firstName: String = ""
     @State private var title: String = ""
+    @State private var phone: String = ""
     
     @State private var showingImagePicker = false
     @State private var inputImage: UIImage?
@@ -63,8 +66,24 @@ struct UserUpdateView: View {
                 
                 Section {
                     VStack(alignment: .leading) {
-                        Text("Name").bold()
-                        TextField("Name", text: $name)
+                        Text("First Name").bold()
+                        TextField("First Name", text: $firstName)
+                            .modifier(TextFieldStyle())
+                    }
+                    
+                    VStack(alignment: .leading) {
+                        Text("Last Name").bold()
+                        TextField("Last Name", text: $lastName)
+                            .modifier(TextFieldStyle())
+                    }
+                    
+                    VStack(alignment: .leading) {
+                        Text("Phone").bold()
+                        iPhoneNumberField("000-000-0000", text: $phone)
+                            .flagHidden(true)
+                            .flagSelectable(true)
+                            .maximumDigits(10)
+                            .clearButtonMode(.whileEditing)
                             .modifier(TextFieldStyle())
                     }
                     
@@ -116,7 +135,9 @@ struct UserUpdateView: View {
             }
             .onReceive(viewModel.didChange) { _ in
                 if let newUser = viewModel.currentUser {
-                    name = newUser.name
+                    firstName = newUser.firstName
+                    lastName = newUser.lastName
+                    phone = newUser.phone
                     title = newUser.title
                     imageUrlString = newUser.image
                 }
@@ -127,18 +148,31 @@ struct UserUpdateView: View {
 
 extension UserUpdateView {
     func updateUser() {
-        if let newUser = viewModel.currentUser {
-            viewModel.update(object: newUser, with: ["name": name, "title": title, "image" : imageUrlString])
+        let user: [String: Any] = ["firstName": firstName,
+                                   "lastName": lastName,
+                                   "phone" : phone,
+                                   "title" : title,
+                                   "image" : imageUrlString]
+        
+        
+//        session.updateUserDetails(for: user) { success in
+//            print("User was update \(success)")
+//        }
+        if let foundUser = viewModel.currentUser {
+            viewModel.update(object: foundUser, with: user)
         } else {
             let user = ProjectUser(id: nil,
                                    uid: session.session?.uid ?? "",
-                                   name: name,
+                                   firstName: firstName,
+                                   lastName: lastName,
+                                   phone: phone,
                                    title: title,
                                    image: imageUrlString,
                                    createdTime: nil)
-            
+
             viewModel.add(object: user)
         }
+        
         showSheetView = false
     }
     

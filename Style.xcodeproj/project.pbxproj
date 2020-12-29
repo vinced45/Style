@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		613A1EDC259BA35200C1F9D9 /* iPhoneNumberField in Frameworks */ = {isa = PBXBuildFile; productRef = 613A1EDB259BA35200C1F9D9 /* iPhoneNumberField */; };
 		616D0D7B2560C7150007F798 /* StyleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D0D7A2560C7150007F798 /* StyleApp.swift */; };
 		616D0D7D2560C7150007F798 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D0D7C2560C7150007F798 /* ContentView.swift */; };
 		616D0D7F2560C7160007F798 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 616D0D7E2560C7160007F798 /* Assets.xcassets */; };
@@ -107,6 +108,7 @@
 				616D0D952560CADF0007F798 /* FirebaseFirestoreSwift-Beta in Frameworks */,
 				616D0D972560CADF0007F798 /* FirebaseStorageSwift-Beta in Frameworks */,
 				616D0D9F2560CADF0007F798 /* FirebaseInAppMessaging-Beta in Frameworks */,
+				613A1EDC259BA35200C1F9D9 /* iPhoneNumberField in Frameworks */,
 				616D0D932560CADF0007F798 /* FirebaseDatabase in Frameworks */,
 				61DF1BC32588FB4E005BDA1D /* KingfisherSwiftUI in Frameworks */,
 				616D0D992560CADF0007F798 /* FirebaseStorage in Frameworks */,
@@ -281,6 +283,7 @@
 				616D0DA92560CF6D0007F798 /* FirebaseAnalytics */,
 				6181707225621AD00008ED28 /* FacebookLogin */,
 				61DF1BC22588FB4E005BDA1D /* KingfisherSwiftUI */,
+				613A1EDB259BA35200C1F9D9 /* iPhoneNumberField */,
 			);
 			productName = Style;
 			productReference = 616D0D772560C7150007F798 /* Style.app */;
@@ -313,6 +316,7 @@
 				616D0D8F2560CADF0007F798 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				6181707125621AD00008ED28 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
 				61DF1BC12588FB4E005BDA1D /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				613A1EDA259BA35100C1F9D9 /* XCRemoteSwiftPackageReference "iPhoneNumberField" */,
 			);
 			productRefGroup = 616D0D782560C7150007F798 /* Products */;
 			projectDirPath = "";
@@ -576,6 +580,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		613A1EDA259BA35100C1F9D9 /* XCRemoteSwiftPackageReference "iPhoneNumberField" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MojtabaHs/iPhoneNumberField";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.4;
+			};
+		};
 		616D0D8F2560CADF0007F798 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -603,6 +615,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		613A1EDB259BA35200C1F9D9 /* iPhoneNumberField */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 613A1EDA259BA35100C1F9D9 /* XCRemoteSwiftPackageReference "iPhoneNumberField" */;
+			productName = iPhoneNumberField;
+		};
 		616D0D902560CADF0007F798 /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 616D0D8F2560CADF0007F798 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

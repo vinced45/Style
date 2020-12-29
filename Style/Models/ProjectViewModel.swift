@@ -265,7 +265,9 @@ struct Project: Identifiable, Codable, FirebaseObjectable {
 struct ProjectUser: Identifiable, Codable, FirebaseObjectable {
     @DocumentID var id: String?
     var uid: String
-    var name: String
+    var firstName: String
+    var lastName: String
+    var phone: String
     var title: String
     var image: String
     
@@ -274,7 +276,9 @@ struct ProjectUser: Identifiable, Codable, FirebaseObjectable {
     enum CodingKeys: String, CodingKey {
         case id
         case uid
-        case name
+        case firstName
+        case lastName
+        case phone
         case title
         case image
     }
@@ -290,7 +294,9 @@ struct ProjectUser: Identifiable, Codable, FirebaseObjectable {
     var dict: [String: Any] {
         return [
             "uid": uid,
-            "name": name,
+            "firstName": firstName,
+            "lastName": lastName,
+            "phone": phone,
             "title": title,
             "image": image,
         ]

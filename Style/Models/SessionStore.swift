@@ -68,6 +68,30 @@ class SessionStore: ObservableObject {
         }
     }
     
+    func getUserDetails(completion: @escaping (User?) -> Void) {
+        guard let userInfo = Auth.auth().currentUser?.providerData.first else { return completion(nil) }
+        
+        return completion(User(userInfo: userInfo))
+    }
+    
+    func updateUserDetails(for user: [String: String], completion: @escaping (Bool) -> Void) {
+        
+        let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
+        changeRequest?.setValue(user["firstName"], forKey: "firstName")
+        changeRequest?.setValue(user["lastName"], forKey: "lastName")
+        changeRequest?.setValue(user["title"], forKey: "title")
+        changeRequest?.setValue(user["phone"], forKey: "phone")
+        changeRequest?.photoURL = URL(string: user["image"] ?? "")
+        //changeRequest?.displayName = (user.firstName ?? "") +  " " + (user.lastName ?? "")
+        changeRequest?.commitChanges { (error) in
+            if let _ = error {
+                return completion(false)
+            } else {
+                completion(true)
+            }
+        }
+    }
+    
     func unbind() {
         guard let handle = handle else { return }
         
@@ -82,9 +106,19 @@ class SessionStore: ObservableObject {
 struct User {
     var uid: String
     var email: String?
+    var firstName: String?
+    var lastName: String?
+    var phoneNumber: String?
+    var title: String?
+    var imageUrl: String?
     
     init(uid: String, email: String?) {
         self.uid = uid
         self.email = email
+    }
+    
+    init(userInfo: UserInfo) {
+        self.uid = userInfo.uid
+        self.email = userInfo.email
     }
 }
