@@ -14,6 +14,7 @@ struct AddSceneActorView: View {
     var currentSceneActor: SceneActor?
     
     @State private var showingImagePicker = false
+    @State var showCamera: Bool = false
     
     @State private var inputImage: UIImage? = nil
 
@@ -33,20 +34,32 @@ struct AddSceneActorView: View {
                 Section(header: Text("Tap image to add look")) {
                     HStack{
                         Spacer()
-                        if inputImage == nil {
-                            Image(systemName: "person.crop.circle.fill.badge.plus")
-                                .resizable()
-                                .frame(height: 250)
-                                .onTapGesture {
-                                    self.showingImagePicker.toggle()
+                        VStack {
+                            if inputImage == nil {
+                                Image(systemName: "person.crop.circle.fill.badge.plus")
+                                    .resizable()
+                                    .frame(height: 250)
+                            } else {
+                                image
+                                    .resizable()
+                                    .frame(height: 250)
+                            }
+                            Menu {
+                                Button(action: {
+                                    showCamera = true
+                                    showingImagePicker.toggle()
+                                }) {
+                                    Label("Take Picture", systemImage: "camera")
                                 }
-                        } else {
-                            image
-                                .resizable()
-                                .frame(height: 250)
-                                .onTapGesture {
-                                    self.showingImagePicker.toggle()
+                                Button(action: {
+                                    showCamera = false
+                                    showingImagePicker.toggle()
+                                }) {
+                                    Label("Photo Gallery", systemImage: "photo.on.rectangle")
                                 }
+                            } label: {
+                                Text("Tap to Update Image")
+                            }
                         }
                         Spacer()
                     }
@@ -101,7 +114,7 @@ struct AddSceneActorView: View {
                     Text("Save").bold()
                 })
             .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
-                ImagePicker(image: self.$inputImage)
+                ImagePicker(image: $inputImage, showCamera: $showCamera)
             }
             .onAppear {
                 if let sceneActor = currentSceneActor {

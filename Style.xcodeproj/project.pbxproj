@@ -53,6 +53,7 @@
 		61DF1BC6258915A3005BDA1D /* AddProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DF1BC5258915A3005BDA1D /* AddProjectView.swift */; };
 		61DF1BCA258922B9005BDA1D /* ProjectDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DF1BC9258922B9005BDA1D /* ProjectDetailView.swift */; };
 		61DF1BCE25894D2E005BDA1D /* AddSceneActorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DF1BCD25894D2E005BDA1D /* AddSceneActorView.swift */; };
+		61F5E6E9259BB10300263C46 /* ActorDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F5E6E8259BB10300263C46 /* ActorDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -96,6 +97,7 @@
 		61DF1BC5258915A3005BDA1D /* AddProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectView.swift; sourceTree = "<group>"; };
 		61DF1BC9258922B9005BDA1D /* ProjectDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDetailView.swift; sourceTree = "<group>"; };
 		61DF1BCD25894D2E005BDA1D /* AddSceneActorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSceneActorView.swift; sourceTree = "<group>"; };
+		61F5E6E8259BB10300263C46 /* ActorDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActorDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -243,6 +245,7 @@
 				61DF1BC5258915A3005BDA1D /* AddProjectView.swift */,
 				6189253F256BE8CD004184BB /* ProjectUpdateView.swift */,
 				61DF1BC9258922B9005BDA1D /* ProjectDetailView.swift */,
+				61F5E6E8259BB10300263C46 /* ActorDetailView.swift */,
 				61892545256BEC5A004184BB /* ActorUpdateView.swift */,
 				61892549256BF6CF004184BB /* AddActorView.swift */,
 				6189254C256BFBD2004184BB /* SceneUpdateView.swift */,
@@ -368,6 +371,7 @@
 				61892543256BE989004184BB /* ViewModifiers.swift in Sources */,
 				616D0D7B2560C7150007F798 /* StyleApp.swift in Sources */,
 				61892550256BFCDE004184BB /* AddSceneView.swift in Sources */,
+				61F5E6E9259BB10300263C46 /* ActorDetailView.swift in Sources */,
 				618926AA257EF110004184BB /* SceneActorShareView.swift in Sources */,
 				61892540256BE8CD004184BB /* ProjectUpdateView.swift in Sources */,
 				616D0DA52560CD9E0007F798 /* AppDelegate.swift in Sources */,

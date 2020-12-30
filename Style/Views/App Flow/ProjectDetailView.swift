@@ -25,7 +25,7 @@ struct ProjectDetailView: View {
         Form {
             Section(header: Text("Actors")) {
                 ForEach(viewModel.actors) { actor in
-                    NavigationLink(destination: Text("th")) {
+                    NavigationLink(destination: ActorDetailView(viewModel: viewModel, currentActor: actor)) {
                         HStack {
                             KFImage(URL(string: actor.image))
                                 .resizable()

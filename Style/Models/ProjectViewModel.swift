@@ -22,6 +22,7 @@ class ProjectViewModel: ObservableObject {
     
     @Published var actors: [Actor] = []
     @Published var currentActor: Actor?
+    @Published var currentActorImages: [String] = []
     
     @Published var scenes: [MovieScene] = []
     @Published var currentScene: MovieScene?
@@ -90,6 +91,16 @@ class ProjectViewModel: ObservableObject {
                 return try? queryDocumentSnapshot.data(as: MovieScene.self)
             }
         }
+    }
+    
+    func filterScene(for actorId: String) -> [MovieScene] {
+        var scenesForActor: [MovieScene] = []
+        
+        for scene in scenes where scene.actors.contains(actorId) {
+            scenesForActor.append(scene)
+        }
+        
+        return scenesForActor
     }
     
     func fetchSceneActors(for sceneActorId: String) {
@@ -163,10 +174,10 @@ class ProjectViewModel: ObservableObject {
         //let data = Data()
 
         // Create a reference to the file you want to upload
-        let riversRef = storage.child(path)
+        let storageRef = storage.child(path)
 
         // Upload the file to the path "images/rivers.jpg"
-        let uploadTask = riversRef.putData(data, metadata: nil) { (metadata, error) in
+        let uploadTask = storageRef.putData(data, metadata: nil) { (metadata, error) in
           guard let metadata = metadata else {
             print("Error uploading data to path: \(path)")
             completion(nil)
@@ -175,13 +186,32 @@ class ProjectViewModel: ObservableObject {
           // Metadata contains file metadata such as size, content-type.
           let size = metadata.size
           // You can also access to download URL after upload.
-          riversRef.downloadURL { (url, error) in
+            storageRef.downloadURL { (url, error) in
             guard let downloadURL = url else {
               completion(nil)
               return
             }
             completion(url)
           }
+        }
+    }
+    
+    func getActorImages() {
+        self.currentActorImages = []
+        let actorImageRef = storage.child("images/actors/\(currentActor?.id ?? "")/gallery")
+        actorImageRef.listAll { (result, error) in
+            if let err = error {
+                print("Image count error \(err.localizedDescription)")
+                return
+            }
+            print("Image count \(result.items.count)")
+            for item in result.items {
+                item.downloadURL { url, error in
+                    if let imageUrl = url {
+                        self.currentActorImages.append(imageUrl.absoluteString)
+                    }
+                }
+            }
         }
     }
     
@@ -318,6 +348,7 @@ struct Actor: Identifiable, Codable, FirebaseObjectable {
     var screenName: String
     var image: String
     var clothesSize: Int
+    var images: [String]
     
     @ServerTimestamp var createdTime: Timestamp?
     
@@ -328,6 +359,7 @@ struct Actor: Identifiable, Codable, FirebaseObjectable {
         case screenName
         case image
         case clothesSize
+        case images
     }
     
     var objectName: String {
@@ -344,17 +376,18 @@ struct Actor: Identifiable, Codable, FirebaseObjectable {
             "realName": realName,
             "screenName": screenName,
             "image": image,
-            "clothesSize": clothesSize
+            "clothesSize": clothesSize,
+            "images": images
         ]
     }
     
-    static func dummyActor() -> Actor {
-        return Actor(id: "denzel", projectId: "sadasdsad", realName: "Denzel Washington", screenName: "Alonzo Harris", image: "denzel", clothesSize: 32)
-    }
-    
-    static func dummyActor2() -> Actor {
-        return Actor(id: "viola", projectId: "dasdasdas", realName: "Voila Davis", screenName: "Rose Maxine", image: "viola", clothesSize: 6)
-    }
+//    static func dummyActor() -> Actor {
+//        return Actor(id: "denzel", projectId: "sadasdsad", realName: "Denzel Washington", screenName: "Alonzo Harris", image: "denzel", clothesSize: 32)
+//    }
+//    
+//    static func dummyActor2() -> Actor {
+//        return Actor(id: "viola", projectId: "dasdasdas", realName: "Voila Davis", screenName: "Rose Maxine", image: "viola", clothesSize: 6)
+//    }
 }
 
 struct MovieScene: Identifiable, Codable, FirebaseObjectable {

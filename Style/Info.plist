@@ -34,7 +34,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2</string>
+	<string>4</string>
 	<key>FacebookAppID</key>
 	<string>371036600647810</string>
 	<key>FacebookDisplayName</key>
@@ -85,5 +85,11 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Access to the camera to add images to the gallery</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Access to the microphone to add images to the gallery</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Access to uplaod phots</string>
 </dict>
 </plist>

@@ -16,6 +16,7 @@ struct AddProjectView: View {
     @ObservedObject var viewModel: ProjectViewModel
     
     @State private var showingImagePicker = false
+    @State var showCamera: Bool = false
     
     @State private var inputImage: UIImage? = nil
     
@@ -32,20 +33,32 @@ struct AddProjectView: View {
                 Section {
                     HStack{
                         Spacer()
-                        if inputImage == nil {
-                            Image(systemName: "person.crop.circle.fill.badge.plus")
-                                .resizable()
-                                .modifier(ProfileImageStyle())
-                                .onTapGesture {
-                                    self.showingImagePicker.toggle()
+                        VStack {
+                            if inputImage == nil {
+                                Image(systemName: "person.circle.fill")
+                                    .resizable()
+                                    .modifier(ProfileImageStyle())
+                            } else {
+                                projectImage
+                                    .resizable()
+                                    .modifier(ProfileImageStyle())
+                            }
+                            Menu {
+                                Button(action: {
+                                    showCamera = true
+                                    showingImagePicker.toggle()
+                                }) {
+                                    Label("Take Picture", systemImage: "camera")
                                 }
-                        } else {
-                            projectImage
-                                .resizable()
-                                .modifier(ProfileImageStyle())
-                                .onTapGesture {
-                                    self.showingImagePicker.toggle()
+                                Button(action: {
+                                    showCamera = false
+                                    showingImagePicker.toggle()
+                                }) {
+                                    Label("Photo Gallery", systemImage: "photo.on.rectangle")
                                 }
+                            } label: {
+                                Text("Tap to Update Image")
+                            }
                         }
                         Spacer()
                     }
@@ -70,7 +83,7 @@ struct AddProjectView: View {
                     Text("Save").bold()
                 })
             .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
-                ImagePicker(image: self.$inputImage)
+                ImagePicker(image: $inputImage, showCamera: $showCamera)
             }
         }
     }

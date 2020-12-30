@@ -24,6 +24,7 @@ struct UserUpdateView: View {
     @State private var phone: String = ""
     
     @State private var showingImagePicker = false
+    @State var showCamera: Bool = false
     @State private var inputImage: UIImage?
     @State private var userImage: Image?
     
@@ -35,30 +36,38 @@ struct UserUpdateView: View {
                 Section(header: Text("Profile Image")) {
                     HStack{
                         Spacer()
-                        if let image = userImage {
-                            image
-                                .resizable()
-                                .modifier(ProfileImageStyle())
-                                .onTapGesture {
-                                    self.showingImagePicker = true
-                                }
-                        } else {
-                            if imageUrlString.isEmpty {
-                                Image(systemName: "plus.circle.fill")
+                        VStack {
+                            if let image = userImage {
+                                image
                                     .resizable()
                                     .modifier(ProfileImageStyle())
-                                    .onTapGesture {
-                                        self.showingImagePicker = true
-                                    }
                             } else {
-                                KFImage(URL(string: imageUrlString))
-                                    .resizable()
-                                    .modifier(ProfileImageStyle())
-                                    .onTapGesture {
-                                        self.showingImagePicker = true
-                                    }
+                                if imageUrlString.isEmpty {
+                                    Image(systemName: "person.circle.fill")
+                                        .resizable()
+                                        .modifier(ProfileImageStyle())
+                                } else {
+                                    KFImage(URL(string: imageUrlString))
+                                        .resizable()
+                                        .modifier(ProfileImageStyle())
+                                }
                             }
-                            
+                            Menu {
+                                Button(action: {
+                                    showCamera = true
+                                    showingImagePicker.toggle()
+                                }) {
+                                    Label("Take Picture", systemImage: "camera")
+                                }
+                                Button(action: {
+                                    showCamera = false
+                                    showingImagePicker.toggle()
+                                }) {
+                                    Label("Photo Gallery", systemImage: "photo.on.rectangle")
+                                }
+                            } label: {
+                                Text("Tap to Update Image")
+                            }
                         }
                         Spacer()
                     }
@@ -128,7 +137,7 @@ struct UserUpdateView: View {
                         return Alert(title: Text("Sign Out"), message: Text("Are you sure you want to sign out?"), primaryButton: primaryButton, secondaryButton: secondaryButton)
                     }
             .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
-                ImagePicker(image: self.$inputImage)
+                ImagePicker(image: $inputImage, showCamera: $showCamera)
             }
             .onAppear {
                 viewModel.fetchUser(for: session.session?.uid ?? "")
@@ -137,7 +146,7 @@ struct UserUpdateView: View {
                 if let newUser = viewModel.currentUser {
                     firstName = newUser.firstName
                     lastName = newUser.lastName
-                    phone = newUser.phone
+                    phone = newUser.phone.filter("0123456789".contains)
                     title = newUser.title
                     imageUrlString = newUser.image
                 }

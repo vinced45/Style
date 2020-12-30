@@ -102,8 +102,8 @@ struct SceneActorShareView: View {
     }
 }
 
-struct SceneActorShareView_Previews: PreviewProvider {
-    static var previews: some View {
-        SceneActorShareView(actor: Actor.dummyActor2())
-    }
-}
+//struct SceneActorShareView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SceneActorShareView(actor: Actor.dummyActor2())
+//    }
+//}
