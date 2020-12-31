@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		61312A18259D215B0057CA6B /* HUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61312A17259D215B0057CA6B /* HUDView.swift */; };
+		61312A1D259D550F0057CA6B /* ImageEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61312A1C259D550F0057CA6B /* ImageEditView.swift */; };
+		61312A21259D59120057CA6B /* SceneListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61312A20259D59120057CA6B /* SceneListView.swift */; };
 		613A1EDC259BA35200C1F9D9 /* iPhoneNumberField in Frameworks */ = {isa = PBXBuildFile; productRef = 613A1EDB259BA35200C1F9D9 /* iPhoneNumberField */; };
 		616D0D7B2560C7150007F798 /* StyleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D0D7A2560C7150007F798 /* StyleApp.swift */; };
 		616D0D7D2560C7150007F798 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D0D7C2560C7150007F798 /* ContentView.swift */; };
@@ -57,6 +60,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		61312A17259D215B0057CA6B /* HUDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDView.swift; sourceTree = "<group>"; };
+		61312A1C259D550F0057CA6B /* ImageEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEditView.swift; sourceTree = "<group>"; };
+		61312A20259D59120057CA6B /* SceneListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneListView.swift; sourceTree = "<group>"; };
 		616D0D772560C7150007F798 /* Style.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Style.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		616D0D7A2560C7150007F798 /* StyleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleApp.swift; sourceTree = "<group>"; };
 		616D0D7C2560C7150007F798 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -206,6 +212,7 @@
 				618926BE257F0B08004184BB /* App Flow */,
 				618926BF257F0BA3004184BB /* MultipleSelectionRow.swift */,
 				618926C4257F0D6F004184BB /* EmptyView.swift */,
+				61312A17259D215B0057CA6B /* HUDView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -246,6 +253,8 @@
 				6189253F256BE8CD004184BB /* ProjectUpdateView.swift */,
 				61DF1BC9258922B9005BDA1D /* ProjectDetailView.swift */,
 				61F5E6E8259BB10300263C46 /* ActorDetailView.swift */,
+				61312A1C259D550F0057CA6B /* ImageEditView.swift */,
+				61312A20259D59120057CA6B /* SceneListView.swift */,
 				61892545256BEC5A004184BB /* ActorUpdateView.swift */,
 				61892549256BF6CF004184BB /* AddActorView.swift */,
 				6189254C256BFBD2004184BB /* SceneUpdateView.swift */,
@@ -354,6 +363,7 @@
 				616D0DB02560D6E10007F798 /* AuthView.swift in Sources */,
 				618923E22563515F004184BB /* LoginViewModel.swift in Sources */,
 				6189253D256BE56E004184BB /* ImagePicker.swift in Sources */,
+				61312A18259D215B0057CA6B /* HUDView.swift in Sources */,
 				6189254A256BF6CF004184BB /* AddActorView.swift in Sources */,
 				618926B9257F08F2004184BB /* ProjectListView.swift in Sources */,
 				61DF1BC6258915A3005BDA1D /* AddProjectView.swift in Sources */,
@@ -371,8 +381,10 @@
 				61892543256BE989004184BB /* ViewModifiers.swift in Sources */,
 				616D0D7B2560C7150007F798 /* StyleApp.swift in Sources */,
 				61892550256BFCDE004184BB /* AddSceneView.swift in Sources */,
+				61312A21259D59120057CA6B /* SceneListView.swift in Sources */,
 				61F5E6E9259BB10300263C46 /* ActorDetailView.swift in Sources */,
 				618926AA257EF110004184BB /* SceneActorShareView.swift in Sources */,
+				61312A1D259D550F0057CA6B /* ImageEditView.swift in Sources */,
 				61892540256BE8CD004184BB /* ProjectUpdateView.swift in Sources */,
 				616D0DA52560CD9E0007F798 /* AppDelegate.swift in Sources */,
 				616D0D872560C7160007F798 /* Style.xcdatamodeld in Sources */,

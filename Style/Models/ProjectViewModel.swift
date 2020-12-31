@@ -31,6 +31,9 @@ class ProjectViewModel: ObservableObject {
     @Published var currentSceneActor: SceneActor?
     
     var didChange = PassthroughSubject<Void, Never>()
+    var message = PassthroughSubject<String, Never>()
+
+    var loading = PassthroughSubject<Bool, Never>()
     
     private var database = Firestore.firestore()
     private var storage = Storage.storage().reference()
@@ -155,6 +158,7 @@ class ProjectViewModel: ObservableObject {
             } else {
                 print("Document added with ID: \(ref!.documentID)")
                 self.didChange.send()
+                self.message.send(object.successMessage)
             }
         }
     }
@@ -196,8 +200,27 @@ class ProjectViewModel: ObservableObject {
         }
     }
     
+    func fetchactorImageDetails(for image: String, completion: @escaping (ActorImage?) -> Void) {
+        database.collection("images").whereField("image", isEqualTo: image)
+            .getDocuments() { (querySnapshot, error) in
+            guard let documents = querySnapshot?.documents else {
+              print("No documents")
+                completion(nil)
+              return
+            }
+                do {
+                    let image = try documents.first?.data(as: ActorImage.self)
+                    completion(image)
+                } catch let err {
+                    print("doc error \(err.localizedDescription)")
+                }
+        }
+    }
+    
     func getActorImages() {
+        loading.send(true)
         self.currentActorImages = []
+        var tempList: [String] = []
         let actorImageRef = storage.child("images/actors/\(currentActor?.id ?? "")/gallery")
         actorImageRef.listAll { (result, error) in
             if let err = error {
@@ -205,14 +228,23 @@ class ProjectViewModel: ObservableObject {
                 return
             }
             print("Image count \(result.items.count)")
+            if result.items.count == 0 {
+                self.loading.send(false)
+                return
+            }
             for item in result.items {
                 item.downloadURL { url, error in
                     if let imageUrl = url {
-                        self.currentActorImages.append(imageUrl.absoluteString)
+                        tempList.append(imageUrl.absoluteString)
+                        if tempList.count == result.items.count {
+                            self.currentActorImages = tempList
+                            self.loading.send(false)
+                        }
                     }
                 }
             }
         }
+        
     }
     
     func upload(urlPath: URL, to path: String, completion: @escaping (URL?) -> Void) {
@@ -253,6 +285,7 @@ protocol FirebaseObjectable {
     var objectName: String {  get }
     var objectId: String? { get }
     var dict: [String: Any] { get }
+    var successMessage: String { get }
 }
 
 struct Project: Identifiable, Codable, FirebaseObjectable {
@@ -281,6 +314,10 @@ struct Project: Identifiable, Codable, FirebaseObjectable {
                 "name": name,
                 "image": image
         ]
+    }
+    
+    var successMessage: String {
+        return "Project added"
     }
     
     static func dummy1() -> Project {
@@ -332,6 +369,10 @@ struct ProjectUser: Identifiable, Codable, FirebaseObjectable {
         ]
     }
     
+    var successMessage: String {
+        return "Project added"
+    }
+    
 //    static func dummy1() -> ProjectUser {
 //        return ProjectUser(id: "asdasda", name: "Angelique", title: "Designer")
 //    }
@@ -381,6 +422,10 @@ struct Actor: Identifiable, Codable, FirebaseObjectable {
         ]
     }
     
+    var successMessage: String {
+        return "Actor added"
+    }
+    
 //    static func dummyActor() -> Actor {
 //        return Actor(id: "denzel", projectId: "sadasdsad", realName: "Denzel Washington", screenName: "Alonzo Harris", image: "denzel", clothesSize: 32)
 //    }
@@ -419,6 +464,10 @@ struct MovieScene: Identifiable, Codable, FirebaseObjectable {
             "name": name,
             "actors": actors
         ]
+    }
+    
+    var successMessage: String {
+        return "Scene added"
     }
     
     static func dummyScene() -> MovieScene {
@@ -465,6 +514,10 @@ struct SceneActor: Identifiable, Codable, FirebaseObjectable {
         return id
     }
     
+    var successMessage: String {
+        return "Scene Image added"
+    }
+    
     var dict: [String: Any] {
         return [
             "sceneActorId": sceneActorId,
@@ -477,5 +530,56 @@ struct SceneActor: Identifiable, Codable, FirebaseObjectable {
             "beforeLook": beforeLook,
             "image": image
         ]
+    }
+}
+
+struct ActorImage: Identifiable, Codable, FirebaseObjectable {
+    @DocumentID var id: String?
+    var actorId: String
+    var name: String
+    var top: String
+    var bottom: String
+    var shoes: String
+    var accessories: String
+    var notes: String
+    var image: String
+    
+    @ServerTimestamp var createdTime: Timestamp?
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case actorId
+        case name
+        case top
+        case bottom
+        case shoes
+        case accessories
+        case notes
+        case image
+    }
+    
+    var objectName: String {
+        return "images"
+    }
+    
+    var objectId: String? {
+        return id
+    }
+    
+    var dict: [String: Any] {
+        return [
+            "actorId": actorId,
+            "name": name,
+            "top": top,
+            "bottom": bottom,
+            "shoes": shoes,
+            "accessories": accessories,
+            "notes": notes,
+            "image": image
+        ]
+    }
+    
+    var successMessage: String {
+        return "Image Details added"
     }
 }

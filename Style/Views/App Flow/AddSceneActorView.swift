@@ -11,7 +11,7 @@ import KingfisherSwiftUI
 struct AddSceneActorView: View {
     @Binding var showSheet: Bool
     @ObservedObject var viewModel: ProjectViewModel
-    var currentSceneActor: SceneActor?
+    @State var currentSceneActor: SceneActor?
     
     @State private var showingImagePicker = false
     @State var showCamera: Bool = false
@@ -35,8 +35,12 @@ struct AddSceneActorView: View {
                     HStack{
                         Spacer()
                         VStack {
-                            if inputImage == nil {
-                                Image(systemName: "person.crop.circle.fill.badge.plus")
+                            if !imageUrlString.isEmpty {
+                                KFImage(URL(string: imageUrlString))
+                                    .resizable()
+                                    .frame(height: 250)
+                            } else if inputImage == nil {
+                                Image(systemName: "photo.fill")
                                     .resizable()
                                     .frame(height: 250)
                             } else {
@@ -117,6 +121,7 @@ struct AddSceneActorView: View {
                 ImagePicker(image: $inputImage, showCamera: $showCamera)
             }
             .onAppear {
+                currentSceneActor = viewModel.currentSceneActor
                 if let sceneActor = currentSceneActor {
                     nameOfLook = sceneActor.name
                     top = sceneActor.top
@@ -124,12 +129,16 @@ struct AddSceneActorView: View {
                     shoes = sceneActor.shoes
                     accessories = sceneActor.accessories
                     notes = sceneActor.notes
-//                    KingfisherManager.shared.retrieveImage(with: url, options: nil, progressBlock: nil, completionHandler: { img, error, cacheType, imageURL in
-//                        guard let newImage = img else { return }
-//                        inputImage = newImage
-//                        image = Image(uiImage: newImage)
-//                        
-//                    })
+                    imageUrlString = sceneActor.image
+                    
+                    viewModel.fetchactorImageDetails(for: imageUrlString) { foundActorImage in
+                        nameOfLook = foundActorImage?.name ?? ""
+                        top = foundActorImage?.top ?? ""
+                        bottom = foundActorImage?.bottom ?? ""
+                        shoes = foundActorImage?.shoes ?? ""
+                        accessories = foundActorImage?.accessories ?? ""
+                        notes = foundActorImage?.notes ?? ""
+                    }
                 }
             }
         }
@@ -138,8 +147,14 @@ struct AddSceneActorView: View {
 
 extension AddSceneActorView {
     func addSceneActor() {
+        var newId = ""
+        if let tempId = currentSceneActor?.sceneActorId {
+            newId = tempId
+        } else {
+            newId = "\(viewModel.currentScene?.id ?? "")-\(viewModel.currentActor?.id ?? "")"
+        }
         let sceneActor = SceneActor(id: nil,
-                                    sceneActorId: "\(viewModel.currentScene?.id ?? "")-\(viewModel.currentActor?.id ?? "")",
+                                    sceneActorId: newId,
                                     name: nameOfLook,
                                     top: top,
                                     bottom: bottom,
