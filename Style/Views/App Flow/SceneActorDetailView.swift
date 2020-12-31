@@ -31,9 +31,10 @@ struct SceneActorDetailView: View {
                             Spacer()
                             KFImage(URL(string: sceneActor.image))
                                 .resizable()
-                                .frame(width: 250, height: 250)
-                                .cornerRadius(15)
-                                //.aspectRatio(.fit, contentMode: <#ContentMode#>)
+                                .scaledToFit()
+                                .frame(height: 250)
+                                //.cornerRadius(15)
+                                //.aspectRatio(1, contentMode: .fit)
                             Spacer()
                         }
                         

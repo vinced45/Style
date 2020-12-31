@@ -38,15 +38,21 @@ struct AddSceneActorView: View {
                             if !imageUrlString.isEmpty {
                                 KFImage(URL(string: imageUrlString))
                                     .resizable()
+                                    .scaledToFit()
                                     .frame(height: 250)
+                                    //.aspectRatio(1, contentMode: .fit)
                             } else if inputImage == nil {
                                 Image(systemName: "photo.fill")
                                     .resizable()
+                                    .scaledToFit()
                                     .frame(height: 250)
+                                    //.aspectRatio(1, contentMode: .fit)
                             } else {
                                 image
                                     .resizable()
+                                    .scaledToFit()
                                     .frame(height: 250)
+                                    //.aspectRatio(1, contentMode: .fit)
                             }
                             Menu {
                                 Button(action: {

@@ -115,11 +115,14 @@ struct ActorDetailView: View {
                                         .placeholder {
                                             Image(systemName: "photo.on.rectangle.angled")
                                                 .resizable()
+                                                
                                                 .frame(width: 80.0, height: 80.0)
                                                 //.renderingMode(.template)
                                                 .colorMultiply(.gray)
                                         }
                                         .resizable()
+                                        //.scaledToFit()
+                                        //.scaledToFill()
                                         .clipped()
                                         .aspectRatio(1, contentMode: .fill)
                                         .matchedGeometryEffect(id: image, in: animation)
@@ -187,12 +190,12 @@ struct ActorDetailView: View {
             
             UploadHUDView(progress: $uploadedCount, total: $uploadTotal)
                 .zIndex(99)
-                .offset(y: showHUD ? 0 : -100)
+                .offset(y: showHUD ? 0 : -200)
                 .animation(.easeOut)
             
             MessageHUDView(message: $message)
                 .zIndex(98)
-                .offset(y: showMessageHUD ? 0 : -100)
+                .offset(y: showMessageHUD ? 0 : -200)
                 .animation(.easeOut)
         }
         .navigationBarTitleDisplayMode(.inline)
@@ -355,7 +358,8 @@ struct ActorImageView: View {
             KFImage(URL(string: image))
                 .resizable()
                 //.frame(width: 65, height: 65)
-                .aspectRatio(contentMode: .fit)
+                .scaledToFit()
+                //.aspectRatio(contentMode: .fit)
                 //.padding(.all, 5.0)
                 .matchedGeometryEffect(id: image, in: animation)
                 //.cornerRadius(15)
