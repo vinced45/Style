@@ -10,6 +10,8 @@ import Photos
 import PhotosUI
 import KingfisherSwiftUI
 
+
+
 struct ActorDetailView: View {
     @ObservedObject var viewModel: ProjectViewModel
     var currentActor: Actor
@@ -33,6 +35,7 @@ struct ActorDetailView: View {
         case camera
         case photoAlbum
         case editImage
+        case editImage2
         case selectScene
         case addToScene
     }
@@ -83,6 +86,24 @@ struct ActorDetailView: View {
                     }
                     
                     Spacer()
+                    
+//                    Menu {
+//                        Button(action: {
+//                            sheetState = .camera
+//                        }) {
+//                            Label("Show Camera", systemImage: "camera")
+//                        }
+//
+//                        Button(action: {
+//                            sheetState = .photoAlbum
+//                        }) {
+//                            Label("Photo Album", systemImage: "photo.on.rectangle")
+//                        }
+//                    }
+//                    label: {
+//                        Label("", systemImage: "camera.circle")
+//                    }
+                    
                 }
                 .padding()
                 
@@ -186,7 +207,7 @@ struct ActorDetailView: View {
             .zIndex(1)
             
             if showImage {
-                ActorImageView(showImage: $showImage,
+                ActorImageView(showImage: $showImage, sheetState: $sheetState,
                                image: tappedImage,
                                actor: currentActor,
                                viewModel: viewModel,
@@ -207,66 +228,72 @@ struct ActorDetailView: View {
         }
         //.navigationBarBackButtonHidden(showImage)
         .navigationBarTitleDisplayMode(.inline)
-//        .navigationBarItems(trailing:
-//            HStack {
-//                if showImage {
-//                    Button {
-//                        sheetState = .editImage
-//                    } label: {
-//                        Text("Edit")
-//                    }
-//                    Button {
-//                        withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
-//                            showImage.toggle()
-//                        }
-//                    } label: {
-//                        Image(systemName: "xmark")
-//                    }
-//                } else {
-//                    Button {
-//                        isShowingActionSheet.toggle()
-//                    } label: {
-//                        Image(systemName: "plus")
-//                    }
-//                }
-//            }
-//        )
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Menu {
-                    if showImage {
-                        Button(action: {
-                            withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
-                                showImage.toggle()
-                            }
-                        }) {
-                            Label("Close", systemImage: "xmark")
+        .navigationBarItems(trailing:
+            HStack {
+                if showImage {
+                    Button {
+                        showImage = false
+                        sheetState = .editImage
+                    } label: {
+                        Text("Edit")
+                    }
+                    Button {
+                        withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
+                            showImage.toggle()
                         }
-
-                        Button(action: {
-                            sheetState = .editImage
-                        }) {
-                            Label("Edit", systemImage: "pencil")
-                        }
-                    } else {
-                        Button(action: {
-                            sheetState = .camera
-                        }) {
-                            Label("Show Camera", systemImage: "camera")
-                        }
-
-                        Button(action: {
-                            sheetState = .photoAlbum
-                        }) {
-                            Label("Photo Album", systemImage: "photo.on.rectangle")
-                        }
+                    } label: {
+                        Image(systemName: "xmark")
+                    }
+                } else {
+                    Button {
+                        sheetState = .camera
+                    } label: {
+                        Image(systemName: "camera")
+                    }
+                    Button {
+                        sheetState = .photoAlbum
+                    } label: {
+                        Image(systemName: "photo.on.rectangle.angled")
                     }
                 }
-                label: {
-                    Label(showImage ? "Options" : "Add", systemImage: showImage ? "ellipsis" : "plus")
-                }
             }
-        }
+        )
+//        .toolbar {
+//            ToolbarItem(placement: .primaryAction) {
+//                Menu {
+//                    if showImage {
+//                        Button(action: {
+//                            withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
+//                                showImage.toggle()
+//                            }
+//                        }) {
+//                            Label("Close", systemImage: "xmark")
+//                        }
+//
+//                        Button(action: {
+//                            sheetState = .editImage
+//                        }) {
+//                            Label("Edit", systemImage: "pencil")
+//                        }
+//                    } else {
+//                        Button(action: {
+//                            sheetState = .camera
+//                        }) {
+//                            Label("Show Camera", systemImage: "camera")
+//                        }
+//
+//                        Button(action: {
+//                            sheetState = .photoAlbum
+//                        }) {
+//                            Label("Photo Album", systemImage: "photo.on.rectangle")
+//                        }
+//                    }
+//                }
+//                label: {
+//                    Label(showImage ? "Options" : "Add", systemImage: showImage ? "ellipsis" : "plus")
+//                }
+//            }
+//        }
         .onAppear {
             viewModel.currentActor = currentActor
             scenes = viewModel.filterScene(for: currentActor.id ?? "")
@@ -276,7 +303,7 @@ struct ActorDetailView: View {
             switch sheetState {
             case .camera: ImagePicker(image: $inputImage, showCamera: $isShowingSheet)
             case .photoAlbum: PhotoPicker(result: $photoList)
-            case .editImage: ImageEditView(showSheet: $isShowingSheet, image: tappedImage, actorId: currentActor.id ?? "", viewModel: viewModel)
+            case .editImage, .editImage2: ImageEditView(showSheet: $isShowingSheet, image: tappedImage, actorId: currentActor.id ?? "", viewModel: viewModel)
             case .selectScene:
                 SceneListView(showSheet: $isShowingSheet, scenes: scenes) { selectedScene in
                     print("got scene \(selectedScene.id ?? "")-\(currentActor.id ?? "")")
@@ -335,7 +362,6 @@ extension ActorDetailView {
         case .photoAlbum: uploadImages()
         default: break
         }
-        sheetState = .none
     }
     
     func uploadImage() {
@@ -387,6 +413,9 @@ import Combine
 
 struct ActorImageView: View {
     @Binding var showImage: Bool
+    @Binding var sheetState: ActorDetailView.SheetState
+    @State var showEdit: Bool = false
+
     let image: String
     let actor: Actor
     @ObservedObject var viewModel: ProjectViewModel
@@ -417,7 +446,30 @@ struct ActorImageView: View {
                 
                 Spacer()
                 
-                //Image(systemName: "ellipsis")
+//                Menu {
+//                    Button(action: {
+//                        withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
+//                            showImage.toggle()
+//                        }
+//                    }) {
+//                        Label("Close", systemImage: "xmark")
+//                    }
+//
+//                    Button(action: {
+//
+//
+//                        showImage.toggle()
+//
+//                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//                            sheetState = .editImage2
+//                        }
+//                    }) {
+//                        Label("Edit", systemImage: "pencil")
+//                    }
+//                }
+//                label: {
+//                    Label("", systemImage: "ellipsis")
+//                }
             }
             .frame(height: 60)
             .padding()
@@ -425,7 +477,7 @@ struct ActorImageView: View {
             KFImage(URL(string: image))
                 .resizable()
                 .scaledToFit()
-                .frame(width: UIScreen.main.bounds.width)
+                .frame(maxWidth: 500)
                 .matchedGeometryEffect(id: image, in: animation)
                 .scaleEffect(scale)
                 .gesture(MagnificationGesture()
@@ -456,6 +508,7 @@ struct ActorImageView: View {
                 .padding(.bottom)
                 
         }
+        .frame(maxWidth: 500)
         .onAppear {
             viewModel.fetchactorImageDetails(for: image) { actorImageWeb in
                 actorImage = actorImageWeb

@@ -17,7 +17,7 @@ struct ImageActorView: View {
     @GestureState var scale: CGFloat = 1.0
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .center) {
             HStack {
                 KFImage(URL(string: actor.image))
                     .resizable()
@@ -41,7 +41,7 @@ struct ImageActorView: View {
             KFImage(URL(string: sceneActor.image))
                 .resizable()
                 .scaledToFit()
-                .frame(width: UIScreen.main.bounds.width)
+                .frame(maxWidth: 500)
                 .gesture(MagnificationGesture()
                     .updating($scale, body: { (value, scale, trans) in
                         scale = value.magnitude
@@ -59,6 +59,7 @@ struct ImageActorView: View {
                 .padding(.bottom)
                 
         }
+        .frame(maxWidth: 500)
     }
 }
 
