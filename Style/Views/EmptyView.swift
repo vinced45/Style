@@ -12,6 +12,8 @@ struct EmptyView: View {
     var title: String
     var message: String
     
+    let completionHandler: () -> Void
+    
     var body: some View {
         VStack {
             Image(systemName: image)
@@ -21,12 +23,15 @@ struct EmptyView: View {
             Text(message)
                 .font(.system(size: 14, weight: .regular))
         }
+        .onTapGesture {
+            completionHandler()
+        }
     }
 }
 
 struct EmptyView_Previews: PreviewProvider {
     static var previews: some View {
-        EmptyView(image: "film", title: "No Scenes", message: "Tap + to add some.")
+        EmptyView(image: "film", title: "No Scenes", message: "Tap + to add some.") { }
             .previewLayout(.sizeThatFits)
     }
 }

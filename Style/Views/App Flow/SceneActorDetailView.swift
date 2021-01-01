@@ -23,87 +23,100 @@ struct SceneActorDetailView: View {
     @State var showSheet: Bool = false
     @State private var activeSheet: SceneActorDetailViewActiveSheet = .addLook
     
+    let columns = [
+        GridItem(.flexible(minimum: 40)),
+    ]
+    
     var body: some View {
-            Form {
+//            Form {
+//                ForEach(viewModel.sceneActors) { sceneActor in
+//                    Section(header: Text(sceneActor.name)) {
+//                        HStack {
+//                            Spacer()
+//                            KFImage(URL(string: sceneActor.image))
+//                                .resizable()
+//                                .scaledToFit()
+//                                .frame(height: 250)
+//                                //.cornerRadius(15)
+//                                //.aspectRatio(1, contentMode: .fit)
+//                            Spacer()
+//                        }
+//                        
+//                        NavigationLink(destination: Text("")) {
+//                            HStack(alignment: .top) {
+//                                Text("Top").bold()
+//                                Spacer()
+//                                Text(sceneActor.top)
+//                            }
+//                        }
+//                        NavigationLink(destination: Text("")) {
+//                            HStack(alignment: .top) {
+//                                Text("Bottom").bold()
+//                                Spacer()
+//                                Text(sceneActor.bottom)
+//                            }
+//                        }
+//                        NavigationLink(destination: Text("")) {
+//                            HStack(alignment: .top) {
+//                                Text("Shoes").bold()
+//                                Spacer()
+//                                Text(sceneActor.shoes)
+//                            }
+//                        }
+//                        NavigationLink(destination: Text("")) {
+//                            HStack(alignment: .top) {
+//                                Text("Accessories").bold()
+//                                Spacer()
+//                                Text(sceneActor.accessories)
+//                            }
+//                        }
+//                        NavigationLink(destination: Text("")) {
+//                            HStack(alignment: .top) {
+//                                Text("Notes").bold()
+//                                Spacer()
+//                                Text(sceneActor.notes)
+//                            }
+//                        }
+//                        
+//                    }
+//                }
+//                
+//                Section {
+//                    HStack {
+//                        Button(action: {
+//                            activeSheet = .addLook
+//                            showSheet.toggle()
+//                        }) {
+//                            HStack(spacing: 10) {
+//                                Image(systemName: "camera.fill")
+//                                Text("Add Looks to Actor")
+//                            }
+//                        }
+//                            .modifier(ButtonStyle())
+//                            .padding(10)
+//                        
+//                        Button(action: {
+//                            print("Edit button was tapped")
+//                        }) {
+//                            HStack(spacing: 10) {
+//                                Image(systemName: "square.and.arrow.up.fill")
+//                                Text("Share")
+//                            }
+//                        }
+//                            .modifier(ButtonStyle())
+//                            .padding(10)
+//                    }
+//                }
+//            }
+//        
+//        
+        ScrollView {
+            LazyVGrid(columns: columns, alignment: .center) {
                 ForEach(viewModel.sceneActors) { sceneActor in
-                    Section(header: Text(sceneActor.name)) {
-                        HStack {
-                            Spacer()
-                            KFImage(URL(string: sceneActor.image))
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 250)
-                                //.cornerRadius(15)
-                                //.aspectRatio(1, contentMode: .fit)
-                            Spacer()
-                        }
-                        
-                        NavigationLink(destination: Text("")) {
-                            HStack(alignment: .top) {
-                                Text("Top").bold()
-                                Spacer()
-                                Text(sceneActor.top)
-                            }
-                        }
-                        NavigationLink(destination: Text("")) {
-                            HStack(alignment: .top) {
-                                Text("Bottom").bold()
-                                Spacer()
-                                Text(sceneActor.bottom)
-                            }
-                        }
-                        NavigationLink(destination: Text("")) {
-                            HStack(alignment: .top) {
-                                Text("Shoes").bold()
-                                Spacer()
-                                Text(sceneActor.shoes)
-                            }
-                        }
-                        NavigationLink(destination: Text("")) {
-                            HStack(alignment: .top) {
-                                Text("Accessories").bold()
-                                Spacer()
-                                Text(sceneActor.accessories)
-                            }
-                        }
-                        NavigationLink(destination: Text("")) {
-                            HStack(alignment: .top) {
-                                Text("Notes").bold()
-                                Spacer()
-                                Text(sceneActor.notes)
-                            }
-                        }
-                        
-                    }
-                }
-                
-                Section {
-                    HStack {
-                        Button(action: {
-                            activeSheet = .addLook
-                            showSheet.toggle()
-                        }) {
-                            HStack(spacing: 10) {
-                                Image(systemName: "camera.fill")
-                                Text("Add Looks to Actor")
-                            }
-                        }
-                            .modifier(ButtonStyle())
-                            .padding(10)
-                        
-                        Button(action: {
-                            print("Edit button was tapped")
-                        }) {
-                            HStack(spacing: 10) {
-                                Image(systemName: "square.and.arrow.up.fill")
-                                Text("Share")
-                            }
-                        }
-                            .modifier(ButtonStyle())
-                            .padding(10)
-                    }
+                    ImageActorView(actor: currentActor, sceneActor: sceneActor)
                 }
             }
+        }
             .navigationBarTitle("\(currentScene.name) - \(currentActor.screenName)", displayMode: .inline)
             .navigationBarItems(trailing: Button(action: {
                 activeSheet = .addLook

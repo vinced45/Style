@@ -46,7 +46,7 @@ struct ProjectListView: View {
                         }
                     }
                 } else {
-                    EmptyView(image: "video.fill", title: "No Projects", message: "Tap + to add some.")
+                    EmptyView(image: "video.fill", title: "No Projects", message: "Tap + to add some.") {}
                 }
             }
             .navigationBarTitle("Projects")

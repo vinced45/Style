@@ -104,7 +104,9 @@ struct ActorDetailView: View {
                                 LoadingCircleView().frame(width: 100, height: 100, alignment: .center)
                             } else {
                                 Spacer(minLength: 100)
-                                EmptyView(image: "photo.on.rectangle.angled", title: "No Pictures", message: "Please add some pictures.")
+                                EmptyView(image: "photo.on.rectangle.angled", title: "No Pictures", message: "Tap to add some pictures.") {
+                                    sheetState = .photoAlbum
+                                }
                             }
                             
                             //LoadingLineView()
@@ -129,14 +131,14 @@ struct ActorDetailView: View {
                                         .contextMenu {
                                             Button(action: {
                                                 tappedImage = image
-                                                sheetState = .editImage
+                                                self.sheetState = .editImage
                                             }) {
                                                 Image(systemName: "square.and.pencil")
                                                 Text("Edit Notes")
                                             }
                                             Button(action: {
                                                 tappedImage = image
-                                                sheetState = .selectScene
+                                                self.sheetState = .selectScene
                                             }) {
                                                 Image(systemName: "film")
                                                 Text("Add to Scene")
@@ -184,7 +186,12 @@ struct ActorDetailView: View {
             .zIndex(1)
             
             if showImage {
-                ActorImageView(showImage: $showImage, image: tappedImage, viewModel: viewModel, actorImage: nil, animation: animation)
+                ActorImageView(showImage: $showImage,
+                               image: tappedImage,
+                               actor: currentActor,
+                               viewModel: viewModel,
+                               actorImage: nil,
+                               animation: animation)
                     .zIndex(2)
             }
             
@@ -198,31 +205,68 @@ struct ActorDetailView: View {
                 .offset(y: showMessageHUD ? 0 : -200)
                 .animation(.easeOut)
         }
+        //.navigationBarBackButtonHidden(showImage)
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarItems(trailing:
-            HStack {
-                if showImage {
-                    Button {
-                        sheetState = .editImage
-                    } label: {
-                        Text("Edit")
-                    }
-                    Button {
-                        withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
-                            showImage.toggle()
+//        .navigationBarItems(trailing:
+//            HStack {
+//                if showImage {
+//                    Button {
+//                        sheetState = .editImage
+//                    } label: {
+//                        Text("Edit")
+//                    }
+//                    Button {
+//                        withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
+//                            showImage.toggle()
+//                        }
+//                    } label: {
+//                        Image(systemName: "xmark")
+//                    }
+//                } else {
+//                    Button {
+//                        isShowingActionSheet.toggle()
+//                    } label: {
+//                        Image(systemName: "plus")
+//                    }
+//                }
+//            }
+//        )
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Menu {
+                    if showImage {
+                        Button(action: {
+                            withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
+                                showImage.toggle()
+                            }
+                        }) {
+                            Label("Close", systemImage: "xmark")
                         }
-                    } label: {
-                        Image(systemName: "xmark")
-                    }
-                } else {
-                    Button {
-                        isShowingActionSheet.toggle()
-                    } label: {
-                        Image(systemName: "plus")
+
+                        Button(action: {
+                            sheetState = .editImage
+                        }) {
+                            Label("Edit", systemImage: "pencil")
+                        }
+                    } else {
+                        Button(action: {
+                            sheetState = .camera
+                        }) {
+                            Label("Show Camera", systemImage: "camera")
+                        }
+
+                        Button(action: {
+                            sheetState = .photoAlbum
+                        }) {
+                            Label("Photo Album", systemImage: "photo.on.rectangle")
+                        }
                     }
                 }
+                label: {
+                    Label(showImage ? "Options" : "Add", systemImage: showImage ? "ellipsis" : "plus")
+                }
             }
-        )
+        }
         .onAppear {
             viewModel.currentActor = currentActor
             scenes = viewModel.filterScene(for: currentActor.id ?? "")
@@ -256,7 +300,7 @@ struct ActorDetailView: View {
             case .addToScene:
                 AddSceneActorView(showSheet: $isShowingSheet, viewModel: viewModel)
             case .none:
-                AddSceneActorView(showSheet: $isShowingSheet, viewModel: viewModel)
+                PhotoPicker(result: $photoList)
             }
         }
         .actionSheet(isPresented: $isShowingActionSheet, content: {
@@ -291,6 +335,7 @@ extension ActorDetailView {
         case .photoAlbum: uploadImages()
         default: break
         }
+        sheetState = .none
     }
     
     func uploadImage() {
@@ -343,6 +388,7 @@ import Combine
 struct ActorImageView: View {
     @Binding var showImage: Bool
     let image: String
+    let actor: Actor
     @ObservedObject var viewModel: ProjectViewModel
     
     @State var actorImage: ActorImage?
@@ -354,26 +400,39 @@ struct ActorImageView: View {
     let didSelect = PassthroughSubject<Actor, Never>()
         
     var body: some View {
-        VStack {
+        
+        VStack(alignment: .leading) {
+            HStack {
+                KFImage(URL(string: actor.image))
+                    .resizable()
+                    .frame(width: 44, height: 44)
+                    .clipShape(Circle())
+                    .shadow(radius: 10)
+                    .overlay(Circle().stroke(Color.black, lineWidth: 3))
+                
+                VStack(alignment: .leading) {
+                    Text(actor.realName).font(.headline).bold()
+                    Text(actor.screenName).font(.footnote)
+                }
+                
+                Spacer()
+                
+                //Image(systemName: "ellipsis")
+            }
+            .frame(height: 60)
+            .padding()
+            
             KFImage(URL(string: image))
                 .resizable()
-                //.frame(width: 65, height: 65)
                 .scaledToFit()
-                //.aspectRatio(contentMode: .fit)
-                //.padding(.all, 5.0)
+                .frame(width: UIScreen.main.bounds.width)
                 .matchedGeometryEffect(id: image, in: animation)
-                //.cornerRadius(15)
                 .scaleEffect(scale)
                 .gesture(MagnificationGesture()
                     .updating($scale, body: { (value, scale, trans) in
                         scale = value.magnitude
                     })
                 )
-//                .onTapGesture {
-//                    withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
-//                        showImage = false
-//                    }
-//                }
                 .gesture(
                     DragGesture(minimumDistance: 3.0)
                             .onEnded { value in
@@ -385,38 +444,17 @@ struct ActorImageView: View {
                                     }
                             }
                     )
-                                 
-            List {
-                HStack(alignment: .top) {
-                    Text("Top").bold()
-                    Spacer()
-                    Text(actorImage?.top ?? "")
-                }
                 
-                HStack(alignment: .top) {
-                    Text("Bottom").bold()
-                    Spacer()
-                    Text(actorImage?.bottom ?? "")
-                }
+            Text(createText())
+                .padding(.leading)
+                .padding(.bottom)
+            
+            Text(getRelativeDate(for: actorImage?.createdTime?.dateValue() ?? Date()))
+                .font(.footnote)
+                .foregroundColor(.gray)
+                .padding(.leading)
+                .padding(.bottom)
                 
-                HStack(alignment: .top) {
-                    Text("Shoes").bold()
-                    Spacer()
-                    Text(actorImage?.shoes ?? "")
-                }
-                
-                HStack(alignment: .top) {
-                    Text("Accessories").bold()
-                    Spacer()
-                    Text(actorImage?.accessories ?? "")
-                }
-                
-                HStack(alignment: .top) {
-                    Text("Notes").bold()
-                    Spacer()
-                    Text(actorImage?.notes ?? "")
-                }
-            }
         }
         .onAppear {
             viewModel.fetchactorImageDetails(for: image) { actorImageWeb in
@@ -424,6 +462,45 @@ struct ActorImageView: View {
             }
         }
 
+    }
+}
+
+extension ActorImageView {
+    func createText() -> String {
+        var text = ""
+        
+        if let top = actorImage?.top {
+            text += "👕 " + top + " "
+        }
+
+        if let bottom = actorImage?.bottom {
+            text += "👖 " + bottom + " "
+        }
+
+        if let shoes = actorImage?.shoes {
+            text += "👞 " + shoes + " "
+        }
+
+        if let accessories = actorImage?.accessories {
+            text += "💼 " + accessories + " "
+        }
+
+        if let notes = actorImage?.notes {
+            text += "📝 " + notes + " "
+        }
+        
+        return text
+    }
+    
+    func getRelativeDate(for date: Date) -> String {
+        // ask for the full relative date
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .full
+
+        // get exampleDate relative to the current date
+        let relativeDate = formatter.localizedString(for: date, relativeTo: Date())
+
+        return relativeDate
     }
 }
 
@@ -475,6 +552,24 @@ struct LoadingLineView: View {
         }
         .onAppear() {
             self.isLoading = true
+        }
+    }
+}
+
+struct TextEditView: View {
+ 
+    @Binding var text: String
+    var fieldToEdit: String
+ 
+    var body: some View {
+        Form {
+            Section {
+                VStack(alignment: .leading) {
+                    Text(fieldToEdit).bold()
+                    TextField(fieldToEdit, text: $text)
+                        .modifier(TextFieldStyle())
+                }
+            }
         }
     }
 }

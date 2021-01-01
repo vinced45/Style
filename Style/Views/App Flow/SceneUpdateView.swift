@@ -38,7 +38,7 @@ struct SceneUpdateView: View {
                 }
             } else {
                 Spacer(minLength: 150)
-                EmptyView(image: "film", title: "No Scenes", message: "Tap + to add some.")
+                EmptyView(image: "film", title: "No Scenes", message: "Tap + to add some.") {}
             }
             
             Spacer()

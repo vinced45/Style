@@ -217,10 +217,46 @@ class ProjectViewModel: ObservableObject {
         }
     }
     
+    func getAllImages() {
+        var totalSize: Int64 = 0
+        var fileCount = 0
+        let storageRef = storage.child("images")
+        storageRef.listAll { (result, error) in
+            if let err = error {
+                print("Image count error \(err.localizedDescription)")
+                return
+            }
+            print("Image count \(result.prefixes)")
+            for item in result.prefixes {
+                print("item is \(item.fullPath)")
+            }
+//            for item in result.items {
+//                item.getMetadata { metaData, error in
+//                    if error != nil {
+//                        print(error?.localizedDescription)
+//                    } else {
+//                        totalSize += metaData!.size
+//
+//                        fileCount += 1
+//
+//                       // Once all the files have been counted, print out the total size
+//                        if fileCount == result.items.count {
+//                            print("The total file size is: \(self.format(bytes: Double(totalSize)))")
+//                       }
+//                    }
+//                }
+//            }
+        }
+    }
+    
     func getActorImages() {
         loading.send(true)
         self.currentActorImages = []
         var tempList: [String] = []
+        
+        var totalSize: Int64 = 0
+        var fileCount = 0
+        
         let actorImageRef = storage.child("images/actors/\(currentActor?.id ?? "")/gallery")
         actorImageRef.listAll { (result, error) in
             if let err = error {
@@ -233,6 +269,21 @@ class ProjectViewModel: ObservableObject {
                 return
             }
             for item in result.items {
+                item.getMetadata { metaData, error in
+                    if error != nil {
+                        print(error?.localizedDescription)
+                    } else {
+                        totalSize += metaData!.size
+
+                        fileCount += 1
+                       
+                       // Once all the files have been counted, print out the total size
+                        if fileCount == result.items.count {
+                            print("The total file size is: \(self.format(bytes: Double(totalSize)))")
+                       }
+                    }
+                }
+                
                 item.downloadURL { url, error in
                     if let imageUrl = url {
                         tempList.append(imageUrl.absoluteString)
@@ -272,6 +323,26 @@ class ProjectViewModel: ObservableObject {
             completion(url)
           }
         }
+    }
+    
+    func format(bytes: Double) -> String {
+        guard bytes > 0 else {
+            return "0 bytes"
+        }
+
+        // Adapted from http://stackoverflow.com/a/18650828
+        let suffixes = ["bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+        let k: Double = 1000
+        let i = floor(log(bytes) / log(k))
+
+        // Format number with thousands separator and everything below 1 GB with no decimal places.
+        let numberFormatter = NumberFormatter()
+        numberFormatter.maximumFractionDigits = i < 3 ? 0 : 1
+        numberFormatter.numberStyle = .decimal
+
+        let numberString = numberFormatter.string(from: NSNumber(value: bytes / pow(k, i))) ?? "Unknown"
+        let suffix = suffixes[Int(i)]
+        return "\(numberString) \(suffix)"
     }
     
 }

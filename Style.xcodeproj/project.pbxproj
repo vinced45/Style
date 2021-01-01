@@ -10,6 +10,8 @@
 		61312A18259D215B0057CA6B /* HUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61312A17259D215B0057CA6B /* HUDView.swift */; };
 		61312A1D259D550F0057CA6B /* ImageEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61312A1C259D550F0057CA6B /* ImageEditView.swift */; };
 		61312A21259D59120057CA6B /* SceneListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61312A20259D59120057CA6B /* SceneListView.swift */; };
+		61312A25259E83650057CA6B /* ImageOverLayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61312A24259E83640057CA6B /* ImageOverLayView.swift */; };
+		61312A28259E940D0057CA6B /* ImageActorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61312A27259E940C0057CA6B /* ImageActorView.swift */; };
 		613A1EDC259BA35200C1F9D9 /* iPhoneNumberField in Frameworks */ = {isa = PBXBuildFile; productRef = 613A1EDB259BA35200C1F9D9 /* iPhoneNumberField */; };
 		616D0D7B2560C7150007F798 /* StyleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D0D7A2560C7150007F798 /* StyleApp.swift */; };
 		616D0D7D2560C7150007F798 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D0D7C2560C7150007F798 /* ContentView.swift */; };
@@ -63,6 +65,8 @@
 		61312A17259D215B0057CA6B /* HUDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDView.swift; sourceTree = "<group>"; };
 		61312A1C259D550F0057CA6B /* ImageEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEditView.swift; sourceTree = "<group>"; };
 		61312A20259D59120057CA6B /* SceneListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneListView.swift; sourceTree = "<group>"; };
+		61312A24259E83640057CA6B /* ImageOverLayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageOverLayView.swift; sourceTree = "<group>"; };
+		61312A27259E940C0057CA6B /* ImageActorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageActorView.swift; sourceTree = "<group>"; };
 		616D0D772560C7150007F798 /* Style.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Style.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		616D0D7A2560C7150007F798 /* StyleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleApp.swift; sourceTree = "<group>"; };
 		616D0D7C2560C7150007F798 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -213,6 +217,8 @@
 				618926BF257F0BA3004184BB /* MultipleSelectionRow.swift */,
 				618926C4257F0D6F004184BB /* EmptyView.swift */,
 				61312A17259D215B0057CA6B /* HUDView.swift */,
+				61312A24259E83640057CA6B /* ImageOverLayView.swift */,
+				61312A27259E940C0057CA6B /* ImageActorView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -366,6 +372,7 @@
 				61312A18259D215B0057CA6B /* HUDView.swift in Sources */,
 				6189254A256BF6CF004184BB /* AddActorView.swift in Sources */,
 				618926B9257F08F2004184BB /* ProjectListView.swift in Sources */,
+				61312A25259E83650057CA6B /* ImageOverLayView.swift in Sources */,
 				61DF1BC6258915A3005BDA1D /* AddProjectView.swift in Sources */,
 				618923FA25636F7A004184BB /* UIPlayerView.swift in Sources */,
 				616D0D842560C7160007F798 /* Persistence.swift in Sources */,
@@ -374,6 +381,7 @@
 				6181707625621C8E0008ED28 /* FBLoginButton.swift in Sources */,
 				616D0DAD2560D0900007F798 /* SessionStore.swift in Sources */,
 				618923DE256335DF004184BB /* AppleLoginButton.swift in Sources */,
+				61312A28259E940D0057CA6B /* ImageActorView.swift in Sources */,
 				61892546256BEC5A004184BB /* ActorUpdateView.swift in Sources */,
 				61DF1BCA258922B9005BDA1D /* ProjectDetailView.swift in Sources */,
 				618926C0257F0BA3004184BB /* MultipleSelectionRow.swift in Sources */,

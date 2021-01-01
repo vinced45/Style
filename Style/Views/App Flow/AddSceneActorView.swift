@@ -31,7 +31,7 @@ struct AddSceneActorView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Tap image to add look")) {
+                Section(header: Text("Photo")) {
                     HStack{
                         Spacer()
                         VStack {
@@ -68,7 +68,7 @@ struct AddSceneActorView: View {
                                     Label("Photo Gallery", systemImage: "photo.on.rectangle")
                                 }
                             } label: {
-                                Text("Tap to Update Image")
+                                Text("Add New Look")
                             }
                         }
                         Spacer()
@@ -113,7 +113,7 @@ struct AddSceneActorView: View {
                     }
                 }
             }
-            .navigationBarTitle(Text("Add Actor"), displayMode: .inline)
+            .navigationBarTitle(Text(viewModel.currentActor?.screenName ?? ""), displayMode: .inline)
                 .navigationBarItems(leading: Button(action: {
                     self.showSheet = false
                 }) {
