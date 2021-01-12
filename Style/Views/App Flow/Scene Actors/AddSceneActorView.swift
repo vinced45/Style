@@ -12,11 +12,6 @@ struct AddSceneActorView: View {
     @Binding var showSheet: Bool
     @ObservedObject var viewModel: ProjectViewModel
     @State var currentSceneActor: SceneActor?
-    
-    @State private var showingImagePicker = false
-    @State var showCamera: Bool = false
-    
-    @State private var inputImage: UIImage? = nil
 
     @State private var nameOfLook: String = ""
     @State private var top: String = ""
@@ -25,53 +20,20 @@ struct AddSceneActorView: View {
     @State private var accessories: String = ""
     @State private var notes: String = ""
     @State private var image: Image = Image("viola")
-        
-    @State private var imageUrlString: String = ""
+    
+    @State var sceneImages: [String] = []
     
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Photo")) {
-                    HStack{
-                        Spacer()
-                        VStack {
-                            if !imageUrlString.isEmpty {
-                                KFImage(URL(string: imageUrlString))
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 250)
-                                    //.aspectRatio(1, contentMode: .fit)
-                            } else if inputImage == nil {
-                                Image(systemName: "photo.fill")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 250)
-                                    //.aspectRatio(1, contentMode: .fit)
-                            } else {
-                                image
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 250)
-                                    //.aspectRatio(1, contentMode: .fit)
-                            }
-                            Menu {
-                                Button(action: {
-                                    showCamera = true
-                                    showingImagePicker.toggle()
-                                }) {
-                                    Label("Take Picture", systemImage: "camera")
-                                }
-                                Button(action: {
-                                    showCamera = false
-                                    showingImagePicker.toggle()
-                                }) {
-                                    Label("Photo Gallery", systemImage: "photo.on.rectangle")
-                                }
-                            } label: {
-                                Text("Add New Look")
-                            }
+                Section(header: Text("Photo"), footer: Text("Tap + button to add scene Images")) {
+                    UpdateMultipleImageView(isEditing: true, images: $sceneImages) { imageData in
+                        self.viewModel.upload(data: imageData, to: "image/\(UUID().uuidString).jpg") { url in
+                            guard let imageUrl = url else { return }
+                            
+                            self.sceneImages.append(imageUrl.absoluteString)
+                            //viewModel.update(object: currentScene, with: ["images": sceneImages])
                         }
-                        Spacer()
                     }
                 }
                 
@@ -123,9 +85,6 @@ struct AddSceneActorView: View {
                 }) {
                     Text("Save").bold()
                 })
-            .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
-                ImagePicker(image: $inputImage, showCamera: $showCamera)
-            }
             .onAppear {
                 currentSceneActor = viewModel.currentSceneActor
                 if let sceneActor = currentSceneActor {
@@ -135,9 +94,9 @@ struct AddSceneActorView: View {
                     shoes = sceneActor.shoes
                     accessories = sceneActor.accessories
                     notes = sceneActor.notes
-                    imageUrlString = sceneActor.image
+                    sceneImages = sceneActor.images
                     
-                    viewModel.fetchactorImageDetails(for: imageUrlString) { foundActorImage in
+                    viewModel.fetchactorImageDetails(for: sceneActor.images.first ?? "") { foundActorImage in
                         nameOfLook = foundActorImage?.name ?? ""
                         top = foundActorImage?.top ?? ""
                         bottom = foundActorImage?.bottom ?? ""
@@ -168,24 +127,11 @@ extension AddSceneActorView {
                                     accessories: accessories,
                                     notes: notes,
                                     beforeLook: true,
-                                    image: imageUrlString,
+                                    images: sceneImages,
                                     createdTime: nil)
         
         viewModel.add(object: sceneActor)
         self.showSheet = false
-    }
-    
-    func loadImage() {
-        guard let inputImage = inputImage,
-              let imageData = inputImage.jpegData(compressionQuality: 0.9) else { return }
-        
-        image = Image(uiImage: inputImage)
-        
-        viewModel.upload(data: imageData, to: "image/\(UUID().uuidString).jpg") { url in
-            guard let imageUrl = url else { return }
-            print("url: \(imageUrl.absoluteString)")
-            imageUrlString = imageUrl.absoluteString
-        }
     }
 }
 

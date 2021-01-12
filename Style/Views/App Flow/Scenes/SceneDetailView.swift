@@ -16,11 +16,28 @@ struct SceneDetailView: View {
     @State var sceneType: String = "Internal"
     
     @State var sceneActors: [Actor] = []
-    
+    @State var sceneImages: [String] = []
     @State var showAddActor: Bool = false
+    
+    let imageColumns = [
+        GridItem(.flexible(minimum: 40)),
+        GridItem(.flexible(minimum: 40)),
+        GridItem(.flexible(minimum: 40)),
+    ]
     
     var body: some View {
         Form {
+            Section(header: Text("Scene Images"), footer: Text("Tap + button to add scene Images")) {
+                UpdateMultipleImageView(isEditing: true, images: $sceneImages) { imageData in
+                    self.viewModel.upload(data: imageData, to: "image/\(UUID().uuidString).jpg") { url in
+                        guard let imageUrl = url else { return }
+                        
+                        self.sceneImages.append(imageUrl.absoluteString)
+                        viewModel.update(object: currentScene, with: ["images": sceneImages])
+                    }
+                }
+            }
+            
             Section(header: Text("Actors")) {
                 ForEach(sceneActors) { actor in
                     NavigationLink(destination: SceneActorDetailView(viewModel: viewModel, currentScene: currentScene, currentActor: actor)) {
@@ -68,6 +85,7 @@ struct SceneDetailView: View {
         .navigationTitle(currentScene.name)
         .onAppear {
             sceneActors = viewModel.getActors(for: currentScene)
+            sceneImages = currentScene.images
         }
     }
 }

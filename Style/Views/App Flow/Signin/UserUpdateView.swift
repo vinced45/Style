@@ -193,7 +193,7 @@ extension UserUpdateView {
         
         viewModel.upload(data: imageData, to: "image/\(UUID().uuidString).jpg") { url in
             guard let imageUrl = url else { return }
-            print("url: \(imageUrl.absoluteString)")
+            //print("url: \(imageUrl.absoluteString)")
             imageUrlString = imageUrl.absoluteString
         }
     }
@@ -201,6 +201,6 @@ extension UserUpdateView {
 
 //struct UserUpdateView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        UserUpdateView()
+//        UserUpdateView(showSheetView: ., viewModel: ProjectViewModel.preview())
 //    }
 //}

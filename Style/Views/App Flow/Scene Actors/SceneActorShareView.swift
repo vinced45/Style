@@ -44,7 +44,7 @@ struct SceneActorShareView: View {
                 }
                 
                 Section(header: Text("Message:")) {
-                    TextView(text: $message, textStyle: $textStyle)
+                    TextView(text: $message, textStyle: .callout)
                         .frame(height: 150)
                 }
                 

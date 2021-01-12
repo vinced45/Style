@@ -13,7 +13,7 @@ struct ImageOverLayView: View {
     
     var body: some View {
         
-        KFImage(URL(string: sceneActor.image))
+        KFImage(URL(string: sceneActor.images.first ?? ""))
             .resizable()
             .scaledToFit()
             .overlay(Rectangle().fill(Color.black.opacity(showText ? 0.8 : 0.0)))
@@ -87,7 +87,7 @@ struct ImageOverLayView_Previews: PreviewProvider {
                                     accessories: "Diamond hoops",
                                     notes: "This is a good look for Viola Davis",
                                     beforeLook: false,
-                                    image: "https://static.gofugyourself.com/uploads/2013/10/185512559_10-820x1292.jpg",
+                                    images: ["https://static.gofugyourself.com/uploads/2013/10/185512559_10-820x1292.jpg"],
                                     createdTime: nil)
         ImageOverLayView(sceneActor: sceneActor)
     }

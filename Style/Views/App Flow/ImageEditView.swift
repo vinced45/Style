@@ -73,8 +73,10 @@ struct ImageEditView: View {
                     
                     VStack(alignment: .leading) {
                         Text("Notes").bold()
-                        TextField("Notes", text: $notes)
+                        //TextField("Notes", text: $notes)
+                        TextView(text: $notes, textStyle: .callout)
                             .modifier(TextFieldStyle())
+                            .frame(height: 100)
                     }
                 }
             }
@@ -120,7 +122,6 @@ extension ImageEditView {
         self.showSheet = false
     }
 }
-
 
 //struct ImageEditView_Previews: PreviewProvider {
 //    static var previews: some View {

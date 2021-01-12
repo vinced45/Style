@@ -10,7 +10,7 @@ import SwiftUI
 struct TextView: UIViewRepresentable {
     
     @Binding var text: String
-    @Binding var textStyle: UIFont.TextStyle
+    var textStyle: UIFont.TextStyle
     
     func makeUIView(context: Context) -> UITextView {
         let textView = UITextView()

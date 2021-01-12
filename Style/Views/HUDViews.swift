@@ -33,6 +33,16 @@ struct UploadHUDView: View {
     }
 }
 
+struct UploadHUDView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            UploadHUDView(progress: .constant(5), total: .constant(10))
+                .padding(.all)
+                .previewLayout(.sizeThatFits)
+        }
+    }
+}
+
 struct MessageHUDView: View {
     @Binding var message: String
     
@@ -49,6 +59,16 @@ struct MessageHUDView: View {
                 .clipShape(Capsule())
                 .shadow(color: Color(.black).opacity(0.22), radius: 12, x: 0, y: 5)
         )
+    }
+}
+
+struct MessageHUDView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            MessageHUDView(message: .constant("Uploading"))
+                .padding(.all)
+                .previewLayout(.sizeThatFits)
+        }
     }
 }
 

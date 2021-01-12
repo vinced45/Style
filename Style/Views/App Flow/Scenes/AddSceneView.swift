@@ -13,6 +13,8 @@ struct AddSceneView: View {
     @ObservedObject var viewModel: ProjectViewModel
     
     @State private var name: String = ""
+    @State private var number: String = ""
+    @State private var sceneImages: [String] = []
     
     //let allActors: [Actor]
     
@@ -26,7 +28,22 @@ struct AddSceneView: View {
                 Section(header: Text("Scene Info")) {
                     TextField("Scene Name", text: $name)
                         .modifier(TextFieldStyle())
+                    
+                    TextField("Scene Number", text: $number)
+                        .modifier(TextFieldStyle())
+                        .keyboardType(.numberPad)
                 }
+                
+                Section(header: Text("Scene Images"), footer: Text("Tap + button to add scene Images")) {
+                    UpdateMultipleImageView(isEditing: true, images: $sceneImages) { imageData in
+                        self.viewModel.upload(data: imageData, to: "image/\(UUID().uuidString).jpg") { url in
+                            guard let imageUrl = url else { return }
+                            
+                            self.sceneImages.append(imageUrl.absoluteString)
+                        }
+                    }
+                }
+                
                 Section(header: Text("Actors In Scene")) {
                     List {
                         ForEach(viewModel.actors) { actor in
@@ -70,7 +87,7 @@ struct AddSceneView: View {
 
 extension AddSceneView {
     func addScene() {
-        let scene = MovieScene(id: nil, projectId: viewModel.currentProject?.id ?? "", name: name, actors: actorIDs, createdTime: nil)
+        let scene = MovieScene(id: nil, projectId: viewModel.currentProject?.id ?? "", name: name, number: Int(number) ?? 0, actors: actorIDs, images: sceneImages, createdTime: nil)
         viewModel.add(object: scene)
         self.showAddScene = false
     }

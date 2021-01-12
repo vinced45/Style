@@ -30,6 +30,12 @@ class ProjectViewModel: ObservableObject {
     @Published var sceneActors: [SceneActor] = []
     @Published var currentSceneActor: SceneActor?
     
+    @Published var notes: [Note] = []
+    @Published var currentNote: Note?
+    
+    @Published var actorLooks: [ActorLook] = []
+    @Published var currentActorLook: ActorLook?
+    
     var didChange = PassthroughSubject<Void, Never>()
     var message = PassthroughSubject<String, Never>()
 
@@ -39,14 +45,16 @@ class ProjectViewModel: ObservableObject {
     private var storage = Storage.storage().reference()
 
     func fetchProjects() {
-        database.collection("projects").addSnapshotListener { (querySnapshot, error) in
+        database.collection("projects")
+            .order(by: "name", descending: false)
+            .addSnapshotListener { (querySnapshot, error) in
           guard let documents = querySnapshot?.documents else {
             print("No documents")
             return
           }
             
             self.projects = documents.compactMap { queryDocumentSnapshot -> Project? in
-              return try? queryDocumentSnapshot.data(as: Project.self)
+                return try? queryDocumentSnapshot.data(as: Project.self)
             }
         }
     }
@@ -83,7 +91,9 @@ class ProjectViewModel: ObservableObject {
     }
     
     func fetchScenes(for projectId: String) {
-        database.collection("scenes").whereField("projectId", isEqualTo: projectId)
+        database.collection("scenes")
+            .whereField("projectId", isEqualTo: projectId)
+            .order(by: "number", descending: false)
             .getDocuments() { (querySnapshot, error) in
             guard let documents = querySnapshot?.documents else {
               print("No documents")
@@ -103,11 +113,14 @@ class ProjectViewModel: ObservableObject {
             scenesForActor.append(scene)
         }
         
-        return scenesForActor
+        return scenesForActor.sorted {
+            $0.number < $1.number
+        }
     }
     
     func fetchSceneActors(for sceneActorId: String) {
-        database.collection("sceneActors").whereField("sceneActorId", isEqualTo: sceneActorId)
+        database.collection("sceneActors")
+            .whereField("sceneActorId", isEqualTo: sceneActorId)
             .getDocuments() { (querySnapshot, error) in
             guard let documents = querySnapshot?.documents else {
               print("No documents")
@@ -130,25 +143,35 @@ class ProjectViewModel: ObservableObject {
         return sceneActors
     }
     
-//    func fetch() {
-//        database.collection("play").document("rcBFMvHqNC4YXGp2PkvH")
-//            .addSnapshotListener { snapshot, error in
-//                guard let doc = snapshot else {
-//                    print("no play found")
-//                    return
-//                }
-//
-//                do {
-//                    self.currentPlay = try doc.data(as: Play.self)
-//                    print("play \(self.currentPlay?.teama.count)")
-//                } catch let err {
-//                    print("doc error \(err.localizedDescription)")
-//                }
-//
-//
-//        }
-//        db.collecti
-//    }
+    func fetchNotes(for actorId: String) {
+        database.collection("notes")
+            .whereField("actorId", isEqualTo: actorId)
+            .getDocuments() { (querySnapshot, error) in
+            guard let documents = querySnapshot?.documents else {
+              print("No Notes")
+              return
+            }
+      
+            self.notes = documents.compactMap { queryDocumentSnapshot -> Note? in
+                return try? queryDocumentSnapshot.data(as: Note.self)
+            }
+        }
+    }
+    
+    func fetchActorLooks(for actorId: String) {
+        database.collection("actorLooks")
+            .whereField("actorId", isEqualTo: actorId)
+            .getDocuments() { (querySnapshot, error) in
+            guard let documents = querySnapshot?.documents else {
+              print("No Actor Looks")
+              return
+            }
+      
+            self.actorLooks = documents.compactMap { queryDocumentSnapshot -> ActorLook? in
+                return try? queryDocumentSnapshot.data(as: ActorLook.self)
+            }
+        }
+    }
     
     func add(object: FirebaseObjectable) {
         var ref: DocumentReference? = nil
@@ -324,7 +347,10 @@ class ProjectViewModel: ObservableObject {
           }
         }
     }
-    
+}
+
+/// Helper Methods
+extension ProjectViewModel {
     func format(bytes: Double) -> String {
         guard bytes > 0 else {
             return "0 bytes"
@@ -344,263 +370,23 @@ class ProjectViewModel: ObservableObject {
         let suffix = suffixes[Int(i)]
         return "\(numberString) \(suffix)"
     }
-    
 }
 
+/// Preview
 extension ProjectViewModel {
-    
-}
-
-protocol FirebaseObjectable {
-    //init?(dict:[String:AnyObject])
-    var objectName: String {  get }
-    var objectId: String? { get }
-    var dict: [String: Any] { get }
-    var successMessage: String { get }
-}
-
-struct Project: Identifiable, Codable, FirebaseObjectable {
-    @DocumentID var id: String?
-    var name: String
-    var image: String
-    
-    @ServerTimestamp var createdTime: Timestamp?
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case name
-        case image
-    }
-    
-    var objectName: String {
-        return "projects"
-    }
-    
-    var objectId: String? {
-        return id
-    }
-    
-    var dict: [String: Any] {
-        return [
-                "name": name,
-                "image": image
-        ]
-    }
-    
-    var successMessage: String {
-        return "Project added"
-    }
-    
-    static func dummy1() -> Project {
-        return Project(id: "asdasda", name: "BET Movie", image: "bet")
-    }
-    
-    static func dummy2() -> Project {
-        return Project(id: "asdasdawer", name: "UMC TV Show", image: "umc")
-    }
-}
-
-struct ProjectUser: Identifiable, Codable, FirebaseObjectable {
-    @DocumentID var id: String?
-    var uid: String
-    var firstName: String
-    var lastName: String
-    var phone: String
-    var title: String
-    var image: String
-    
-    @ServerTimestamp var createdTime: Timestamp?
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case uid
-        case firstName
-        case lastName
-        case phone
-        case title
-        case image
-    }
-    
-    var objectName: String {
-        return "users"
-    }
-    
-    var objectId: String? {
-        return id
-    }
-    
-    var dict: [String: Any] {
-        return [
-            "uid": uid,
-            "firstName": firstName,
-            "lastName": lastName,
-            "phone": phone,
-            "title": title,
-            "image": image,
-        ]
-    }
-    
-    var successMessage: String {
-        return "Project added"
-    }
-    
-//    static func dummy1() -> ProjectUser {
-//        return ProjectUser(id: "asdasda", name: "Angelique", title: "Designer")
-//    }
-//
-//    static func dummy2() -> ProjectUser {
-//        return ProjectUser(id: "asdasdawqewq", name: "Kwasi", title: "Producer")
-//    }
-}
-
-struct Actor: Identifiable, Codable, FirebaseObjectable {
-    @DocumentID var id: String?
-    var projectId: String
-    var realName: String
-    var screenName: String
-    var image: String
-    var clothesSize: Int
-    var images: [String]
-    
-    @ServerTimestamp var createdTime: Timestamp?
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case projectId
-        case realName
-        case screenName
-        case image
-        case clothesSize
-        case images
-    }
-    
-    var objectName: String {
-        return "actors"
-    }
-    
-    var objectId: String? {
-        return id
-    }
-    
-    var dict: [String: Any] {
-        return [
-            "projectId": projectId,
-            "realName": realName,
-            "screenName": screenName,
-            "image": image,
-            "clothesSize": clothesSize,
-            "images": images
-        ]
-    }
-    
-    var successMessage: String {
-        return "Actor added"
-    }
-    
-//    static func dummyActor() -> Actor {
-//        return Actor(id: "denzel", projectId: "sadasdsad", realName: "Denzel Washington", screenName: "Alonzo Harris", image: "denzel", clothesSize: 32)
-//    }
-//    
-//    static func dummyActor2() -> Actor {
-//        return Actor(id: "viola", projectId: "dasdasdas", realName: "Voila Davis", screenName: "Rose Maxine", image: "viola", clothesSize: 6)
-//    }
-}
-
-struct MovieScene: Identifiable, Codable, FirebaseObjectable {
-    @DocumentID var id: String?
-    var projectId: String
-    var name: String
-    var actors: [String]
-    
-    @ServerTimestamp var createdTime: Timestamp?
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case projectId
-        case name
-        case actors
-    }
-    
-    var objectName: String {
-        return "scenes"
-    }
-    
-    var objectId: String? {
-        return id
-    }
-    
-    var dict: [String: Any] {
-        return [
-            "projectId": projectId,
-            "name": name,
-            "actors": actors
-        ]
-    }
-    
-    var successMessage: String {
-        return "Scene added"
-    }
-    
-    static func dummyScene() -> MovieScene {
-        return MovieScene(id: UUID().uuidString, projectId: "adsdad", name: "Scene 1", actors: ["dsfsdfds", "sadasdsad"])
-    }
-    
-    static func dummyScene2() -> MovieScene {
-        return MovieScene(id: UUID().uuidString, projectId: "sdfsdds", name: "Scene 2", actors: ["aasdsadsa"])
-    }
-}
-
-struct SceneActor: Identifiable, Codable, FirebaseObjectable {
-    @DocumentID var id: String?
-    var sceneActorId: String
-    var name: String
-    var top: String
-    var bottom: String
-    var shoes: String
-    var accessories: String
-    var notes: String
-    var beforeLook: Bool
-    var image: String
-    
-    @ServerTimestamp var createdTime: Timestamp?
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case name
-        case sceneActorId
-        case top
-        case bottom
-        case shoes
-        case accessories
-        case notes
-        case beforeLook
-        case image
-    }
-    
-    var objectName: String {
-        return "sceneActors"
-    }
-    
-    var objectId: String? {
-        return id
-    }
-    
-    var successMessage: String {
-        return "Scene Image added"
-    }
-    
-    var dict: [String: Any] {
-        return [
-            "sceneActorId": sceneActorId,
-            "name": name,
-            "top": top,
-            "bottom": bottom,
-            "shoes": shoes,
-            "accessories": accessories,
-            "notes": notes,
-            "beforeLook": beforeLook,
-            "image": image
-        ]
+    static func preview() -> ProjectViewModel {
+        let vm: ProjectViewModel = ProjectViewModel()
+        
+        vm.projects = [Project.preview(), Project.preview()]
+        vm.currentProject = Project.preview()
+        
+        vm.actors = [Actor.preview(), Actor.preview()]
+        vm.currentActor = Actor.preview()
+        
+        vm.scenes = [MovieScene.preview(), MovieScene.preview()]
+        vm.currentScene = MovieScene.preview()
+        
+        return vm
     }
 }
 

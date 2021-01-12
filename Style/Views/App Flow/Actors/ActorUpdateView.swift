@@ -37,7 +37,7 @@ struct ActorUpdateView: View {
                 }
             } else {
                 Spacer(minLength: 150)
-                EmptyView(image: "person.2.fill", title: "No Actors", message: "Tap + to add some.") {}
+                EmptyIconView(type: .actor) {}
             }
             
             Spacer()

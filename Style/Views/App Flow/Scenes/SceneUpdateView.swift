@@ -38,7 +38,7 @@ struct SceneUpdateView: View {
                 }
             } else {
                 Spacer(minLength: 150)
-                EmptyView(image: "film", title: "No Scenes", message: "Tap + to add some.") {}
+                EmptyIconView(type: .scene) {}
             }
             
             Spacer()
@@ -84,7 +84,7 @@ struct SceneUpdateView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             SceneUpdateView(scenes: [])
-            SceneUpdateView(scenes: [MovieScene.dummyScene(), MovieScene.dummyScene2()])
+            SceneUpdateView(scenes: [MovieScene.preview(), MovieScene.preview()])
         }
     }
 }

@@ -38,6 +38,5 @@ struct MultipleSelectionRow_Previews: PreviewProvider {
                 .previewLayout(.sizeThatFits)
                 .padding()
         }
-        
     }
 }

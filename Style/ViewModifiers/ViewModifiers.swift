@@ -57,7 +57,8 @@ extension Image {
     func emptyStyle() -> some View {
         self
             .resizable()
+            .scaledToFit()
             .frame(width: 100, height: 100, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-            .colorMultiply(.red)
+            //.colorMultiply(.red)
     }
 }

@@ -65,11 +65,7 @@ struct AddProjectView: View {
                 }
                 
                 Section {
-                    VStack(alignment: .leading) {
-                        Text("Project Name").bold()
-                        TextField("Name", text: $name)
-                            .modifier(TextFieldStyle())
-                    }
+                    FormTextFieldView(name: "Project Name", placeholder: "Name", text: $name)
                 }
             }
             .navigationBarTitle(Text("Add Project"), displayMode: .inline)
@@ -110,19 +106,10 @@ extension AddProjectView {
     }
 }
 
-
-//struct AddProjectView_Previews: PreviewProvider {
-//    @State static var showSheetView = true
-//
-//    static var previews: some View {
-//        Group {
-//            AddProjectView(showSheetView: $showSheetView, viewModel: <#Binding<ProjectViewModel>#>) { actor in
-//
-//            }
-//            AddProjectView(showSheetView: $showSheetView) { actor in
-//
-//            }
-//            .preferredColorScheme(.dark)
-//        }
-//    }
-//}
+struct AddProjectView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            AddProjectView(showSheetView: .constant(true), viewModel: ProjectViewModel.preview())
+        }
+    }
+}

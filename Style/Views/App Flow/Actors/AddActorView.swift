@@ -129,18 +129,10 @@ extension AddActorView {
 }
 
 
-//struct AddActorView_Previews: PreviewProvider {
-//    @State static var showSheetView = true
-//
-//    static var previews: some View {
-//        Group {
-//            AddActorView(showSheetView: $showSheetView) { actor in
-//
-//            }
-//            AddActorView(showSheetView: $showSheetView) { actor in
-//
-//            }
-//            .preferredColorScheme(.dark)
-//        }
-//    }
-//}
+struct AddActorView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            AddActorView(showAddActor: .constant(true), viewModel: ProjectViewModel.preview())
+        }
+    }
+}
