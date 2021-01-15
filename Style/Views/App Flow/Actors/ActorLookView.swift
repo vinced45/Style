@@ -25,7 +25,7 @@ struct ActorLookView: View {
                 Text(actorLook.text)
                     .foregroundColor(colorForTitle())
                     .strikethrough(actorLook.completed, color: .black)
-                Text(getRelativeDate(for: actorLook.lastUpdated ?? Date()))
+                Text(getRelativeDate(for: actorLook.lastUpdated ))
                     .font(.subheadline)
                     .foregroundColor(.gray)
             }

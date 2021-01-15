@@ -1,50 +1,23 @@
 //
-//  AddSceneView.swift
+//  UpdateSceneActorListView.swift
 //  Style
 //
-//  Created by Vince Davis on 11/23/20.
+//  Created by Vince Davis on 1/15/21.
 //
 
 import SwiftUI
 import KingfisherSwiftUI
 
-struct AddSceneView: View {
+struct UpdateSceneActorListView: View {
     @Binding var showAddScene: Bool
+    @Binding var movieScene: MovieScene
     @ObservedObject var viewModel: ProjectViewModel
-    
-    @State private var name: String = ""
-    @State private var number: String = ""
-    @State private var sceneImages: [String] = []
-    
-    //let allActors: [Actor]
-    
-    //let newScene: (MovieScene) -> Void
     
     @State var actorIDs: [String] = []
     
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Scene Info")) {
-                    TextField("Scene #", text: $number)
-                        .modifier(TextFieldStyle())
-                        .keyboardType(.numberPad)
-                        .frame(width: 100)
-                    
-                    TextField("Scene Name", text: $name)
-                        .modifier(TextFieldStyle())
-                }
-                
-                Section(header: Text("Scene Images"), footer: Text("Tap + button to add scene Images")) {
-                    UpdateMultipleImageView(isEditing: true, images: $sceneImages) { imageData in
-                        self.viewModel.upload(data: imageData, to: "image/\(UUID().uuidString).jpg") { url in
-                            guard let imageUrl = url else { return }
-                            
-                            self.sceneImages.append(imageUrl.absoluteString)
-                        }
-                    }
-                }
-                
                 Section(header: Text("Actors In Scene")) {
                     List {
                         ForEach(viewModel.actors) { actor in
@@ -72,24 +45,27 @@ struct AddSceneView: View {
                     }
                 }
             }
-            .navigationBarTitle(Text("Add Scene"), displayMode: .inline)
+            .navigationBarTitle(Text("Update Actors"), displayMode: .inline)
             .navigationBarItems(leading: Button(action: {
                 self.showAddScene = false
             }) {
                 Text("Cancel").bold()
             }, trailing: Button(action: {
-                addScene()
+                updateScene()
             }) {
                 Text("Save").bold()
             })
+            .onAppear {
+                actorIDs = movieScene.actors
+            }
         }
     }
 }
 
-extension AddSceneView {
-    func addScene() {
-        let scene = MovieScene(id: nil, projectId: viewModel.currentProject?.id ?? "", name: name, number: Int(number) ?? 0, actors: actorIDs, images: sceneImages, createdTime: nil)
-        viewModel.add(object: scene)
+extension UpdateSceneActorListView {
+    func updateScene() {
+        movieScene.actors = actorIDs
+        viewModel.update(object: movieScene, with: ["actors": actorIDs])
         self.showAddScene = false
     }
     
@@ -103,10 +79,10 @@ extension AddSceneView {
     }
 }
 
-struct AddSceneView_Previews: PreviewProvider {
+struct AUpdateSceneActorListView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            AddSceneView(showAddScene: .constant(true), viewModel: ProjectViewModel.preview())
+            UpdateSceneActorListView(showAddScene: .constant(true), movieScene: .constant(MovieScene.preview()), viewModel: ProjectViewModel.preview())
         }
     }
 }

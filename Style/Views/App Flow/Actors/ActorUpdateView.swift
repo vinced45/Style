@@ -7,85 +7,157 @@
 
 import SwiftUI
 import KingfisherSwiftUI
+import Combine
 
-struct ActorUpdateView: View {
+struct UpdateActorView: View {
+    @Binding var showSheet: Bool
+    @Binding var actor: Actor
     @ObservedObject var viewModel: ProjectViewModel
     
-    @State var showSheetView = false
+    @State private var showingImagePicker = false
+    @State var showCamera: Bool = false
+    
+    @State private var inputImage: UIImage? = nil
+
+    @State private var realName: String = ""
+    @State private var screenName: String = ""
+    @State private var profileImage: Image = Image("viola")
+    
+    @State var sizeSelection: Int = 0
+    
+    @State private var imageUrlString: String = ""
+    
+    //let newActor: (Actor) -> Void
     
     var body: some View {
-        VStack {
-            if viewModel.actors.count > 0 {
-                List {
-                    ForEach(viewModel.actors) { actor in
-                        HStack {
-                            KFImage(URL(string: actor.image))
-                                .resizable()
-                                .frame(width: 44, height: 44)
-                                .clipShape(Circle())
-                                .shadow(radius: 10)
-                                .overlay(Circle().stroke(Color.black, lineWidth: 3))
-                            VStack(alignment: .leading) {
-                                Text(actor.realName)
-                                Text(actor.screenName).font(.subheadline).foregroundColor(.gray)
+        NavigationView {
+            Form {
+                Section {
+                    HStack{
+                        Spacer()
+                        VStack {
+                            if imageUrlString.isNotEmpty {
+                                KFImage(URL(string: imageUrlString))
+                                    .resizable()
+                                    .frame(width: 88, height: 88)
+                                    .clipShape(Circle())
+                                    .shadow(radius: 10)
+                                    .overlay(Circle().stroke(Color.black, lineWidth: 3))
+                            } else if inputImage == nil {
+                                Image(systemName: "person.circle.fill")
+                                    .resizable()
+                                    .modifier(ProfileImageStyle())
+                            } else {
+                                profileImage
+                                    .resizable()
+                                    .modifier(ProfileImageStyle())
+                            }
+                            Menu {
+                                Button(action: {
+                                    showCamera = true
+                                    showingImagePicker.toggle()
+                                }) {
+                                    Label("Take Picture", systemImage: "camera")
+                                }
+                                Button(action: {
+                                    showCamera = false
+                                    showingImagePicker.toggle()
+                                }) {
+                                    Label("Photo Gallery", systemImage: "photo.on.rectangle")
+                                }
+                            } label: {
+                                Text("Tap to Update Image")
                             }
                         }
-                        .frame(width: .infinity, height: 60)
+                        Spacer()
                     }
-                    //.onDelete(perform: onDelete)
-                    //.onMove(perform: onMove)
                 }
-            } else {
-                Spacer(minLength: 150)
-                EmptyIconView(type: .actor) {}
+                
+                Section {
+                    VStack(alignment: .leading) {
+                        Text("Real Name").bold()
+                        TextField("Real Name", text: $realName)
+                            .modifier(TextFieldStyle())
+                    }
+                    
+                    VStack(alignment: .leading) {
+                        Text("Screen Name").bold()
+                        TextField("Screen Name", text: $screenName)
+                            .modifier(TextFieldStyle())
+                    }
+                }
+                
+                Section(header: Text("Size Chart")) {
+                    Picker(selection: $sizeSelection, label:
+                            Text("Size Chart").bold()
+                                    , content: {
+                                        Text("Small").tag(0)
+                                        Text("Medium").tag(1)
+                                        Text("Large").tag(2)
+                                        Text("Extra Large").tag(3)
+                        })
+                        .pickerStyle(WheelPickerStyle())
+                }
+                    
             }
-            
-            Spacer()
-            NavigationLink(
-                destination: SceneUpdateView(scenes: []),
-                label: {
-                    Text("Next")
-                        .modifier(ButtonStyle())
+            .navigationBarTitle(Text("Add Actor"), displayMode: .inline)
+                .navigationBarItems(leading: Button(action: {
+                    showSheet = false
+                }) {
+                    Text("Cancel").bold()
+                }, trailing: Button(action: {
+                    updateActor()
+                }) {
+                    Text("Save").bold()
                 })
-        }
-        .padding(12)
-        .navigationBarTitle("Actors")
-        .navigationBarItems(trailing:
-            Button(action: {
-                self.showSheetView.toggle()
-            }) {
-                Image(systemName: "plus")
+            .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
+                ImagePicker(image: $inputImage, showCamera: $showCamera)
             }
-        )
-        .sheet(isPresented: $showSheetView) {
-//            AddActorView(showSheetView: self.$showSheetView, newActor: { newActor in
-//                self.add(actor: newActor)
-//            })
+            .onAppear {
+                realName = actor.realName
+                screenName = actor.screenName
+                sizeSelection = actor.clothesSize
+                imageUrlString = actor.image
+            }
         }
     }
 }
 
-extension ActorUpdateView {
-    func add(actor: Actor) {
-        //actors.append(actor)
+extension UpdateActorView {
+    func updateActor() {
+        actor.realName = realName
+        actor.screenName = screenName
+        actor.clothesSize = sizeSelection
+        actor.image = imageUrlString
+        
+        viewModel.update(object: actor, with: ["realName": realName,
+                                               "screenName": screenName,
+                                               "clothesSize": sizeSelection,
+                                               "image": imageUrlString])
+        showSheet = false
     }
     
-    private func onDelete(offsets: IndexSet) {
-        //actors.remove(atOffsets: offsets)
-    }
-
-    private func onMove(source: IndexSet, destination: Int) {
-        //actors.move(fromOffsets: source, toOffset: destination)
+    func loadImage() {
+        guard let inputImage = inputImage,
+              let imageData = inputImage.jpegData(compressionQuality: 0.9) else { return }
+        
+        profileImage = Image(uiImage: inputImage)
+        
+        viewModel.upload(data: imageData, to: "image/\(UUID().uuidString).jpg") { url in
+            guard let imageUrl = url else { return }
+            print("url: \(imageUrl.absoluteString)")
+            imageUrlString = imageUrl.absoluteString
+        }
     }
 }
 
-//struct ActorUpdateView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        Group {
-//            ActorUpdateView(actors: [])
-//            ActorUpdateView(actors: [Actor.dummyActor(), Actor.dummyActor2()])
-//        }
-//    }
-//}
-
+struct UpdateActorView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            UpdateActorView(showSheet: .constant(true),
+                            actor: .constant(Actor.preview()),
+                            viewModel: ProjectViewModel.preview())
+        }
+    }
+}
 

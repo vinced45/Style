@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import Photos
+import PhotosUI
 import KingfisherSwiftUI
 
 struct UpdateImageView: View {
@@ -94,10 +96,16 @@ struct UpdateMultipleImageView: View {
     
     let imageData: (Data) -> Void
     
-    @State var showingImagePicker: Bool = false
-    @State var showCamera: Bool = false
+    enum SheetType {
+        case camera
+        case photoAlbum
+    }
+    
+    @ObservedObject var sheet = SheetState<UpdateMultipleImageView.SheetType>()
     
     @State var inputImage: UIImage? = nil
+    
+    @State private var photoList: [PHPickerResult]?
     
     let imageColumns = [
         GridItem(.flexible(minimum: 40)),
@@ -116,14 +124,12 @@ struct UpdateMultipleImageView: View {
             if isEditing {
                 Menu {
                     Button(action: {
-                        showCamera = true
-                        showingImagePicker.toggle()
+                        sheet.state = .camera
                     }) {
                         Label("Take Picture", systemImage: "camera")
                     }
                     Button(action: {
-                        showCamera = false
-                        showingImagePicker.toggle()
+                        sheet.state = .photoAlbum
                     }) {
                         Label("Photo Gallery", systemImage: "photo.on.rectangle")
                     }
@@ -135,18 +141,39 @@ struct UpdateMultipleImageView: View {
                 }
             }
         }
-        .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
-            ImagePicker(image: $inputImage, showCamera: $showCamera)
+        .sheet(isPresented: $sheet.isShowing, onDismiss: handleDismiss) {
+            switch sheet.state {
+            case .camera:
+                ImagePicker(image: $inputImage, showCamera: $sheet.isShowing)
+            case .photoAlbum:
+                PhotoPicker(result: $photoList)
+            case .none: EmptyView()
+            }
         }
     }
 }
 
 extension UpdateMultipleImageView {
+    func handleDismiss() {
+        switch sheet.state {
+        case .camera: loadImage()
+        case .photoAlbum: loadImages()
+        default: break
+        }
+    }
     func loadImage() {
         guard let inputImage = inputImage,
               let imageData = inputImage.jpegData(compressionQuality: 0.9) else { return }
         
         self.imageData(imageData)
+    }
+    
+    func loadImages() {
+        guard let results = photoList, results.count > 0 else { return }
+
+        AssetProcessor.process(results: photoList ?? []) { data in
+            self.imageData(data)
+        }
     }
 }
 

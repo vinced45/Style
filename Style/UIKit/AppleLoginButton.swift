@@ -52,10 +52,10 @@ class AppleSignInCoordinator: NSObject, ASAuthorizationControllerDelegate {
         case let appleIDCredential as ASAuthorizationAppleIDCredential:
             
             // Get user details
-            let userIdentifier = appleIDCredential.user
-            let fullName = appleIDCredential.fullName
-            let email = appleIDCredential.email ?? ""
-            let name = (fullName?.givenName ?? "") + (" ") + (fullName?.familyName ?? "")
+            //let userIdentifier = appleIDCredential.user
+            //let fullName = appleIDCredential.fullName
+            //let email = appleIDCredential.email ?? ""
+            //let name = (fullName?.givenName ?? "") + (" ") + (fullName?.familyName ?? "")
             
             // Save user details or fetch them
             // Sign in with Apple only gives full name and email once

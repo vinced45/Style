@@ -36,7 +36,7 @@ struct FacebookLoginButton: UIViewRepresentable {
         
         func loginButton(_ loginButton: FBLoginButton, didCompleteWith result: LoginManagerLoginResult?, error: Error?) {
             self.result(result)
-            print("fb result \(result)")
+            //print("fb result \(result)")
         }
         
         func loginButtonDidLogOut(_ loginButton: FBLoginButton) {

@@ -72,7 +72,7 @@ class ProjectViewModel: ObservableObject {
             }
                 self.currentUser = fbUsers.first
                 self.didChange.send()
-                print("found user \(self.currentUser?.image)")
+                print("found user \(String(describing: self.currentUser?.image))")
         }
     }
     
@@ -204,17 +204,17 @@ class ProjectViewModel: ObservableObject {
         let storageRef = storage.child(path)
 
         // Upload the file to the path "images/rivers.jpg"
-        let uploadTask = storageRef.putData(data, metadata: nil) { (metadata, error) in
-          guard let metadata = metadata else {
+        let _ = storageRef.putData(data, metadata: nil) { (metadata, error) in
+          guard let _ = metadata else {
             print("Error uploading data to path: \(path)")
             completion(nil)
             return
           }
           // Metadata contains file metadata such as size, content-type.
-          let size = metadata.size
+          //let size = metadata.size
           // You can also access to download URL after upload.
             storageRef.downloadURL { (url, error) in
-            guard let downloadURL = url else {
+            guard let _ = url else {
               completion(nil)
               return
             }
@@ -240,19 +240,19 @@ class ProjectViewModel: ObservableObject {
         }
     }
     
-    func getAllImages() {
-        var totalSize: Int64 = 0
-        var fileCount = 0
-        let storageRef = storage.child("images")
-        storageRef.listAll { (result, error) in
-            if let err = error {
-                print("Image count error \(err.localizedDescription)")
-                return
-            }
-            print("Image count \(result.prefixes)")
-            for item in result.prefixes {
-                print("item is \(item.fullPath)")
-            }
+//    func getAllImages() {
+//        //var totalSize: Int64 = 0
+//        //var fileCount = 0
+//        let storageRef = storage.child("images")
+//        storageRef.listAll { (result, error) in
+//            if let err = error {
+//                print("Image count error \(err.localizedDescription)")
+//                return
+//            }
+//            print("Image count \(result.prefixes)")
+//            for item in result.prefixes {
+//                print("item is \(item.fullPath)")
+//            }
 //            for item in result.items {
 //                item.getMetadata { metaData, error in
 //                    if error != nil {
@@ -269,8 +269,8 @@ class ProjectViewModel: ObservableObject {
 //                    }
 //                }
 //            }
-        }
-    }
+//        }
+//    }
     
     func getActorImages() {
         loading.send(true)
@@ -293,8 +293,8 @@ class ProjectViewModel: ObservableObject {
             }
             for item in result.items {
                 item.getMetadata { metaData, error in
-                    if error != nil {
-                        print(error?.localizedDescription)
+                    if let err = error {
+                        print(err.localizedDescription)
                     } else {
                         totalSize += metaData!.size
 
@@ -329,17 +329,17 @@ class ProjectViewModel: ObservableObject {
         let riversRef = storage.child(path)
 
         // Upload the file to the path "images/rivers.jpg"
-        let uploadTask = riversRef.putFile(from: urlPath, metadata: nil) { metadata, error in
-          guard let metadata = metadata else {
+        let _ = riversRef.putFile(from: urlPath, metadata: nil) { metadata, error in
+          guard let _ = metadata else {
             print("Error uploading url \(urlPath.absoluteString) to path: \(path)")
             completion(nil)
             return
           }
           // Metadata contains file metadata such as size, content-type.
-          let size = metadata.size
+          //let size = metadata.size
           // You can also access to download URL after upload.
           riversRef.downloadURL { (url, error) in
-            guard let downloadURL = url else {
+            guard let _ = url else {
                 completion(nil)
               return
             }

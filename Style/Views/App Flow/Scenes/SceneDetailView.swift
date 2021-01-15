@@ -10,7 +10,7 @@ import KingfisherSwiftUI
 
 struct SceneDetailView: View {
     @ObservedObject var viewModel: ProjectViewModel
-    var currentScene: MovieScene
+    @State var currentScene: MovieScene
     
     @State var sceneTime: String = "Day"
     @State var sceneType: String = "Internal"
@@ -18,6 +18,12 @@ struct SceneDetailView: View {
     @State var sceneActors: [Actor] = []
     @State var sceneImages: [String] = []
     @State var showAddActor: Bool = false
+    
+    enum SheetType {
+        case updateActors
+    }
+    
+    @ObservedObject var sheet = SheetState<SceneDetailView.SheetType>()
     
     let imageColumns = [
         GridItem(.flexible(minimum: 40)),
@@ -56,8 +62,10 @@ struct SceneDetailView: View {
                         .frame(height: 60)
                     }
                 }
+                .onDelete(perform: deleteActor)
+                
                 Button("Add Actor") {
-                    
+                    sheet.state = .updateActors
                 }
             }
             Section(header: Text("Scene Details")) {
@@ -87,13 +95,29 @@ struct SceneDetailView: View {
             sceneActors = viewModel.getActors(for: currentScene)
             sceneImages = currentScene.images
         }
+        .sheet(isPresented: $sheet.isShowing,
+               onDismiss: {
+            sceneActors = viewModel.getActors(for: currentScene)
+               }, content: {
+            UpdateSceneActorListView(showAddScene: $sheet.isShowing,
+                                     movieScene: $currentScene,
+                                     viewModel: viewModel)
+        })
     }
 }
 
-//struct SceneDetailView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        Group {
-//            SceneDetailView()
-//        }
-//    }
-//}
+extension SceneDetailView {
+    private func deleteActor(offsets: IndexSet) {
+        sceneActors.remove(atOffsets: offsets)
+        self.currentScene.actors.remove(atOffsets: offsets)
+        viewModel.update(object: currentScene, with: ["actors": currentScene.actors])
+    }
+}
+
+struct SceneDetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            SceneDetailView(viewModel: ProjectViewModel.preview(), currentScene: MovieScene.preview())
+        }
+    }
+}

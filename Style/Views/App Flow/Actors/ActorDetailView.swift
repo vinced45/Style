@@ -12,7 +12,7 @@ import KingfisherSwiftUI
 
 struct ActorDetailView: View {
     @ObservedObject var viewModel: ProjectViewModel
-    var currentActor: Actor
+    @State var currentActor: Actor
     
     @State var scenes: [MovieScene] = []
     
@@ -37,6 +37,7 @@ struct ActorDetailView: View {
         case addToScene
         case editNote
         case addLook
+        case updateActor
     }
     
     @ObservedObject var sheet = SheetState<ActorDetailView.SheetType>()
@@ -324,6 +325,9 @@ struct ActorDetailView: View {
             ActionSheet(title: Text("Actions"),
                         message: nil,
                         buttons: [
+                            .default(Text(Image(systemName: "person")) + Text("Update Actor") , action: {
+                                self.sheet.state = .updateActor
+                            }),
                             .default(Text(Image(systemName: "camera")) + Text("Take Picture") , action: {
                                 self.sheet.state = .camera
                             }),
@@ -371,6 +375,8 @@ extension ActorDetailView {
             AddNoteView(showSheet: self.$sheet.isShowing, note: viewModel.currentNote, viewModel: viewModel)
         case .addLook:
             AddActorLookView(showSheet: self.$sheet.isShowing, viewModel: viewModel)
+        case .updateActor:
+            UpdateActorView(showSheet: $sheet.isShowing, actor: $currentActor, viewModel: viewModel)
         case .none:
             EmptyView()
         }
