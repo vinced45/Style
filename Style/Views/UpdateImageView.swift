@@ -118,8 +118,10 @@ struct UpdateMultipleImageView: View {
             ForEach(images, id: \.self) { image in
                 KFImage(URL(string: image))
                     .resizable()
+                    .cornerRadius(10.0)
                     .clipped()
                     .aspectRatio(1, contentMode: .fill)
+                
             }
             if isEditing {
                 Menu {

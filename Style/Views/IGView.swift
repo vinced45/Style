@@ -29,7 +29,7 @@ struct IGView: View {
         VStack(alignment: .leading) {
             ImageTextRowView(config: actor)
                 .frame(height: 60)
-                .padding()
+                .padding([.leading, .trailing])
             
             KFImage(URL(string: image))
                 .resizable()
@@ -44,19 +44,19 @@ struct IGView: View {
                 )
                 .gesture(
                     DragGesture(minimumDistance: 3.0)
-                            .onEnded { value in
-                                if value.translation.height > 0 && value.translation.width < 100 && value.translation.width > -100 {
-                                        print("down swipe")
-                                    withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
-                                        showImage = false
-                                    }
-                                    }
-                            }
+                        .onEnded { value in
+                            if value.translation.height > 0 && value.translation.width < 100 && value.translation.width > -100 {
+                                    print("down swipe")
+                                withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
+                                    showImage = false
+                                }
+                                }
+                        }
                     )
                 
             Text(createText())
                 .padding(.leading)
-                .padding(.bottom)
+                //.padding(.bottom)
             
             Text(getRelativeDate(for: actorImage?.createdTime?.dateValue() ?? Date()))
                 .font(.footnote)

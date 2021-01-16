@@ -16,8 +16,16 @@ struct ImageActorView: View {
     
     @GestureState var scale: CGFloat = 1.0
     
+    init(actor: Actor, sceneActor: SceneActor) {
+        self.actor = actor
+        self.sceneActor = sceneActor
+        
+        UIPageControl.appearance().currentPageIndicatorTintColor = #colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)
+        UIPageControl.appearance().pageIndicatorTintColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+        }
+    
     var body: some View {
-        VStack(alignment: .center) {
+        VStack(alignment: .leading) {
             HStack {
                 KFImage(URL(string: actor.image))
                     .resizable()
@@ -36,7 +44,7 @@ struct ImageActorView: View {
                 Image(systemName: "ellipsis")
             }
             .frame(height: 60)
-            .padding()
+            .padding([.leading, .trailing])
             
             TabView {
                 ForEach(sceneActor.images, id: \.self) { image in
@@ -44,28 +52,27 @@ struct ImageActorView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(maxWidth: 500)
+                        .frame(height: 400)
                         .gesture(MagnificationGesture()
                             .updating($scale, body: { (value, scale, trans) in
                                 scale = value.magnitude
                             })
                         )
+                        //.background(Color.gray)
                 }
             }
             .tabViewStyle(PageTabViewStyle())
             
-                
             Text(createText())
-                .padding(.leading)
-                .padding(.bottom)
+                .padding([.leading, .trailing])
             
             Text(getRelativeDate(for: sceneActor.createdTime?.dateValue() ?? Date()))
                 .font(.footnote)
                 .foregroundColor(.gray)
-                .padding(.leading)
-                .padding(.bottom)
-                
+                .padding([.leading, .trailing])
         }
         .frame(maxWidth: 500)
+        .padding(.bottom)
     }
 }
 
@@ -106,6 +113,10 @@ extension ImageActorView {
 
         return relativeDate
     }
+    
+//    func getMaxHeight(for image: [Image]) -> Float {
+//
+//    }
 }
 
 struct ImageActorView_Previews: PreviewProvider {
