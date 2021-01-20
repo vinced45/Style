@@ -54,6 +54,7 @@
 		618926C0257F0BA3004184BB /* MultipleSelectionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618926BF257F0BA3004184BB /* MultipleSelectionRow.swift */; };
 		618926C5257F0D6F004184BB /* EmptyIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618926C4257F0D6F004184BB /* EmptyIconView.swift */; };
 		61A9999025B2461100049DAA /* UpdateSceneActorListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A9998F25B2461100049DAA /* UpdateSceneActorListView.swift */; };
+		61A9999325B874E900049DAA /* SceneImageListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A9999225B874E800049DAA /* SceneImageListView.swift */; };
 		61B8A49525AD338D0010FD75 /* DateStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B8A49425AD338D0010FD75 /* DateStyle.swift */; };
 		61B8A49825AD37A90010FD75 /* UpdateImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B8A49725AD37A90010FD75 /* UpdateImageView.swift */; };
 		61B8A49B25AD67B90010FD75 /* SceneActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B8A49A25AD67B90010FD75 /* SceneActor.swift */; };
@@ -123,6 +124,7 @@
 		618926BF257F0BA3004184BB /* MultipleSelectionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleSelectionRow.swift; sourceTree = "<group>"; };
 		618926C4257F0D6F004184BB /* EmptyIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyIconView.swift; sourceTree = "<group>"; };
 		61A9998F25B2461100049DAA /* UpdateSceneActorListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateSceneActorListView.swift; sourceTree = "<group>"; };
+		61A9999225B874E800049DAA /* SceneImageListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneImageListView.swift; sourceTree = "<group>"; };
 		61B8A49425AD338D0010FD75 /* DateStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateStyle.swift; sourceTree = "<group>"; };
 		61B8A49725AD37A90010FD75 /* UpdateImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateImageView.swift; sourceTree = "<group>"; };
 		61B8A49A25AD67B90010FD75 /* SceneActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneActor.swift; sourceTree = "<group>"; };
@@ -231,6 +233,7 @@
 				6189254F256BFCDE004184BB /* AddSceneView.swift */,
 				6189269E257EC9B2004184BB /* SceneDetailView.swift */,
 				61A9998F25B2461100049DAA /* UpdateSceneActorListView.swift */,
+				61A9999225B874E800049DAA /* SceneImageListView.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -518,6 +521,7 @@
 				61312A21259D59120057CA6B /* SceneListView.swift in Sources */,
 				61D310FC25ACAD250031FE91 /* LoadingViews.swift in Sources */,
 				61F5E6E9259BB10300263C46 /* ActorDetailView.swift in Sources */,
+				61A9999325B874E900049DAA /* SceneImageListView.swift in Sources */,
 				61D3110325ACB6540031FE91 /* ActorLook.swift in Sources */,
 				618926AA257EF110004184BB /* SceneActorShareView.swift in Sources */,
 				61D3110025ACB4080031FE91 /* IGView.swift in Sources */,

@@ -42,6 +42,10 @@ struct SceneDetailView: View {
                         viewModel.update(object: currentScene, with: ["images": sceneImages])
                     }
                 }
+                
+                NavigationLink(destination: SceneImageListView(images: sceneImages)) {
+                    Text("List Images")
+                }
             }
             
             Section(header: Text("Actors")) {
@@ -90,7 +94,7 @@ struct SceneDetailView: View {
                 }
             }
         }
-        .navigationTitle(currentScene.name)
+        .navigationTitle("\(currentScene.number) - \(currentScene.name)")
         .onAppear {
             sceneActors = viewModel.getActors(for: currentScene)
             sceneImages = currentScene.images

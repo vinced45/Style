@@ -15,6 +15,7 @@ struct ProjectDetailView: View {
     enum SheetType {
         case actor
         case scene
+        case editProject
     }
     
     @ObservedObject var sheet = SheetState<ProjectDetailView.SheetType>()
@@ -52,6 +53,17 @@ struct ProjectDetailView: View {
             }
         }
         .navigationTitle(currentProject.name)
+        .navigationBarItems(trailing:
+            Menu {
+                Button(action: {
+                    sheet.state = .editProject
+                }) {
+                    Label("Edit Project", systemImage: "video.fill")
+                }
+            } label: {
+                Image(systemName: "ellipsis")
+            }
+        )
         .onAppear {
             viewModel.currentProject = self.currentProject
             viewModel.fetchActors(for: currentProject.id ?? "")
@@ -73,6 +85,7 @@ extension ProjectDetailView {
         switch sheet.state {
         case .actor: AddActorView(showAddActor: $sheet.isShowing, viewModel: viewModel)
         case .scene: AddSceneView(showAddScene: $sheet.isShowing, viewModel: viewModel)
+        case .editProject: EditProjectView(showSheetView: $sheet.isShowing, project: currentProject, viewModel: viewModel)
         case .none: EmptyView()
         }
     }

@@ -133,8 +133,11 @@ struct ActorDetailView: View {
                                                     .colorMultiply(.gray)
                                             }
                                             .resizable()
+                                            
+                                            .scaledToFill()
+                                            .frame(width: UIScreen.main.bounds.width / 3, height: UIScreen.main.bounds.width / 3)
+                                            //.aspectRatio(1, contentMode: .fill)
                                             .clipped()
-                                            .aspectRatio(1, contentMode: .fill)
                                             .matchedGeometryEffect(id: image, in: animation)
                                             .contextMenu {
                                                 Button(action: {
