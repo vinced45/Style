@@ -11,6 +11,8 @@ import KingfisherSwiftUI
 struct ActorLookView: View {
     var actorLook: ActorLook
     
+     
+    
     var body: some View {
         HStack {
             if actorLook.completed {
@@ -32,10 +34,11 @@ struct ActorLookView: View {
             
             Spacer()
             
-            KFImage(URL(string: actorLook.image))
-                .resizable()
-                .frame(width: 70, height: 70)
-                .scaledToFit()
+            StackedImageView(images: [actorLook.image, actorLook.image])
+                .frame(width: 80, height: 80)
+//                .onTapGesture {
+//                    selection = 1
+//                }
         }
     }
 }

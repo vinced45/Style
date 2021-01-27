@@ -17,7 +17,7 @@ enum EmptyType {
         
     var image: String {
         switch self {
-        case .project: return "video.fill"
+        case .project: return "logo"
         case .actor: return "person.2.fill"
         case .scene: return "film"
         case .photo: return "photo.on.rectangle.angled"
@@ -56,10 +56,19 @@ struct EmptyIconView: View {
     
     var body: some View {
         VStack {
-            Image(systemName: type.image)
-                .emptyStyle()
+            if type == .project {
+                Image(type.image)
+                    .resizable()
+                    .frame(width: 200, height: 200)
+                    .scaledToFit()
+            } else {
+                Image(systemName: type.image)
+                    .emptyStyle()
+            }
+            
             Text(type.title)
                 .font(.system(size: 20, weight: .bold))
+            
             Text(type.message)
                 .font(.system(size: 14, weight: .regular))
         }

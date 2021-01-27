@@ -13,6 +13,7 @@ struct ProjectListView: View {
     enum SheetType {
         case updateProfile
         case addProject
+        case showSettings
     }
     
     @ObservedObject var sheet = SheetState<ProjectListView.SheetType>()
@@ -40,16 +41,26 @@ struct ProjectListView: View {
                 Image(systemName: "person.circle")
                     .font(.title)
             }, trailing:
-                Button(action: {
-                    sheet.state = .addProject
-                }) {
-                    Image(systemName: "plus")
+                HStack {
+                    Button(action: {
+                        sheet.state = .addProject
+                    }) {
+                        Image(systemName: "plus")
+                    }
+                    
+                    Button(action: {
+                        sheet.state = .showSettings
+                    }) {
+                        Image(systemName: "gear")
+                    }
                 }
+                
             )
             .sheet(isPresented: $sheet.isShowing, content: {
                 switch sheet.state {
                 case .addProject: AddProjectView(showSheetView: $sheet.isShowing, viewModel: viewModel)
                 case .updateProfile: UserUpdateView(showSheetView: $sheet.isShowing, viewModel: viewModel)
+                case .showSettings: BackgroundView()
                 default: EmptyView()
                 }
             })

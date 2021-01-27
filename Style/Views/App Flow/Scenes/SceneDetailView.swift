@@ -43,7 +43,7 @@ struct SceneDetailView: View {
                     }
                 }
                 
-                NavigationLink(destination: SceneImageListView(images: sceneImages)) {
+                NavigationLink(destination: SceneImageListView(images: sceneImages, index: 4)) {
                     Text("List Images")
                 }
             }

@@ -49,7 +49,7 @@ struct ProfileImageStyle: ViewModifier {
             .frame(width: 100, height: 100, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
             .clipShape(Circle())
             .shadow(radius: 10)
-            .overlay(Circle().stroke(Color.black, lineWidth: 3))
+            .overlay(Circle().stroke(Color("darkPink"), lineWidth: 3))
     }
 }
 
