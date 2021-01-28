@@ -12,6 +12,8 @@
 		611DD29225B9D7A40013FD05 /* HapticTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611DD29125B9D7A40013FD05 /* HapticTestView.swift */; };
 		611DD37F25C1CF030013FD05 /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611DD37E25C1CF030013FD05 /* BackgroundView.swift */; };
 		611DD38225C1D7760013FD05 /* SlantedBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611DD38125C1D7760013FD05 /* SlantedBackgroundView.swift */; };
+		611DD38B25C207880013FD05 /* ScriptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611DD38A25C207880013FD05 /* ScriptView.swift */; };
+		611DD3CF25C33A790013FD05 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611DD3CE25C33A780013FD05 /* File.swift */; };
 		61312A18259D215B0057CA6B /* HUDViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61312A17259D215B0057CA6B /* HUDViews.swift */; };
 		61312A1D259D550F0057CA6B /* ImageEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61312A1C259D550F0057CA6B /* ImageEditView.swift */; };
 		61312A21259D59120057CA6B /* SceneListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61312A20259D59120057CA6B /* SceneListView.swift */; };
@@ -86,12 +88,27 @@
 		61F5E6E9259BB10300263C46 /* ActorDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F5E6E8259BB10300263C46 /* ActorDetailView.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		611DD3A925C22C900013FD05 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		611DD28925B8F1340013FD05 /* StackedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedImageView.swift; sourceTree = "<group>"; };
 		611DD28D25B9D7220013FD05 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		611DD29125B9D7A40013FD05 /* HapticTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticTestView.swift; sourceTree = "<group>"; };
 		611DD37E25C1CF030013FD05 /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		611DD38125C1D7760013FD05 /* SlantedBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlantedBackgroundView.swift; sourceTree = "<group>"; };
+		611DD38A25C207880013FD05 /* ScriptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptView.swift; sourceTree = "<group>"; };
+		611DD3CE25C33A780013FD05 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		61312A17259D215B0057CA6B /* HUDViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDViews.swift; sourceTree = "<group>"; };
 		61312A1C259D550F0057CA6B /* ImageEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEditView.swift; sourceTree = "<group>"; };
 		61312A20259D59120057CA6B /* SceneListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneListView.swift; sourceTree = "<group>"; };
@@ -358,6 +375,7 @@
 				611DD29125B9D7A40013FD05 /* HapticTestView.swift */,
 				611DD37E25C1CF030013FD05 /* BackgroundView.swift */,
 				611DD38125C1D7760013FD05 /* SlantedBackgroundView.swift */,
+				611DD38A25C207880013FD05 /* ScriptView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -385,6 +403,7 @@
 			children = (
 				61B8A49425AD338D0010FD75 /* DateStyle.swift */,
 				61D310F525ACAA870031FE91 /* SheetState.swift */,
+				611DD3CE25C33A780013FD05 /* File.swift */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -422,6 +441,7 @@
 				616D0D732560C7150007F798 /* Sources */,
 				616D0D742560C7150007F798 /* Frameworks */,
 				616D0D752560C7150007F798 /* Resources */,
+				611DD3A925C22C900013FD05 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
@@ -452,7 +472,7 @@
 		616D0D6F2560C7150007F798 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1220;
+				LastSwiftUpdateCheck = 1230;
 				LastUpgradeCheck = 1220;
 				TargetAttributes = {
 					616D0D762560C7150007F798 = {
@@ -516,6 +536,7 @@
 				61312A18259D215B0057CA6B /* HUDViews.swift in Sources */,
 				61B8A49B25AD67B90010FD75 /* SceneActor.swift in Sources */,
 				6189254A256BF6CF004184BB /* AddActorView.swift in Sources */,
+				611DD38B25C207880013FD05 /* ScriptView.swift in Sources */,
 				618926B9257F08F2004184BB /* ProjectListView.swift in Sources */,
 				61312A25259E83650057CA6B /* ImageOverLayView.swift in Sources */,
 				61DF1BC6258915A3005BDA1D /* AddProjectView.swift in Sources */,
@@ -538,6 +559,7 @@
 				61D3111C25AD0CA60031FE91 /* UpdateActorLookView.swift in Sources */,
 				6189253A256BE1E2004184BB /* UserUpdateView.swift in Sources */,
 				61892543256BE989004184BB /* ViewModifiers.swift in Sources */,
+				611DD3CF25C33A790013FD05 /* File.swift in Sources */,
 				61A9999025B2461100049DAA /* UpdateSceneActorListView.swift in Sources */,
 				61D3111F25AD0DAE0031FE91 /* Note.swift in Sources */,
 				616D0D7B2560C7150007F798 /* StyleApp.swift in Sources */,
@@ -691,6 +713,7 @@
 		616D0D8C2560C7160007F798 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Style/Style.entitlements;
@@ -719,6 +742,7 @@
 		616D0D8D2560C7160007F798 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Style/Style.entitlements;

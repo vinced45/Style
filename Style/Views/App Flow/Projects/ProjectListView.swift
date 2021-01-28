@@ -14,7 +14,10 @@ struct ProjectListView: View {
         case updateProfile
         case addProject
         case showSettings
+        case importScript
     }
+    
+    @State var scriptUrl: String = ""
     
     @ObservedObject var sheet = SheetState<ProjectListView.SheetType>()
     
@@ -54,21 +57,34 @@ struct ProjectListView: View {
                         Image(systemName: "gear")
                     }
                 }
-                
             )
             .sheet(isPresented: $sheet.isShowing, content: {
                 switch sheet.state {
                 case .addProject: AddProjectView(showSheetView: $sheet.isShowing, viewModel: viewModel)
                 case .updateProfile: UserUpdateView(showSheetView: $sheet.isShowing, viewModel: viewModel)
-                case .showSettings: BackgroundView()
+                case .showSettings: HapticView()
+                case .importScript: ScriptView(fileUrl: $scriptUrl, showSheetView: $sheet.isShowing, viewModel: viewModel)
                 default: EmptyView()
                 }
             })
             .onAppear {
                 viewModel.fetchProjects()
             }
+            .onOpenURL { url in
+                guard let newUrl = File.moveUrlToDocumentsDirectory(url: url, fileExtension: "pdf") else {
+                    print("import script - unable to copy url")
+                    return
+                }
+
+                scriptUrl = newUrl.absoluteString
+                sheet.state = .importScript
+            }
         }
     }
+}
+
+extension ProjectListView {
+
 }
 
 struct ProjectListView_Previews: PreviewProvider {
