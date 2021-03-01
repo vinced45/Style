@@ -20,8 +20,12 @@ struct AddActorLookView: View {
 
     var body: some View {
         NavigationView {
-            Form {
-                Section {
+            
+            ZStack {
+                StyleBackgroundView()
+                    .zIndex(1.0)
+                
+                VStack {
                     UpdateImageView() { imageData in
                         self.viewModel.upload(data: imageData, to: "image/\(UUID().uuidString).jpg") { url in
                             guard let imageUrl = url else { return }
@@ -29,11 +33,17 @@ struct AddActorLookView: View {
                             imageUrlString = imageUrl.absoluteString
                         }
                     }
-                }
-                
-                Section {
+                    .padding(.top, 100)
+                    
+                    Spacer()
+                        .frame(height: 150)
+                    
                     FormTextFieldView(name: "Description", placeholder: "Description of Look", text: $text)
+                        .padding([.leading, .trailing], 30)
+                    
+                    Spacer()
                 }
+                .zIndex(2.0)
             }
             .navigationBarTitle(Text("Add Look"), displayMode: .inline)
                 .navigationBarItems(leading: Button(action: {
@@ -82,8 +92,11 @@ struct EditActorLookView: View {
     @State var imageUrlString: String = ""
     
     var body: some View {
-        Form {
-            Section {
+        ZStack {
+            StyleBackgroundView()
+                .zIndex(1.0)
+            
+            VStack {
                 UpdateImageView(imageUrl: actorLook.image) { imageData in
                     self.viewModel.upload(data: imageData, to: "image/\(UUID().uuidString).jpg") { url in
                         guard let imageUrl = url else { return }
@@ -91,11 +104,17 @@ struct EditActorLookView: View {
                         imageUrlString = imageUrl.absoluteString
                     }
                 }
-            }
-            
-            Section {
+                .padding(.top, 100)
+                
+                Spacer()
+                    .frame(height: 150)
+                
                 FormTextFieldView(name: "Description", placeholder: "Description of Look", text: $text)
+                    .padding([.leading, .trailing], 30)
+                
+                Spacer()
             }
+            .zIndex(2.0)
         }
         .navigationBarTitle(Text("Edit Look"), displayMode: .inline)
         .onAppear {
@@ -112,8 +131,8 @@ struct EditActorLookView: View {
     }
 }
 
-//struct EditActorLookView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        EditActorLookView(showSheet: .constant(true), viewModel: ProjectViewModel.preview())
-//    }
-//}
+struct EditActorLookView_Previews: PreviewProvider {
+    static var previews: some View {
+        EditActorLookView(actorLook: ActorLook.preview(), viewModel: ProjectViewModel.preview())
+    }
+}

@@ -39,7 +39,18 @@ struct TextFieldStyle: ViewModifier {
         content
             .font(.system(size: 14))
             .padding(12)
-            .background(RoundedRectangle(cornerRadius: 5).strokeBorder(Color("bg1"), lineWidth: 1))
+            .background(Color.clear)
+            //.background(RoundedRectangle(cornerRadius: 5).strokeBorder(Color(.black), lineWidth: 1))
+    }
+}
+
+struct TextViewStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.system(size: 14))
+            .padding(12)
+            //.background(Color.white)
+            .background(RoundedRectangle(cornerRadius: 5).strokeBorder(Color(.black), lineWidth: 1))
     }
 }
 
@@ -59,6 +70,6 @@ extension Image {
             .resizable()
             .scaledToFit()
             .frame(width: 100, height: 100, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-            //.colorMultiply(.red)
+            
     }
 }

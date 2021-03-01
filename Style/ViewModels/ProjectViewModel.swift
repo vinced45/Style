@@ -36,6 +36,8 @@ class ProjectViewModel: ObservableObject {
     @Published var actorLooks: [ActorLook] = []
     @Published var currentActorLook: ActorLook?
     
+    @Published var currentActorSize: ActorSize?
+    
     var didChange = PassthroughSubject<Void, Never>()
     var message = PassthroughSubject<String, Never>()
 
@@ -44,23 +46,26 @@ class ProjectViewModel: ObservableObject {
     private var database = Firestore.firestore()
     private var storage = Storage.storage().reference()
 
-    func fetchProjects() {
+    func fetchProjects(uid: String) {
         database.collection("projects")
+            //.whereField("admins", arrayContainsAny: [uid])
             .order(by: "name", descending: false)
             .addSnapshotListener { (querySnapshot, error) in
           guard let documents = querySnapshot?.documents else {
-            print("No documents")
+            print("No Projects")
             return
           }
             
             self.projects = documents.compactMap { queryDocumentSnapshot -> Project? in
                 return try? queryDocumentSnapshot.data(as: Project.self)
             }
+            .filter { $0.admins.contains(uid) }
         }
     }
     
     func fetchUser(for uid: String) {
-        database.collection("users").whereField("uid", isEqualTo: uid)
+        database.collection("users")
+            .whereField("uid", isEqualTo: uid)
             .getDocuments() { (querySnapshot, error) in
             guard let documents = querySnapshot?.documents else {
               print("No users")
@@ -76,8 +81,24 @@ class ProjectViewModel: ObservableObject {
         }
     }
     
+    func fetchUsers(exclude uid: String) {
+        database.collection("users")
+            .whereField("uid", isNotEqualTo: uid)
+            .getDocuments() { (querySnapshot, error) in
+            guard let documents = querySnapshot?.documents else {
+              print("No users")
+              return
+            }
+      
+                self.users = documents.compactMap { queryDocumentSnapshot -> ProjectUser? in
+                return try? queryDocumentSnapshot.data(as: ProjectUser.self)
+            }
+        }
+    }
+    
     func fetchActors(for projectId: String) {
-        database.collection("actors").whereField("projectId", isEqualTo: projectId)
+        database.collection("actors")
+            .whereField("projectId", isEqualTo: projectId)
             .getDocuments() { (querySnapshot, error) in
             guard let documents = querySnapshot?.documents else {
               print("No documents")
@@ -173,6 +194,23 @@ class ProjectViewModel: ObservableObject {
         }
     }
     
+    func fetchActorSize(for actorId: String) {
+        database.collection("actorSizes")
+            .whereField("actorId", isEqualTo: actorId)
+            .getDocuments() { (querySnapshot, error) in
+            guard let documents = querySnapshot?.documents else {
+              print("No Actor Sizes")
+              return
+            }
+      
+            self.currentActorSize = documents.compactMap { queryDocumentSnapshot -> ActorSize? in
+                return try? queryDocumentSnapshot.data(as: ActorSize.self)
+            }.first
+                
+                //completion(self.currentActorSize)
+        }
+    }
+
     func add(object: FirebaseObjectable) {
         var ref: DocumentReference? = nil
         ref = database.collection(object.objectName).addDocument(data: object.dict) { err in
@@ -240,6 +278,32 @@ class ProjectViewModel: ObservableObject {
         }
     }
     
+    func save(pdfScenes: [PDFScene], with name: String, user: String, completion: @escaping () -> Void) {
+        let project = Project(id: nil,
+                              name: name,
+                              image: "",
+                              admins: [user],
+                              readOnlyUsers: [],
+                              creatorId: user,
+                              dateCreated: Date(),
+                              lastUser: user,
+                              lastUpdated: Date(),
+                              createdTime: nil)
+        
+        var ref: DocumentReference? = nil
+        ref = database.collection(project.objectName).addDocument(data: project.dict) { err in
+            if let err = err {
+                print("Error adding document: \(err)")
+            } else {
+                for pdfScene in pdfScenes {
+                    let scene = MovieScene(id: nil, projectId: ref!.documentID, name: pdfScene.text, number: Int(pdfScene.number) ?? 0, actors: [], images: [], createdTime: nil)
+                    self.add(object: scene)
+                }
+                completion()
+            }
+        }
+    }
+    
 //    func getAllImages() {
 //        //var totalSize: Int64 = 0
 //        //var fileCount = 0
@@ -272,7 +336,7 @@ class ProjectViewModel: ObservableObject {
 //        }
 //    }
     
-    func getActorImages() {
+    func getActorImages(section: Int) {
         loading.send(true)
         self.currentActorImages = []
         var tempList: [String] = []
@@ -280,7 +344,7 @@ class ProjectViewModel: ObservableObject {
         var totalSize: Int64 = 0
         var fileCount = 0
         
-        let actorImageRef = storage.child("images/actors/\(currentActor?.id ?? "")/gallery")
+        let actorImageRef = storage.child("images/actors/\(currentActor?.id ?? "")/gallery/\(section)")
         actorImageRef.listAll { (result, error) in
             if let err = error {
                 print("Image count error \(err.localizedDescription)")

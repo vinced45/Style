@@ -16,6 +16,12 @@ struct Project: Identifiable, Codable {
     @DocumentID var id: String?
     var name: String
     var image: String
+    var admins: [String]
+    var readOnlyUsers: [String]
+    var creatorId: String
+    var dateCreated: Date
+    var lastUser: String
+    var lastUpdated: Date
     
     @ServerTimestamp var createdTime: Timestamp?
     
@@ -23,6 +29,12 @@ struct Project: Identifiable, Codable {
         case id
         case name
         case image
+        case admins
+        case readOnlyUsers
+        case creatorId
+        case dateCreated
+        case lastUser
+        case lastUpdated
     }
 }
 
@@ -39,7 +51,13 @@ extension Project: FirebaseObjectable {
     var dict: [String: Any] {
         return [
                 "name": name,
-                "image": image
+                "image": image,
+                "admins": admins,
+                "readOnlyUsers": readOnlyUsers,
+                "creatorId": creatorId,
+                "dateCreated": dateCreated,
+                "lastUser": lastUser,
+                "lastUpdated": lastUpdated
         ]
     }
     
@@ -56,10 +74,15 @@ extension Project {
 /// Preview
 extension Project {
     static func preview() -> Project {
-        return Project(id: "asdasda", name: "BET Movie", image: "https://i0.wp.com/blackyouthproject.com/wp-content/uploads/2018/11/Screenshot_20181127-120025_Gallery.jpg?fit=1439%2C795")
-    }
-    
-    static func dummy2() -> Project {
-        return Project(id: "asdasdawer", name: "UMC TV Show", image: "umc")
+        return Project(id: "asdasda",
+                       name: "BET Movie",
+                       image: "https://i0.wp.com/blackyouthproject.com/wp-content/uploads/2018/11/Screenshot_20181127-120025_Gallery.jpg?fit=1439%2C795",
+                       admins: [],
+                       readOnlyUsers: [],
+                       creatorId: "",
+                       dateCreated: Date(),
+                       lastUser: "",
+                       lastUpdated: Date()
+                       )
     }
 }

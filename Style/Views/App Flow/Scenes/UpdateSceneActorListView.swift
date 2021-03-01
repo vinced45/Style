@@ -17,33 +17,39 @@ struct UpdateSceneActorListView: View {
     
     var body: some View {
         NavigationView {
-            Form {
-                Section(header: Text("Actors In Scene")) {
-                    List {
-                        ForEach(viewModel.actors) { actor in
-                            HStack {
-                                KFImage(URL(string: actor.image))
-                                    .resizable()
-                                    .frame(width: 44, height: 44)
-                                    .clipShape(Circle())
-                                    .shadow(radius: 10)
-                                    .overlay(Circle().stroke(Color.black, lineWidth: 3))
-                                VStack(alignment: .leading) {
-                                    Text(actor.realName)
-                                    Text(actor.screenName).font(.subheadline).foregroundColor(.gray)
-                                }
-                                Spacer()
-                                Image(systemName: (self.actorIDs.contains(actor.id ?? "")) ? "checkmark.rectangle" : "rectangle")
-                                    .resizable()
-                                    .frame(width: 30, height: 30, alignment: .center)
+            ZStack {
+                SlantedBackgroundView()
+                    .zIndex(1.0)
+                
+                List {
+                    Text("Actors In Scene").bold()
+                    
+                    ForEach(viewModel.actors) { actor in
+                        HStack {
+                            KFImage(URL(string: actor.image))
+                                .resizable()
+                                .frame(width: 44, height: 44)
+                                .clipShape(Circle())
+                                .shadow(radius: 10)
+                                .overlay(Circle().stroke(Color.black, lineWidth: 3))
+                            VStack(alignment: .leading) {
+                                Text(actor.realName)
+                                Text(actor.screenName).font(.subheadline).foregroundColor(.gray)
+                            }
+                            Spacer()
+                            Image(systemName: (self.actorIDs.contains(actor.id ?? "")) ? "checkmark.rectangle" : "rectangle")
+                                .resizable()
+                                .frame(width: 30, height: 30, alignment: .center)
 
-                            }
-                            .onTapGesture {
-                                toggle(actor: actor)
-                            }
+                        }
+                        .padding([.top, .bottom], 2)
+                        .onTapGesture {
+                            toggle(actor: actor)
                         }
                     }
                 }
+                .listStyle(InsetGroupedListStyle())
+                .zIndex(2.0)
             }
             .navigationBarTitle(Text("Update Actors"), displayMode: .inline)
             .navigationBarItems(leading: Button(action: {

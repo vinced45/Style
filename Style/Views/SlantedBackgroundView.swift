@@ -8,10 +8,17 @@
 import SwiftUI
 
 struct SlantedBackgroundView: View {
+    
     var body: some View {
-        SlantedRectangle()
-            .fill(Color("darkGray"))
-            .frame(height: 450)
+        ZStack {
+            Color("darkBlue")
+                .ignoresSafeArea()
+            
+            SlantedRectangle()
+                .fill(Color("darkGray"))
+                .frame(height: 450)
+        }
+        
             
     }
 }

@@ -24,54 +24,61 @@ struct AddSceneView: View {
     
     var body: some View {
         NavigationView {
-            Form {
-                Section(header: Text("Scene Info")) {
-                    TextField("Scene #", text: $number)
-                        .modifier(TextFieldStyle())
-                        .keyboardType(.numberPad)
-                        .frame(width: 100)
+            ZStack {
+                SlantedBackgroundView()
+                    .zIndex(1.0)
+                
+                Form {
+                    Section(header: Text("Scene Info")) {
+                        TextField("Scene #", text: $number)
+                            .modifier(TextFieldStyle())
+                            .keyboardType(.numberPad)
+                            .frame(width: 100)
+                        
+                        TextField("Scene Name", text: $name)
+                            .modifier(TextFieldStyle())
+                    }
                     
-                    TextField("Scene Name", text: $name)
-                        .modifier(TextFieldStyle())
-                }
-                
-                Section(header: Text("Scene Images"), footer: Text("Tap + button to add scene Images")) {
-                    UpdateMultipleImageView(isEditing: true, images: $sceneImages) { imageData in
-                        self.viewModel.upload(data: imageData, to: "image/\(UUID().uuidString).jpg") { url in
-                            guard let imageUrl = url else { return }
-                            
-                            self.sceneImages.append(imageUrl.absoluteString)
+                    Section(header: Text("Scene Images"), footer: Text("Tap + button to add scene Images")) {
+                        UpdateMultipleImageView(isEditing: true, images: $sceneImages) { imageData in
+                            self.viewModel.upload(data: imageData, to: "image/\(UUID().uuidString).jpg") { url in
+                                guard let imageUrl = url else { return }
+                                
+                                self.sceneImages.append(imageUrl.absoluteString)
+                            }
                         }
                     }
-                }
-                
-                Section(header: Text("Actors In Scene")) {
-                    List {
-                        ForEach(viewModel.actors) { actor in
-                            HStack {
-                                KFImage(URL(string: actor.image))
-                                    .resizable()
-                                    .frame(width: 44, height: 44)
-                                    .clipShape(Circle())
-                                    .shadow(radius: 10)
-                                    .overlay(Circle().stroke(Color.black, lineWidth: 3))
-                                VStack(alignment: .leading) {
-                                    Text(actor.realName)
-                                    Text(actor.screenName).font(.subheadline).foregroundColor(.gray)
-                                }
-                                Spacer()
-                                Image(systemName: (self.actorIDs.contains(actor.id ?? "")) ? "checkmark.rectangle" : "rectangle")
-                                    .resizable()
-                                    .frame(width: 30, height: 30, alignment: .center)
+                    
+                    Section(header: Text("Actors In Scene")) {
+                        List {
+                            ForEach(viewModel.actors) { actor in
+                                HStack {
+                                    KFImage(URL(string: actor.image))
+                                        .resizable()
+                                        .frame(width: 44, height: 44)
+                                        .clipShape(Circle())
+                                        .shadow(radius: 10)
+                                        .overlay(Circle().stroke(Color.black, lineWidth: 3))
+                                    VStack(alignment: .leading) {
+                                        Text(actor.realName)
+                                        Text(actor.screenName).font(.subheadline).foregroundColor(.gray)
+                                    }
+                                    Spacer()
+                                    Image(systemName: (self.actorIDs.contains(actor.id ?? "")) ? "checkmark.rectangle" : "rectangle")
+                                        .resizable()
+                                        .frame(width: 30, height: 30, alignment: .center)
 
-                            }
-                            .onTapGesture {
-                                toggle(actor: actor)
+                                }
+                                .onTapGesture {
+                                    toggle(actor: actor)
+                                }
                             }
                         }
                     }
                 }
+                .zIndex(2.0)
             }
+            
             .navigationBarTitle(Text("Add Scene"), displayMode: .inline)
             .navigationBarItems(leading: Button(action: {
                 self.showAddScene = false

@@ -18,31 +18,46 @@ struct ScriptView: View {
     @State var scenes: [PDFScene] = []
     @State private var isImporting: Bool = false
     
+    @State private var isUploading: Bool = false
+    
+    @EnvironmentObject var session: SessionStore
+    
     var body: some View {
         NavigationView {
-            VStack(alignment: .center) {
-                Text(title)
-                    .multilineTextAlignment(.center)
-                    .padding(.top)
+            ZStack {
+                LoadingView(text: "Uploading Script")
+                    .zIndex(1.0)
+                    .opacity(isUploading ? 1.0 : 0.0)
                 
-                List {
-                    ForEach(scenes, id: \.self) { scene in
-                        HStack {
-                            Text(scene.number)
-                                .font(.largeTitle)
-                            
-                            VStack(alignment: .leading) {
-                                Text((scene.text))
-                                    .bold()
-                                
-                                Text(scene.details)
-                                    .font(.subheadline)
-                                    .foregroundColor(.gray)
+                VStack(alignment: .center) {
+                    Text(title)
+                        .multilineTextAlignment(.center)
+                        .padding(.top)
+                    
+                    List {
+                        ForEach(scenes.indices, id: \.self) { i in
+                            let scene = scenes[i]
+                            NavigationLink(destination: ScriptSceneUpdateView(scene: $scenes[i])) {
+                                HStack {
+                                    Text(scene.number)
+                                        .font(.largeTitle)
+                                    
+                                    VStack(alignment: .leading) {
+                                        Text((scene.text))
+                                            .bold()
+                                        
+                                        Text(scene.details)
+                                            .font(.subheadline)
+                                            .foregroundColor(.gray)
+                                    }
+                                }
                             }
+                            
+                            
                         }
-                        
                     }
                 }
+                .zIndex(2.0)
             }
             .navigationBarTitle(Text("Import Script"), displayMode: .inline)
             .navigationBarItems(leading: Button(action: {
@@ -50,7 +65,12 @@ struct ScriptView: View {
             }) {
                 Text("Cancel").bold()
             }, trailing: Button(action: {
-                //parse()
+                isUploading = true
+                viewModel.save(pdfScenes: scenes, with: getFirstLine(from: title), user: session.session?.uid ?? "") {
+                    self.showSheetView = false
+                    isUploading = false
+                }
+                
             }) {
                 Text("Save").bold()
             })
@@ -70,6 +90,14 @@ struct ScriptView: View {
         
         PDFReader.parseScenes(for: url) { scene in
             scenes.append(scene)
+        }
+    }
+    
+    func getFirstLine(from text: String) -> String {
+        if let firstLine = text.components(separatedBy: "\n").first {
+            return firstLine
+        } else {
+            return ""
         }
     }
 }

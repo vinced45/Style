@@ -63,14 +63,21 @@ struct EmptyIconView: View {
                     .scaledToFit()
             } else {
                 Image(systemName: type.image)
+                    .renderingMode(.template)
                     .emptyStyle()
+                    //.foregroundColor(Color("darkPink"))
+                    .foregroundColor(.white)
             }
             
             Text(type.title)
                 .font(.system(size: 20, weight: .bold))
+                //.foregroundColor(Color("teal"))
+                .foregroundColor(.white)
             
             Text(type.message)
                 .font(.system(size: 14, weight: .regular))
+                //.foregroundColor(Color("darkPink"))
+                .foregroundColor(.white)
         }
         .onTapGesture {
             completionHandler()

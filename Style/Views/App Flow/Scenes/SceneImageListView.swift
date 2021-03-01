@@ -16,20 +16,28 @@ struct SceneImageListView: View {
     ]
     
     var body: some View {
-        ScrollViewReader { scrollProxy in
-            ScrollView {
-                LazyVGrid(columns: oneColumn, alignment: .center) {
-                    ForEach(images, id: \.self) { image in
-                        ImageUploadView(image: image)
+        ZStack {
+            SlantedBackgroundView()
+                .zIndex(1.0)
+            
+            ScrollViewReader { scrollProxy in
+                ScrollView {
+                    LazyVGrid(columns: oneColumn, alignment: .center) {
+                        ForEach(images, id: \.self) { image in
+                            ImageUploadView(image: image)
+                        }
+                    }
+                }
+                
+                .onChange(of: self.index) { _ in
+                    withAnimation {
+                        scrollProxy.scrollTo(index)
                     }
                 }
             }
-            .onChange(of: self.index) { _ in
-                withAnimation {
-                    scrollProxy.scrollTo(index)
-                }
-            }
+            .zIndex(2.0)
         }
+        
         .onAppear {
             //DispatchQueue.main.asy
             index = 5

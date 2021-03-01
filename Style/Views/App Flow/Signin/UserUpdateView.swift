@@ -32,91 +32,75 @@ struct UserUpdateView: View {
     
     var body: some View {
         NavigationView {
-            Form {
-                Section(header: Text("Profile Image")) {
-                    HStack{
-                        Spacer()
-                        VStack {
-                            if let image = userImage {
-                                image
+            
+            ZStack {
+                StyleBackgroundView()
+                    .zIndex(1.0)
+                
+                VStack {
+                    VStack {
+                        if let image = userImage {
+                            image
+                                .resizable()
+                                .modifier(ProfileImageStyle())
+                        } else {
+                            if imageUrlString.isEmpty {
+                                Image(systemName: "person.circle.fill")
                                     .resizable()
                                     .modifier(ProfileImageStyle())
                             } else {
-                                if imageUrlString.isEmpty {
-                                    Image(systemName: "person.circle.fill")
-                                        .resizable()
-                                        .modifier(ProfileImageStyle())
-                                } else {
-                                    KFImage(URL(string: imageUrlString))
-                                        .resizable()
-                                        .modifier(ProfileImageStyle())
-                                }
-                            }
-                            Menu {
-                                Button(action: {
-                                    showCamera = true
-                                    showingImagePicker.toggle()
-                                }) {
-                                    Label("Take Picture", systemImage: "camera")
-                                }
-                                Button(action: {
-                                    showCamera = false
-                                    showingImagePicker.toggle()
-                                }) {
-                                    Label("Photo Gallery", systemImage: "photo.on.rectangle")
-                                }
-                            } label: {
-                                Text("Tap to Update Image")
+                                KFImage(URL(string: imageUrlString))
+                                    .resizable()
+                                    .modifier(ProfileImageStyle())
                             }
                         }
-                        Spacer()
-                    }
-                }
-                
-                Section {
-                    VStack(alignment: .leading) {
-                        Text("First Name").bold()
-                        TextField("First Name", text: $firstName)
-                            .modifier(TextFieldStyle())
-                    }
-                    
-                    VStack(alignment: .leading) {
-                        Text("Last Name").bold()
-                        TextField("Last Name", text: $lastName)
-                            .modifier(TextFieldStyle())
-                    }
-                    
-                    VStack(alignment: .leading) {
-                        Text("Phone").bold()
-                        iPhoneNumberField("000-000-0000", text: $phone)
-                            .flagHidden(true)
-                            .flagSelectable(true)
-                            .maximumDigits(10)
-                            .clearButtonMode(.whileEditing)
-                            .modifier(TextFieldStyle())
-                    }
-                    
-                    VStack(alignment: .leading) {
-                        Text("Title").bold()
-                        TextField("Title", text: $title)
-                            .modifier(TextFieldStyle())
-                    }
-                }
-                
-                Section {
-                    Button(action: {
-                        showAlert.toggle()
-                    }) {
-                        HStack(spacing: 10) {
-                            Text("Sign Out")
+                        Menu {
+                            Button(action: {
+                                showCamera = true
+                                showingImagePicker.toggle()
+                            }) {
+                                Label("Take Picture", systemImage: "camera")
+                            }
+                            Button(action: {
+                                showCamera = false
+                                showingImagePicker.toggle()
+                            }) {
+                                Label("Photo Gallery", systemImage: "photo.on.rectangle")
+                            }
+                        } label: {
+                            Text("Tap to Update Image")
                         }
                     }
-                        .modifier(ButtonStyle())
-                        .padding(10)
+                    .padding(.top, 90)
+                    
+                    Spacer()
+                    
+                    Group {
+                        FormTextFieldView(name: "First Name", placeholder: "First Name", text: $firstName)
+                        
+                        FormTextFieldView(name: "Last Name", placeholder: "Last Name", text: $lastName)
+                        
+                        VStack(alignment: .leading) {
+                            Text("Phone").padding(.leading, 15)
+                            iPhoneNumberField("000-000-0000", text: $phone)
+                                .flagHidden(true)
+                                .flagSelectable(true)
+                                .maximumDigits(10)
+                                .clearButtonMode(.whileEditing)
+                                .modifier(TextFieldStyle())
+                        }
+                        
+                        FormTextFieldView(name: "Title", placeholder: "Title", text: $title)
+                    }
+                    .padding([.leading, .trailing], 30)
+                    
+                    
+                    Spacer()
                 }
+                .zIndex(2.0)
             }
-            .padding(12)
-            .navigationBarTitle("Profile")
+
+            .navigationBarTitle("Profile", displayMode: .inline)
             .navigationBarItems(leading: Button(action: {
                 self.showSheetView = false
             }) {
@@ -199,8 +183,9 @@ extension UserUpdateView {
     }
 }
 
-//struct UserUpdateView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        UserUpdateView(showSheetView: ., viewModel: ProjectViewModel.preview())
-//    }
-//}
+struct UserUpdateView_Previews: PreviewProvider {
+    static var previews: some View {
+        UserUpdateView(showSheetView: .constant(true), viewModel: ProjectViewModel.preview())
+            .environmentObject(SessionStore())
+    }
+}

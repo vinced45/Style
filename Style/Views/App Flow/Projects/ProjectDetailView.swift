@@ -10,49 +10,72 @@ import KingfisherSwiftUI
 
 struct ProjectDetailView: View {
     @ObservedObject var viewModel: ProjectViewModel
-    var currentProject: Project
+    @State var currentProject: Project
 
     enum SheetType {
         case actor
         case scene
         case editProject
+        case admin
     }
     
     @ObservedObject var sheet = SheetState<ProjectDetailView.SheetType>()
+    
+    @State var isActorsExpanded = true
+    @State var isScenesExpanded = true
 
     var body: some View {
-        Form {
-            Section(header: Text("Actors")) {
-                ForEach(viewModel.actors) { actor in
-                    NavigationLink(destination: ActorDetailView(viewModel: viewModel, currentActor: actor)) {
-                        ImageTextRowView(config: actor)
-                            .frame(height: 60)
-                    }
-                }
-                
-                Button(action: {
-                    sheet.state = .actor
-                }) {
-                    Text("Add Actor")
-                }
-            }
+        ZStack {
+            SlantedBackgroundView()
+                .zIndex(1.0)
             
-            Section(header: Text("Scenes")) {
-                ForEach(viewModel.scenes) { scene in
-                    NavigationLink(destination: SceneDetailView(viewModel: viewModel, currentScene: scene)) {
-                        ImageTextRowView(config: scene)
-                            .frame(height: 60)
+            List {
+                Section {
+                    DisclosureGroup(isExpanded: $isActorsExpanded) {
+                        ForEach(viewModel.actors) { actor in
+                            NavigationLink(destination: ActorDetailView(viewModel: viewModel, currentActor: actor)) {
+                                ImageTextRowView(config: actor)
+                                    .frame(height: 60)
+                            }
+                        }
+                    } label: {
+                        Text("Actors (\(viewModel.actors.count))")
+                            .font(.headline)
+                    }
+                    
+                    Button(action: {
+                        sheet.state = .actor
+                    }) {
+                        Text("Add Actor")
                     }
                 }
                 
-                Button(action: {
-                    sheet.state = .scene
-                }) {
-                    Text("Add Scene")
+                Section {
+                    DisclosureGroup(isExpanded: $isScenesExpanded) {
+                        ForEach(viewModel.scenes) { scene in
+                            NavigationLink(destination: SceneDetailView(viewModel: viewModel, currentScene: scene)) {
+                                ImageTextRowView(config: scene)
+                                    .frame(height: 60)
+                            }
+                        }
+                    } label: {
+                        Text("Scenes (\(viewModel.scenes.count))")
+                            .font(.headline)
+                    }
+                    
+                    Button(action: {
+                        sheet.state = .scene
+                    }) {
+                        Text("Add Scene")
+                    }
                 }
             }
+            .listStyle(InsetGroupedListStyle())
+            .zIndex(2.0)
+            .padding(.top, 50)
+            
         }
-        .navigationTitle(currentProject.name)
+        .navigationBarTitle(currentProject.name, displayMode: .inline)
         .navigationBarItems(trailing:
             Menu {
                 Button(action: {
@@ -60,8 +83,27 @@ struct ProjectDetailView: View {
                 }) {
                     Label("Edit Project", systemImage: "video.fill")
                 }
+                
+                Button(action: {
+                    sheet.state = .admin
+                }) {
+                    Label("Manage Users", systemImage: "person.3.fill")
+                }
+                
+                Button(action: {
+                    sheet.state = .actor
+                }) {
+                    Label("Add Actor", systemImage: "person.fill")
+                }
+                
+                Button(action: {
+                    sheet.state = .scene
+                }) {
+                    Label("Add Scene", systemImage: "film.fill")
+                }
             } label: {
                 Image(systemName: "ellipsis")
+                    .font(.title)
             }
         )
         .onAppear {
@@ -85,7 +127,8 @@ extension ProjectDetailView {
         switch sheet.state {
         case .actor: AddActorView(showAddActor: $sheet.isShowing, viewModel: viewModel)
         case .scene: AddSceneView(showAddScene: $sheet.isShowing, viewModel: viewModel)
-        case .editProject: EditProjectView(showSheetView: $sheet.isShowing, project: currentProject, viewModel: viewModel)
+        case .editProject: EditProjectView(showSheetView: $sheet.isShowing, project: $currentProject, viewModel: viewModel)
+        case .admin: ProjectAdminView(showSheet: $sheet.isShowing, project: $currentProject, viewModel: viewModel)
         case .none: EmptyView()
         }
     }

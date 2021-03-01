@@ -71,7 +71,8 @@ struct UpdateImageView: View {
 extension UpdateImageView {
     func loadImage() {
         guard let inputImage = inputImage,
-              let imageData = inputImage.jpegData(compressionQuality: 0.9) else { return }
+              let watermarkImage = inputImage.watermark(),
+              let imageData = watermarkImage.jpegData(compressionQuality: 0.9) else { return }
         
         imageUrl = nil
         
@@ -165,7 +166,8 @@ extension UpdateMultipleImageView {
     }
     func loadImage() {
         guard let inputImage = inputImage,
-              let imageData = inputImage.jpegData(compressionQuality: 0.9) else { return }
+              let watermarkImage = inputImage.watermark(),
+              let imageData = watermarkImage.jpegData(compressionQuality: 0.9) else { return }
         
         self.imageData(imageData)
     }

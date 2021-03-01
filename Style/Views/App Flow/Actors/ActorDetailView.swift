@@ -38,6 +38,7 @@ struct ActorDetailView: View {
         case editNote
         case addLook
         case updateActor
+        case sizeChart
     }
     
     @ObservedObject var sheet = SheetState<ActorDetailView.SheetType>()
@@ -76,9 +77,15 @@ struct ActorDetailView: View {
     
     var body: some View {
         ZStack(alignment: .top) {
+            SlantedBackgroundView()
+                .zIndex(0.0)
+            
             VStack {
-                ActorProfileView(actor: currentActor)
-                    .padding()
+                ActorProfileView(actor: currentActor) {
+                    sheet.state = .sizeChart
+                }
+                .padding()
+                .padding(.top, 50)
                 
                 Picker("Options", selection: $choice) {
                     ForEach(0 ..< settings.count) { index in
@@ -91,6 +98,26 @@ struct ActorDetailView: View {
                 
                 ScrollView {
                     if choice == 0 /* Pre Prod */ {
+                        Picker("Dept", selection: $deptChoice) {
+                            ForEach(0 ..< deptType.count) { index in
+                                Text(self.deptType[index])
+                                    .tag(index)
+                            }
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                        .padding(.leading)
+                        .padding(.trailing)
+                        
+                        Picker("List Type", selection: $listChoice) {
+                            ForEach(0 ..< listType.count) { index in
+                                Image(systemName: self.listType[index])
+                                    .tag(index)
+                            }
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                        .padding(.leading)
+                        .padding(.trailing)
+                        
                         if viewModel.currentActorImages.count == 0 {
                             Spacer(minLength: emptySpacerHeight)
                             if isLoading {
@@ -101,25 +128,7 @@ struct ActorDetailView: View {
                                 }
                             }
                         } else {
-                            Picker("Dept", selection: $deptChoice) {
-                                ForEach(0 ..< deptType.count) { index in
-                                    Text(self.deptType[index])
-                                        .tag(index)
-                                }
-                            }
-                            .pickerStyle(SegmentedPickerStyle())
-                            .padding(.leading)
-                            .padding(.trailing)
                             
-                            Picker("List Type", selection: $listChoice) {
-                                ForEach(0 ..< listType.count) { index in
-                                    Image(systemName: self.listType[index])
-                                        .tag(index)
-                                }
-                            }
-                            .pickerStyle(SegmentedPickerStyle())
-                            .padding(.leading)
-                            .padding(.trailing)
                             
                             if listChoice == 0 {
                                 LazyVGrid(columns: gridColumns, alignment: .center) {
@@ -181,22 +190,32 @@ struct ActorDetailView: View {
                             EmptyIconView(type: .scene) {}
                         } else {
                             ForEach(scenes) { scene in
-                                NavigationLink(destination: SceneDetailView(viewModel: viewModel, currentScene: scene)) {
-                                    VStack(alignment: .leading) {
-                                        HStack {
-                                            ImageTextRowView(config: scene)
-                                                .padding()
-                                                .frame(height: 60)
-                                                .foregroundColor(.black)
-                                            
-                                            Spacer()
-                                            
-                                            Image(systemName: "chevron.right")
-                                                .padding()
-                                                .foregroundColor(.black)
+                                ZStack {
+                                    Color("light")
+                                        .cornerRadius(5.0)
+                                        .zIndex(1.0)
+                                    
+                                    NavigationLink(destination: SceneDetailView(viewModel: viewModel, currentScene: scene)) {
+                                        VStack(alignment: .leading) {
+                                            HStack {
+                                                ImageTextRowView(config: scene)
+                                                    .padding()
+                                                    .frame(height: 60)
+                                                    .foregroundColor(.black)
+                                                
+                                                Spacer()
+                                                
+                                                Image(systemName: "chevron.right")
+                                                    .padding()
+                                                    .foregroundColor(.black)
+                                            }
                                         }
                                     }
+                                    .padding()
+                                    .zIndex(2.0)
                                 }
+                                .padding([.leading, .trailing])
+                                
                             }
                         }
                     } else if choice == 2 /* Looks */ {
@@ -207,32 +226,39 @@ struct ActorDetailView: View {
                             }
                         } else {
                             ForEach(viewModel.actorLooks) { actorLook in
-                                VStack(alignment: .leading) {
-                                    HStack {
-                                        Group {
-                                            ActorLookView(actorLook: actorLook)
-                                                .padding()
-                                                .frame(height: 80)
-                                                .foregroundColor(.black)
+                                ZStack {
+                                    Color("light")
+                                        .cornerRadius(5.0)
+                                        .zIndex(1.0)
+                                    
+                                    VStack(alignment: .leading) {
+                                        HStack {
+                                            Group {
+                                                ActorLookView(actorLook: actorLook)
+                                                    .padding()
+                                                    .frame(height: 80)
+                                                    .foregroundColor(.black)
+                                                    
+                                                Spacer()
+                                            }.onTapGesture {
+                                                viewModel.update(object: actorLook,
+                                                                 with: ["completed": !actorLook.completed,
+                                                                        "lastUpdated": Date()])
                                                 
-                                            Spacer()
-                                        }.onTapGesture {
-                                            viewModel.update(object: actorLook,
-                                                             with: ["completed": !actorLook.completed,
-                                                                    "lastUpdated": Date()])
-                                            
-                                            viewModel.fetchActorLooks(for: currentActor.id ?? "")
-                                        }
+                                                viewModel.fetchActorLooks(for: currentActor.id ?? "")
+                                            }
 
-                                        NavigationLink(destination: EditActorLookView(actorLook: actorLook, viewModel: viewModel)) {
-                                            Image(systemName: "info.circle")
-                                                .padding()
-                                                .foregroundColor(.blue)
+                                            NavigationLink(destination: EditActorLookView(actorLook: actorLook, viewModel: viewModel)) {
+                                                Image(systemName: "info.circle")
+                                                    .padding()
+                                                    .foregroundColor(.blue)
+                                            }
                                         }
-                                        
                                     }
+                                    .padding()
+                                    .zIndex(2.0)
                                 }
-                                
+                                .padding([.leading, .trailing])
                             }
                         }
                     }  else if choice == 3 /* Notes */ {
@@ -243,22 +269,30 @@ struct ActorDetailView: View {
                             }
                         } else {
                             ForEach(viewModel.notes) { note in
-                                NavigationLink(destination: EditNoteView(note: note, viewModel: viewModel)) {
-                                    VStack(alignment: .leading) {
-                                        HStack {
-                                            ImageTextRowView(config: note)
-                                                .padding()
-                                                //.frame(height: 60)
-                                                .foregroundColor(.black)
-                                            
-                                            Spacer()
-                                            
-                                            Image(systemName: "chevron.right")
-                                                .padding()
-                                                .foregroundColor(.black)
+                                ZStack {
+                                    Color("light")
+                                        .cornerRadius(5.0)
+                                        .zIndex(1.0)
+                                    
+                                    NavigationLink(destination: EditNoteView(note: note, viewModel: viewModel)) {
+                                        VStack(alignment: .leading) {
+                                            HStack {
+                                                ImageTextRowView(config: note)
+                                                    .padding()
+                                                    //.frame(height: 60)
+                                                    .foregroundColor(.black)
+                                                
+                                                Spacer()
+                                                
+                                                Image(systemName: "chevron.right")
+                                                    .padding()
+                                                    .foregroundColor(.black)
+                                            }
                                         }
                                     }
+                                    .zIndex(2.0)
                                 }
+                                .padding([.leading, .trailing])
                             }
                         }
                     } else { }
@@ -275,51 +309,39 @@ struct ActorDetailView: View {
                                actorImage: nil,
                                animation: animation)
                     .zIndex(2)
+                    .padding(.top, 70)
             }
             
             UploadHUDView(progress: $uploadedCount, total: $uploadTotal)
                 .zIndex(99)
-                .offset(y: showHUD ? 0 : -200)
+                .offset(y: showHUD ? 80 : -400)
                 .animation(.easeOut)
             
             MessageHUDView(message: $message)
                 .zIndex(98)
-                .offset(y: showMessageHUD ? 0 : -200)
+                .offset(y: showMessageHUD ? 80 : -400)
                 .animation(.easeOut)
         }
-        //.navigationBarBackButtonHidden(showImage)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(trailing:
             HStack {
                 if showImage {
-                    Button {
-                        showImage = false
-                        self.sheet.state = .editImage
-                    } label: {
-                        Text("Edit")
-                    }
-                    Button {
-                        withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
-                            showImage.toggle()
-                        }
-                    } label: {
-                        Image(systemName: "xmark")
-                    }
+                    editPhotoMenuView()
                 } else {
-                    Button {
-                        isShowingActionSheet.toggle()
-                    } label: {
-                        Image(systemName: "ellipsis")
-                    }
+                    editMenuView()
                 }
             }
         )
         .onAppear {
             viewModel.currentActor = currentActor
             scenes = viewModel.filterScene(for: currentActor.id ?? "")
-            viewModel.getActorImages()
+            viewModel.getActorImages(section: deptChoice)
             viewModel.fetchNotes(for: currentActor.id ?? "")
             viewModel.fetchActorLooks(for: currentActor.id ?? "")
+            viewModel.fetchActorSize(for: currentActor.id ?? "")
+        }
+        .onChange(of: deptChoice) { newValue in
+            viewModel.getActorImages(section: newValue)
         }
         .sheet(isPresented: self.$sheet.isShowing, onDismiss: handleDismiss) {
             sheetContent()
@@ -380,8 +402,77 @@ extension ActorDetailView {
             AddActorLookView(showSheet: self.$sheet.isShowing, viewModel: viewModel)
         case .updateActor:
             UpdateActorView(showSheet: $sheet.isShowing, actor: $currentActor, viewModel: viewModel)
+        case .sizeChart:
+            ActorSizeChartView(showSheet: $sheet.isShowing, actorId: currentActor.id ?? "", viewModel: viewModel)
         case .none:
             EmptyView()
+        }
+    }
+    
+    @ViewBuilder
+    private func editPhotoMenuView() -> some View {
+        Menu {
+            Button(action: {
+                showImage = false
+                self.sheet.state = .editImage
+            }) {
+                Label("Edit", systemImage: "camera")
+            }
+            
+            Button(action: {
+                withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
+                    showImage.toggle()
+                }
+            }) {
+                Label("Close", systemImage: "xmark")
+            }
+        } label: {
+            Image(systemName: "ellipsis")
+                .font(.title)
+        }
+    }
+    
+    @ViewBuilder
+    private func pictureMenuView(section: Int) -> some View {
+        Button("Camera", action: {
+            deptChoice = section
+            sheet.state = .camera
+        })
+        
+        Button("Photo Album", action: {
+            deptChoice = section
+            sheet.state = .photoAlbum
+        })
+    }
+    
+    @ViewBuilder
+    private func editMenuView() -> some View {
+        Menu {
+            Menu("Add Pictures") {
+                Button("Camera", action: { sheet.state = .camera })
+                
+                Button("Photo Album", action: { sheet.state = .photoAlbum })
+            }
+            
+            Button("Edit Actor", action: { sheet.state = .updateActor })
+            
+            Button("Add Look", action: { sheet.state = .addLook })
+            
+            Button("Add Note", action: { sheet.state = .editNote })
+        } label: {
+            Image(systemName: "ellipsis")
+                .font(.title)
+        }
+    }
+    
+    @ViewBuilder
+    private func addPictureMenuView() -> some View {
+        ForEach(0..<deptType.count) { i in
+            let dept = deptType[i]
+            
+            Menu(dept) {
+                pictureMenuView(section: i)
+            }
         }
     }
     
@@ -403,12 +494,12 @@ extension ActorDetailView {
         
         showHUD = true
         
-        viewModel.upload(data: imageData, to: "images/actors/\(currentActor.id ?? "")/gallery/\(UUID().uuidString).jpg") { url in
+        viewModel.upload(data: imageData, to: "images/actors/\(currentActor.id ?? "")/gallery/\(deptChoice)/\(UUID().uuidString).jpg") { url in
             guard url != nil else { return }
             
             //imageUrlString = imageUrl.absoluteString
             showHUD = false
-            viewModel.getActorImages()
+            viewModel.getActorImages(section: deptChoice)
             viewModel.message.send("Image Uploaded")
         }
     }
@@ -421,7 +512,7 @@ extension ActorDetailView {
         uploadTotal = results.count
         uploadText = "Uploading..."
         AssetProcessor.process(results: photoList ?? []) { data in
-            viewModel.upload(data: data, to: "images/actors/\(currentActor.id ?? "")/gallery/\(UUID().uuidString).jpg") { url in
+            viewModel.upload(data: data, to: "images/actors/\(currentActor.id ?? "")/gallery/\(deptChoice)/\(UUID().uuidString).jpg") { url in
                 if url != nil {
                     //print("uploaded photo \(newUrl.absoluteString)")
                     uploadedCount += 1
@@ -430,7 +521,7 @@ extension ActorDetailView {
                         uploadedCount = 0
                         uploadTotal = 0
                         showHUD = false
-                        viewModel.getActorImages()
+                        viewModel.getActorImages(section: deptChoice)
                         viewModel.message.send("Images Uploaded")
                     }
                 }

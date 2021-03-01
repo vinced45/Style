@@ -23,6 +23,8 @@ struct ImageTextRowView: View {
             if config.icon {
                 Image(systemName: config.imageUrl)
                     .resizable()
+                    .renderingMode(.template)
+                    .foregroundColor(Color("dark"))
                     .frame(width: 44, height: 44)
             } else {
                 KFImage(URL(string: config.imageUrl))
@@ -35,6 +37,7 @@ struct ImageTextRowView: View {
             
             VStack(alignment: .leading) {
                 Text(config.text)
+                    .foregroundColor(Color("dark"))
                     .lineLimit(3)
                 if config.detailText.isNotEmpty {
                     Text(config.detailText)
@@ -53,6 +56,48 @@ struct ImageTextRowView_Previews: PreviewProvider {
             .previewLayout(.fixed(width: 320, height: 70))
         ImageTextRowView(config: Actor.preview())
             .previewLayout(.fixed(width: 320, height: 70))
+    }
+}
+
+struct SquareImageTextRowView: View {
+    var config: ImageTextRowConfigable
+    
+    var body: some View {
+        HStack {
+            if config.icon {
+                Image(systemName: config.imageUrl)
+                    .resizable()
+                    .frame(width: 120, height: 80)
+            } else {
+                KFImage(URL(string: config.imageUrl))
+                    .resizable()
+                    .frame(width: 120, height: 80)
+                    //.clipShape(Circle())
+                    //.shadow(radius: 10)
+                    .overlay(Rectangle().stroke(Color("darkPink"), lineWidth: 3))
+            }
+            
+            VStack(alignment: .leading) {
+                Text(config.text)
+                    .lineLimit(3)
+                    .foregroundColor(Color("dark"))
+                if config.detailText.isNotEmpty {
+                    Text(config.detailText)
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                }
+                
+            }
+        }
+    }
+}
+
+struct SquareImageTextRowView_Previews: PreviewProvider {
+    static var previews: some View {
+        ImageTextRowView(config: Project.preview())
+            .previewLayout(.fixed(width: 320, height: 100))
+        ImageTextRowView(config: Actor.preview())
+            .previewLayout(.fixed(width: 320, height: 100))
     }
 }
 

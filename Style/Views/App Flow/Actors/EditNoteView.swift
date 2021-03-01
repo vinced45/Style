@@ -17,14 +17,21 @@ struct EditNoteView: View {
     @State var text: String = ""
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("Note")
-            TextView(text: $text, textStyle: .callout)
-                .modifier(TextFieldStyle())
-                .frame(height: 200)
-            Spacer()
+        ZStack {
+            SlantedBackgroundView()
+                .zIndex(1.0)
+            
+            VStack(alignment: .leading) {
+                Text("Note")
+                TextView(text: $text, textStyle: .callout)
+                    .modifier(TextViewStyle())
+                    .frame(height: 200)
+                Spacer()
+            }
+            .padding(30)
+            .zIndex(2.0)
+            .padding(.top, 80)
         }
-        .padding()
         .navigationBarTitle(Text("Edit Note"), displayMode: .inline)
         .navigationBarItems(trailing: Button(action: {
             if let newNote = note {
@@ -57,14 +64,20 @@ struct AddNoteView: View {
     
     var body: some View {
         NavigationView {
-            VStack(alignment: .leading) {
-                Text("Note").bold()
-                TextView(text: $text, textStyle: .callout)
-                    .modifier(TextFieldStyle())
-                    .frame(height: 200)
-                Spacer()
+            ZStack {
+                SlantedBackgroundView()
+                    .zIndex(1.0)
+                
+                VStack(alignment: .leading) {
+                    Text("Note").bold()
+                    TextView(text: $text, textStyle: .callout)
+                        .modifier(TextViewStyle())
+                        .frame(height: 200)
+                    Spacer()
+                }
+                .padding(30)
+                .zIndex(2.0)
             }
-            .padding()
             .navigationBarTitle(Text("Add Note"), displayMode: .inline)
             .navigationBarItems(leading: Button(action: {
                     showSheet = false

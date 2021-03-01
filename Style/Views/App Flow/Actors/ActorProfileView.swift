@@ -11,6 +11,8 @@ import KingfisherSwiftUI
 struct ActorProfileView: View {
     var actor: Actor
     
+    let sizeChartTapped: () -> Void?
+    
     var body: some View {
         HStack {
             KFImage(URL(string: actor.image))
@@ -24,7 +26,8 @@ struct ActorProfileView: View {
                 VStack(alignment: .leading) {
                     Text(actor.screenName)
                     Text(actor.realName).font(.subheadline).foregroundColor(.gray)
-                    Text("Size: \(actor.clothesText)").font(.subheadline).foregroundColor(.gray)
+                    //Text("Show ").font(.subheadline).foregroundColor(.gray)
+                    Button("Show Charts >", action: { sizeChartTapped() })
                 }
             }
             
@@ -35,7 +38,7 @@ struct ActorProfileView: View {
 
 struct ActorProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        ActorProfileView(actor: Actor.preview())
+        ActorProfileView(actor: Actor.preview()) {}
             .padding(.all)
             .previewLayout(.sizeThatFits)
     }

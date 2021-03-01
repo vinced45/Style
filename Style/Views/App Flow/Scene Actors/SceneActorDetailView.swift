@@ -28,35 +28,41 @@ struct SceneActorDetailView: View {
     ]
     
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: columns, alignment: .center) {
-                ForEach(viewModel.sceneActors) { sceneActor in
-                    ImageActorView(actor: currentActor, sceneActor: sceneActor)
+        ZStack {
+            SlantedBackgroundView()
+                .zIndex(1.0)
+            
+            ScrollView {
+                LazyVGrid(columns: columns, alignment: .center) {
+                    ForEach(viewModel.sceneActors) { sceneActor in
+                        ImageActorView(actor: currentActor, sceneActor: sceneActor)
+                    }
                 }
             }
+            .zIndex(2.0)
         }
-            .navigationBarTitle("\(currentScene.name) - \(currentActor.screenName)", displayMode: .inline)
-            .navigationBarItems(trailing: Button(action: {
-                activeSheet = .addLook
-                showSheet.toggle()
-            }) {
-                Image(systemName: "camera.fill")
-            })
-            .onAppear {
-                viewModel.currentActor = currentActor
-                viewModel.currentScene = currentScene
-                viewModel.fetchSceneActors(for: "\(currentScene.id ?? "")-\(currentActor.id ?? "")")
+        .navigationBarTitle("\(currentScene.name) - \(currentActor.screenName)", displayMode: .inline)
+        .navigationBarItems(trailing: Button(action: {
+            activeSheet = .addLook
+            showSheet.toggle()
+        }) {
+            Image(systemName: "camera.fill")
+        })
+        .onAppear {
+            viewModel.currentActor = currentActor
+            viewModel.currentScene = currentScene
+            viewModel.fetchSceneActors(for: "\(currentScene.id ?? "")-\(currentActor.id ?? "")")
+        }
+        .onReceive(viewModel.didChange) { _ in
+            viewModel.fetchSceneActors(for: "\(currentScene.id ?? "")-\(currentActor.id ?? "")")
+        }
+        .sheet(isPresented: $showSheet, content: {
+            switch activeSheet {
+            case .addLook: AddSceneActorView(showSheet: $showSheet, viewModel: viewModel)
+            //case .share:
             }
-            .onReceive(viewModel.didChange) { _ in
-                viewModel.fetchSceneActors(for: "\(currentScene.id ?? "")-\(currentActor.id ?? "")")
-            }
-            .sheet(isPresented: $showSheet, content: {
-                switch activeSheet {
-                case .addLook: AddSceneActorView(showSheet: $showSheet, viewModel: viewModel)
-                //case .share:
-                }
-                
-            })
+            
+        })
     }
 }
 

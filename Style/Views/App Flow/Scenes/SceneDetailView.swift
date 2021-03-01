@@ -19,6 +19,10 @@ struct SceneDetailView: View {
     @State var sceneImages: [String] = []
     @State var showAddActor: Bool = false
     
+    @State var isImagesExpanded = true
+    @State var isActorsExpanded = true
+    @State var isDetailsExpanded = true
+    
     enum SheetType {
         case updateActors
     }
@@ -32,67 +36,93 @@ struct SceneDetailView: View {
     ]
     
     var body: some View {
-        Form {
-            Section(header: Text("Scene Images"), footer: Text("Tap + button to add scene Images")) {
-                UpdateMultipleImageView(isEditing: true, images: $sceneImages) { imageData in
-                    self.viewModel.upload(data: imageData, to: "image/\(UUID().uuidString).jpg") { url in
-                        guard let imageUrl = url else { return }
-                        
-                        self.sceneImages.append(imageUrl.absoluteString)
-                        viewModel.update(object: currentScene, with: ["images": sceneImages])
-                    }
-                }
-                
-                NavigationLink(destination: SceneImageListView(images: sceneImages, index: 4)) {
-                    Text("List Images")
-                }
-            }
+        ZStack {
+            SlantedBackgroundView()
+                .zIndex(1.0)
             
-            Section(header: Text("Actors")) {
-                ForEach(sceneActors) { actor in
-                    NavigationLink(destination: SceneActorDetailView(viewModel: viewModel, currentScene: currentScene, currentActor: actor)) {
-                        HStack {
-                            KFImage(URL(string: actor.image))
-                                .resizable()
-                                .frame(width: 44, height: 44)
-                                .clipShape(Circle())
-                                .shadow(radius: 10)
-                                .overlay(Circle().stroke(Color.black, lineWidth: 3))
-                            VStack(alignment: .leading) {
-                                Text(actor.realName)
-                                Text(actor.screenName).font(.subheadline).foregroundColor(.gray)
+            List {
+                Section {
+                    DisclosureGroup(isExpanded: $isImagesExpanded) {
+                        UpdateMultipleImageView(isEditing: true, images: $sceneImages) { imageData in
+                            self.viewModel.upload(data: imageData, to: "image/\(UUID().uuidString).jpg") { url in
+                                guard let imageUrl = url else { return }
+                                
+                                self.sceneImages.append(imageUrl.absoluteString)
+                                viewModel.update(object: currentScene, with: ["images": sceneImages])
                             }
                         }
-                        .frame(height: 60)
+                    } label: {
+                        Text("Scene Images")
+                            .font(.headline)
+                            .onTapGesture {
+                                isImagesExpanded.toggle()
+                            }
                     }
-                }
-                .onDelete(perform: deleteActor)
-                
-                Button("Add Actor") {
-                    sheet.state = .updateActors
-                }
-            }
-            Section(header: Text("Scene Details")) {
-                HStack {
-                    Text("Time of Day")
-                    Spacer(minLength: 100)
-                    Picker("", selection: $sceneTime) {
-                                        Text("Day").tag(0)
-                                        Text("Night").tag(1)
+                    
+                    NavigationLink(destination: SceneImageListView(images: sceneImages, index: 4)) {
+                        Text("List Images")
                     }
-                    .pickerStyle(SegmentedPickerStyle())
                 }
                 
-                HStack {
-                    Text("Type")
-                    Spacer(minLength: 100)
-                    Picker("", selection: $sceneType) {
-                                        Text("Internal").tag(0)
-                                        Text("External").tag(1)
+                Section {
+                    DisclosureGroup(isExpanded: $isActorsExpanded) {
+                        ForEach(sceneActors) { actor in
+                            NavigationLink(destination: SceneActorDetailView(viewModel: viewModel, currentScene: currentScene, currentActor: actor)) {
+                                HStack {
+                                    KFImage(URL(string: actor.image))
+                                        .resizable()
+                                        .frame(width: 44, height: 44)
+                                        .clipShape(Circle())
+                                        .shadow(radius: 10)
+                                        .overlay(Circle().stroke(Color.black, lineWidth: 3))
+                                    VStack(alignment: .leading) {
+                                        Text(actor.realName)
+                                        Text(actor.screenName).font(.subheadline).foregroundColor(.gray)
+                                    }
+                                }
+                                .frame(height: 60)
+                            }
+                        }
+                        .onDelete(perform: deleteActor)
+                    } label: {
+                        Text("Actors (\(sceneActors.count))")
+                            .font(.headline)
                     }
-                    .pickerStyle(SegmentedPickerStyle())
+                    
+                    Button("Add Actor") {
+                        sheet.state = .updateActors
+                    }
+                }
+                Section {
+                    DisclosureGroup(isExpanded: $isDetailsExpanded) {
+                        HStack {
+                            Text("Time of Day")
+                            Spacer(minLength: 100)
+                            Picker("", selection: $sceneTime) {
+                                                Text("Day").tag(0)
+                                                Text("Night").tag(1)
+                            }
+                            .pickerStyle(SegmentedPickerStyle())
+                        }
+                        
+                        HStack {
+                            Text("Type")
+                            Spacer(minLength: 100)
+                            Picker("", selection: $sceneType) {
+                                                Text("Internal").tag(0)
+                                                Text("External").tag(1)
+                            }
+                            .pickerStyle(SegmentedPickerStyle())
+                        }
+                    } label: {
+                        Text("Scene Details")
+                            .font(.headline)
+                    }
                 }
             }
+            .listStyle(InsetGroupedListStyle())
+            .zIndex(2.0)
+            .padding(.top, 50)
         }
         .navigationTitle("\(currentScene.number) - \(currentScene.name)")
         .onAppear {

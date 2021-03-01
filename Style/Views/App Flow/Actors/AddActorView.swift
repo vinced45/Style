@@ -29,10 +29,12 @@ struct AddActorView: View {
     
     var body: some View {
         NavigationView {
-            Form {
-                Section {
-                    HStack{
-                        Spacer()
+            ZStack {
+                StyleBackgroundView()
+                    .zIndex(1.0)
+                
+                VStack {
+                    Group {
                         VStack {
                             if inputImage == nil {
                                 Image(systemName: "person.circle.fill")
@@ -60,46 +62,42 @@ struct AddActorView: View {
                                 Text("Tap to Update Image")
                             }
                         }
-                        Spacer()
                     }
-                }
-                
-                Section {
-                    VStack(alignment: .leading) {
-                        Text("Real Name").bold()
-                        TextField("Real Name", text: $realName)
-                            .modifier(TextFieldStyle())
-                    }
+                    .padding(.top, 100)
                     
-                    VStack(alignment: .leading) {
-                        Text("Screen Name").bold()
-                        TextField("Screen Name", text: $screenName)
-                            .modifier(TextFieldStyle())
-                    }
-                }
-                
-                Section {
-                    Picker(selection: $sizeSelection, label:
-                            Text("Size Chart").bold()
-                                    , content: {
-                                        Text("Small").tag(0)
-                                        Text("Medium").tag(1)
-                                        Text("Large").tag(2)
-                                        Text("Extra Large").tag(3)
-                                })
-                }
+                    Spacer()
                     
+                    Group {
+                        FormTextFieldView(name: "Real Name", placeholder: "Real Name", text: $realName)
+                        
+                        FormTextFieldView(name: "Screen Name", placeholder: "Screen Name", text: $screenName)
+                        
+                        Picker(selection: $sizeSelection, label:
+                                Text("Size Chart").bold()
+                                        , content: {
+                                            Text("Small").tag(0)
+                                            Text("Medium").tag(1)
+                                            Text("Large").tag(2)
+                                            Text("Extra Large").tag(3)
+                                    })
+                    }
+                    .padding([.leading, .trailing], 30)
+                    
+                    Spacer()
+                }
+                .zIndex(2.0)
             }
+            
             .navigationBarTitle(Text("Add Actor"), displayMode: .inline)
-                .navigationBarItems(leading: Button(action: {
-                    self.showAddActor = false
-                }) {
-                    Text("Cancel").bold()
-                }, trailing: Button(action: {
-                    addActor()
-                }) {
-                    Text("Save").bold()
-                })
+            .navigationBarItems(leading: Button(action: {
+                self.showAddActor = false
+            }) {
+                Text("Cancel").bold()
+            }, trailing: Button(action: {
+                addActor()
+            }) {
+                Text("Save").bold()
+            })
             .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
                 ImagePicker(image: $inputImage, showCamera: $showCamera)
             }

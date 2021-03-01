@@ -15,10 +15,28 @@ struct ContentView: View {
         session.listen()
     }
     
+    init() {
+        UITableView.appearance().backgroundColor = .clear
+        UITableViewCell.appearance().backgroundColor = UIColor.init(red: 255, green: 255, blue: 255, alpha: 0.7)
+        
+        UINavigationBar.appearance().tintColor = UIColor(named: "darkPink")
+        UINavigationBar.appearance().barTintColor = UIColor(named: "darkBlue")
+        UINavigationBar.appearance().isTranslucent = false
+
+        let unifiedDictionary: [NSAttributedString.Key: Any] = [NSAttributedString.Key.foregroundColor: UIColor(named: "darkPink") ?? UIColor.white]
+        
+        UINavigationBar.appearance().titleTextAttributes = unifiedDictionary
+        UINavigationBar.appearance().largeTitleTextAttributes = unifiedDictionary
+
+//        UIToolbar.appearance().tintColor = UIColor(named: "darkPink")
+//        UIToolbar.appearance().barTintColor = UIColor(named: "darkBlue")
+//        UIToolbar.appearance().isTranslucent = false
+    }
+    
     var body: some View {
         Group {
             if (session.session != nil) {
-                ProjectListView()
+                ProjectListView(viewModel: ProjectViewModel())
             } else {
                 AuthView()
             }

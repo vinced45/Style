@@ -35,37 +35,58 @@ struct SignInView: View {
 //                .overlay(Color.pink.opacity(0.2))
 //                .blur(radius: 1)
 //                .edgesIgnoringSafeArea(.all)
+            StyleBackgroundView()
+            
             VStack {
-                Text("Sign in View")
-                    .font(.system(size: 32, weight: .heavy))
-                
-                Text("Sign in to contine")
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundColor(Color("Gray"))
+                Text("Log in")
+                    .font(.system(size: 24, weight: .heavy))
+                    .foregroundColor(Color("darkPink"))
                 
                 VStack(spacing: 18) {
                     TextField("Email Address", text: $email)
-                        .font(.system(size: 14))
-                        .padding(12)
-                        .background(RoundedRectangle(cornerRadius: 5).strokeBorder(Color("bg1"), lineWidth: 1))
+                        .background(
+                            RoundedRectangle(cornerRadius: 5)
+                                .fill(Color.white)
+                        )
+                        .frame(width: 250)
                     SecureField("Password", text: $password)
-                        .font(.system(size: 14))
-                        .padding(12)
-                        .background(RoundedRectangle(cornerRadius: 5).strokeBorder(Color("bg1"), lineWidth: 1))
+                        .background(
+                            RoundedRectangle(cornerRadius: 5)
+                                .fill(Color.white)
+                        )
+                        .frame(width: 250)
                 }
                 .padding(.vertical, 30)
                 
-                Button("Sign In", action: signIn)
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    .frame(height: 50)
+                Button("Log in", action: signIn)
+                    .frame(width: 150, height: 50)
                     .foregroundColor(.white)
                     .font(.system(size: 14, weight: .bold))
-                    .background(LinearGradient(gradient: Gradient(colors: [Color("bg1"), Color("bg2")]), startPoint: .leading, endPoint: .trailing))
+                    .background(Color("teal"))
                     .cornerRadius(5)
+                
+                NavigationLink(destination: SignUpView()) {
+                    HStack {
+                        Text("I'm a new User")
+                            .font(.system(size: 14, weight: .light))
+                            .foregroundColor(.primary)
+
+                        Text("Create an account")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(Color("bg2"))
+                    }
+                    .padding(20)
+                }
+                
+                Spacer()
+                
+                Image("logo")
+                
+                //Spacer()
                 
                 Text("OR")
                     .font(.system(size: 24, weight: .regular))
-                    .padding()
+                    
                 
                 FacebookLoginButton { result in
                     session.fbSignIn()
@@ -87,20 +108,20 @@ struct SignInView: View {
                         .padding()
                 }
                 
-                Spacer()
+                //Spacer()
                 
-                NavigationLink(destination: SignUpView()) {
-                    HStack {
-                        Text("I'm a new User")
-                            .font(.system(size: 14, weight: .light))
-                            .foregroundColor(.primary)
-
-                        Text("Create an account")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(Color("bg2"))
-                    }
-                    .padding(20)
-                }
+//                NavigationLink(destination: SignUpView()) {
+//                    HStack {
+//                        Text("I'm a new User")
+//                            .font(.system(size: 14, weight: .light))
+//                            .foregroundColor(.primary)
+//
+//                        Text("Create an account")
+//                            .font(.system(size: 14, weight: .semibold))
+//                            .foregroundColor(Color("bg2"))
+//                    }
+//                    .padding(20)
+//                }
                 
 //                Button(action: {
 //                    //self.showSheetView = false
@@ -120,6 +141,7 @@ struct SignInView: View {
 //                    .padding(10)
             }
             .padding(.horizontal, 32)
+            .zIndex(2.0)
         }
         }
     }
@@ -201,5 +223,30 @@ struct AuthView_Previews: PreviewProvider {
             AuthView().environmentObject(SessionStore())
             AuthView().preferredColorScheme(.dark).environmentObject(SessionStore())
         }
+    }
+}
+
+struct StyleBackgroundView: View {
+    var body: some View {
+        VStack {
+            Rectangle()
+                .fill(Color("darkBlue"))
+                .ignoresSafeArea(.container, edges: .top)
+                .frame(height: 280)
+            
+            Triangle()
+                .fill(Color("darkBlue"))
+                .frame(width: 300, height: 100)
+                .rotationEffect(.degrees(180))
+                .offset(x: 0, y: -50.0)
+            
+            SlantedRectangle()
+                .fill(Color("midGray"))
+                .frame(height: 450)
+                .offset(x: 0, y: -100.0)
+            
+            Spacer()
+        }
+        .zIndex(1)
     }
 }

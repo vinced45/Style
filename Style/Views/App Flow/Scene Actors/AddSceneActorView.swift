@@ -25,55 +25,61 @@ struct AddSceneActorView: View {
     
     var body: some View {
         NavigationView {
-            Form {
-                Section(header: Text("Photo"), footer: Text("Tap + button to add scene Images")) {
-                    UpdateMultipleImageView(isEditing: true, images: $sceneImages) { imageData in
-                        self.viewModel.upload(data: imageData, to: "image/\(UUID().uuidString).jpg") { url in
-                            guard let imageUrl = url else { return }
-                            
-                            self.sceneImages.append(imageUrl.absoluteString)
-                            //viewModel.update(object: currentScene, with: ["images": sceneImages])
+            ZStack {
+                SlantedBackgroundView()
+                    .zIndex(1.0)
+                
+                Form {
+                    Section(header: Text("Photo"), footer: Text("Tap + button to add scene Images")) {
+                        UpdateMultipleImageView(isEditing: true, images: $sceneImages) { imageData in
+                            self.viewModel.upload(data: imageData, to: "image/\(UUID().uuidString).jpg") { url in
+                                guard let imageUrl = url else { return }
+                                
+                                self.sceneImages.append(imageUrl.absoluteString)
+                                //viewModel.update(object: currentScene, with: ["images": sceneImages])
+                            }
+                        }
+                    }
+                    
+                    Section(header: Text("Details")) {
+                        VStack(alignment: .leading) {
+                            Text("Name of Look").bold()
+                            TextField("Name of Look", text: $nameOfLook)
+                                .modifier(TextFieldStyle())
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            Text("Top").bold()
+                            TextField("Top", text: $top)
+                                .modifier(TextFieldStyle())
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            Text("Bottom").bold()
+                            TextField("Bottom", text: $bottom)
+                                .modifier(TextFieldStyle())
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            Text("Shoes").bold()
+                            TextField("Shoes", text: $shoes)
+                                .modifier(TextFieldStyle())
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            Text("Accessories").bold()
+                            TextField("Accessories", text: $accessories)
+                                .modifier(TextFieldStyle())
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            Text("Notes").bold()
+                            TextField("Notes", text: $notes)
+                                .modifier(TextFieldStyle())
                         }
                     }
                 }
-                
-                Section(header: Text("Details")) {
-                    VStack(alignment: .leading) {
-                        Text("Name of Look").bold()
-                        TextField("Name of Look", text: $nameOfLook)
-                            .modifier(TextFieldStyle())
-                    }
-                    
-                    VStack(alignment: .leading) {
-                        Text("Top").bold()
-                        TextField("Top", text: $top)
-                            .modifier(TextFieldStyle())
-                    }
-                    
-                    VStack(alignment: .leading) {
-                        Text("Bottom").bold()
-                        TextField("Bottom", text: $bottom)
-                            .modifier(TextFieldStyle())
-                    }
-                    
-                    VStack(alignment: .leading) {
-                        Text("Shoes").bold()
-                        TextField("Shoes", text: $shoes)
-                            .modifier(TextFieldStyle())
-                    }
-                    
-                    VStack(alignment: .leading) {
-                        Text("Accessories").bold()
-                        TextField("Accessories", text: $accessories)
-                            .modifier(TextFieldStyle())
-                    }
-                    
-                    VStack(alignment: .leading) {
-                        Text("Notes").bold()
-                        TextField("Notes", text: $notes)
-                            .modifier(TextFieldStyle())
-                    }
-                }
+                .zIndex(2.0)
             }
             .navigationBarTitle(Text(viewModel.currentActor?.screenName ?? ""), displayMode: .inline)
                 .navigationBarItems(leading: Button(action: {

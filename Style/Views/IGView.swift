@@ -63,6 +63,8 @@ struct IGView: View {
                 .foregroundColor(.gray)
                 .padding(.leading)
                 .padding(.bottom)
+            
+            Spacer()
                 
         }
         .frame(maxWidth: 500)

@@ -20,7 +20,7 @@ struct ImageActorView: View {
         self.actor = actor
         self.sceneActor = sceneActor
         
-        UIPageControl.appearance().currentPageIndicatorTintColor = #colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)
+        UIPageControl.appearance().currentPageIndicatorTintColor = UIColor(named: "darkPink")
         UIPageControl.appearance().pageIndicatorTintColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
         }
     

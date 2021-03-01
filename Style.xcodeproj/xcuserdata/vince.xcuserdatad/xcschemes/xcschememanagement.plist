@@ -25,16 +25,6 @@
 			<key>orderHint</key>
 			<integer>24</integer>
 		</dict>
-		<key>ScriptActionImport.xcscheme_^#shared#^_</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>27</integer>
-		</dict>
-		<key>ScriptImport.xcscheme_^#shared#^_</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>23</integer>
-		</dict>
 		<key>Style.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
