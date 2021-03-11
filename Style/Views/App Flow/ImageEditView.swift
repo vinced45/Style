@@ -118,7 +118,7 @@ extension ImageEditView {
                                   image: image,
                                   createdTime: nil)
         
-        viewModel.add(object: imageObj)
+        viewModel.add(object: imageObj) { _ in }
         self.showSheet = false
     }
 }

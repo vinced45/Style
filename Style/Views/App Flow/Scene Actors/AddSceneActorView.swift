@@ -136,7 +136,7 @@ extension AddSceneActorView {
                                     images: sceneImages,
                                     createdTime: nil)
         
-        viewModel.add(object: sceneActor)
+        viewModel.add(object: sceneActor) { _ in }
         self.showSheet = false
     }
 }

@@ -21,6 +21,7 @@ struct AddSceneView: View {
     //let newScene: (MovieScene) -> Void
     
     @State var actorIDs: [String] = []
+    @State var sceneIDs: [String] = []
     
     var body: some View {
         NavigationView {
@@ -75,6 +76,25 @@ struct AddSceneView: View {
                             }
                         }
                     }
+                    
+                    Section(header: Text("Scene Continuity")) {
+                        List {
+                            ForEach(viewModel.scenes) { scene in
+                                HStack {
+                                    ImageTextRowView(config: scene)
+                                    
+                                    Spacer()
+                                    Image(systemName: (self.sceneIDs.contains(scene.id ?? "")) ? "checkmark.rectangle" : "rectangle")
+                                        .resizable()
+                                        .frame(width: 30, height: 30, alignment: .center)
+
+                                }
+                                .onTapGesture {
+                                    toggle(scene: scene)
+                                }
+                            }
+                        }
+                    }
                 }
                 .zIndex(2.0)
             }
@@ -96,8 +116,18 @@ struct AddSceneView: View {
 extension AddSceneView {
     func addScene() {
         let scene = MovieScene(id: nil, projectId: viewModel.currentProject?.id ?? "", name: name, number: Int(number) ?? 0, actors: actorIDs, images: sceneImages, createdTime: nil)
-        viewModel.add(object: scene)
-        self.showAddScene = false
+        viewModel.add(object: scene) { id in
+            for sceneId in sceneIDs {
+                let continuity = SceneContinuity(id: nil,
+                                                 projectId: viewModel.currentProject?.id ?? "",
+                                                 scene1: id,
+                                                 scene2: sceneId,
+                                                 createdTime: nil)
+                self.viewModel.add(object: continuity) { _ in }
+            }
+            
+            self.showAddScene = false
+        }
     }
     
     func toggle(actor: Actor) {
@@ -106,6 +136,15 @@ extension AddSceneView {
         }
         else {
             self.actorIDs.append(actor.id ?? "")
+        }
+    }
+    
+    func toggle(scene: MovieScene) {
+        if sceneIDs.contains(scene.id ?? "") {
+            self.sceneIDs.removeAll(where: { $0 == scene.id ?? "" })
+        }
+        else {
+            self.sceneIDs.append(scene.id ?? "")
         }
     }
 }

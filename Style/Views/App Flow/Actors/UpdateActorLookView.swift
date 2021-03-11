@@ -59,7 +59,7 @@ struct AddActorLookView: View {
                                                  creatorId: session.session?.uid ?? "",
                                                  lastUpdated: Date(),
                                                  createdTime: nil)
-                    self.viewModel.add(object: newActorLook)
+                    self.viewModel.add(object: newActorLook) { _ in }
                     self.showSheet = false
                 }) {
                     Text("Save").bold()

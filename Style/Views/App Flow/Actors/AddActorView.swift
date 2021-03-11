@@ -108,7 +108,7 @@ struct AddActorView: View {
 extension AddActorView {
     func addActor() {
         let actor = Actor(id: nil, projectId: viewModel.currentProject?.id ?? "", realName: realName, screenName: screenName, image: imageUrlString, clothesSize: sizeSelection, images: [], createdTime: nil)
-        viewModel.add(object: actor)
+        viewModel.add(object: actor) { _ in }
         self.showAddActor = false
     }
     

@@ -163,7 +163,7 @@ extension UserUpdateView {
                                    image: imageUrlString,
                                    createdTime: nil)
 
-            viewModel.add(object: user)
+            viewModel.add(object: user) { _ in }
         }
         
         showSheetView = false

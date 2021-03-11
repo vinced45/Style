@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6102B19425F9B1D400322777 /* BulkImageUploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6102B19325F9B1D400322777 /* BulkImageUploadView.swift */; };
+		6102B19725F9BBA300322777 /* ActorListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6102B19625F9BBA300322777 /* ActorListView.swift */; };
 		611DD28A25B8F1340013FD05 /* StackedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611DD28925B8F1340013FD05 /* StackedImageView.swift */; };
 		611DD28E25B9D7220013FD05 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611DD28D25B9D7220013FD05 /* View+Extensions.swift */; };
 		611DD29225B9D7A40013FD05 /* HapticTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611DD29125B9D7A40013FD05 /* HapticTestView.swift */; };
@@ -62,6 +64,7 @@
 		618926C0257F0BA3004184BB /* MultipleSelectionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618926BF257F0BA3004184BB /* MultipleSelectionRow.swift */; };
 		618926C5257F0D6F004184BB /* EmptyIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618926C4257F0D6F004184BB /* EmptyIconView.swift */; };
 		61899F9225EC95C300618871 /* ScriptSceneUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61899F9125EC95C300618871 /* ScriptSceneUpdateView.swift */; };
+		61899F9625ED83AC00618871 /* MessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61899F9525ED83AC00618871 /* MessagesView.swift */; };
 		618B690625CC91EA00B7968A /* FilePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618B690525CC91EA00B7968A /* FilePickerView.swift */; };
 		618B690D25CE1E7B00B7968A /* WatermarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618B690C25CE1E7A00B7968A /* WatermarkView.swift */; };
 		618B691025CF587700B7968A /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618B690F25CF587700B7968A /* UIImage+Extensions.swift */; };
@@ -110,6 +113,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6102B19325F9B1D400322777 /* BulkImageUploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkImageUploadView.swift; sourceTree = "<group>"; };
+		6102B19625F9BBA300322777 /* ActorListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActorListView.swift; sourceTree = "<group>"; };
 		611DD28925B8F1340013FD05 /* StackedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedImageView.swift; sourceTree = "<group>"; };
 		611DD28D25B9D7220013FD05 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		611DD29125B9D7A40013FD05 /* HapticTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticTestView.swift; sourceTree = "<group>"; };
@@ -160,6 +165,7 @@
 		618926BF257F0BA3004184BB /* MultipleSelectionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleSelectionRow.swift; sourceTree = "<group>"; };
 		618926C4257F0D6F004184BB /* EmptyIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyIconView.swift; sourceTree = "<group>"; };
 		61899F9125EC95C300618871 /* ScriptSceneUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptSceneUpdateView.swift; sourceTree = "<group>"; };
+		61899F9525ED83AC00618871 /* MessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesView.swift; sourceTree = "<group>"; };
 		618B690525CC91EA00B7968A /* FilePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilePickerView.swift; sourceTree = "<group>"; };
 		618B690C25CE1E7A00B7968A /* WatermarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatermarkView.swift; sourceTree = "<group>"; };
 		618B690F25CF587700B7968A /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
@@ -265,6 +271,7 @@
 				61D3110525ACBF100031FE91 /* ActorLookView.swift */,
 				61D3111B25AD0CA60031FE91 /* UpdateActorLookView.swift */,
 				6197AE3925DDF8EB0002D6DC /* ActorSizeChartView.swift */,
+				6102B19625F9BBA300322777 /* ActorListView.swift */,
 			);
 			path = Actors;
 			sourceTree = "<group>";
@@ -400,6 +407,7 @@
 				61899F9125EC95C300618871 /* ScriptSceneUpdateView.swift */,
 				61D435BE25C90C9200FDF8E6 /* LoadingView.swift */,
 				618B690C25CE1E7A00B7968A /* WatermarkView.swift */,
+				61899F9525ED83AC00618871 /* MessagesView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -441,6 +449,7 @@
 				61397AD025AC89DF00498E81 /* Scenes */,
 				61397ACF25AC89C500498E81 /* Scene Actors */,
 				61312A1C259D550F0057CA6B /* ImageEditView.swift */,
+				6102B19325F9B1D400322777 /* BulkImageUploadView.swift */,
 			);
 			path = "App Flow";
 			sourceTree = "<group>";
@@ -563,6 +572,7 @@
 				6189254A256BF6CF004184BB /* AddActorView.swift in Sources */,
 				611DD38B25C207880013FD05 /* ScriptView.swift in Sources */,
 				618926B9257F08F2004184BB /* ProjectListView.swift in Sources */,
+				6102B19725F9BBA300322777 /* ActorListView.swift in Sources */,
 				61312A25259E83650057CA6B /* ImageOverLayView.swift in Sources */,
 				61DF1BC6258915A3005BDA1D /* AddProjectView.swift in Sources */,
 				618923FA25636F7A004184BB /* UIPlayerView.swift in Sources */,
@@ -573,6 +583,7 @@
 				618926C5257F0D6F004184BB /* EmptyIconView.swift in Sources */,
 				6181707625621C8E0008ED28 /* FBLoginButton.swift in Sources */,
 				61D310F625ACAA870031FE91 /* SheetState.swift in Sources */,
+				6102B19425F9B1D400322777 /* BulkImageUploadView.swift in Sources */,
 				613979C325A4E53600498E81 /* EditNoteView.swift in Sources */,
 				616D0DAD2560D0900007F798 /* SessionStore.swift in Sources */,
 				618923DE256335DF004184BB /* AppleLoginButton.swift in Sources */,
@@ -593,6 +604,7 @@
 				616D0D7B2560C7150007F798 /* StyleApp.swift in Sources */,
 				61D3111025ACE0F00031FE91 /* FirebaseObjectable.swift in Sources */,
 				61892550256BFCDE004184BB /* AddSceneView.swift in Sources */,
+				61899F9625ED83AC00618871 /* MessagesView.swift in Sources */,
 				61312A21259D59120057CA6B /* SceneListView.swift in Sources */,
 				61D310FC25ACAD250031FE91 /* LoadingViews.swift in Sources */,
 				61F5E6E9259BB10300263C46 /* ActorDetailView.swift in Sources */,

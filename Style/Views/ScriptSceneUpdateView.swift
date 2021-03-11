@@ -11,20 +11,18 @@ struct ScriptSceneUpdateView: View {
     @Binding var scene: PDFScene
     
     var body: some View {
-        NavigationView {
-            VStack {
-                FormTextFieldView(name: "Scene Number", placeholder: "1", text: $scene.number)
-                    .padding([.leading, .trailing], 30)
-                    .keyboardType(.numberPad)
-                
-                FormTextFieldView(name: "Scene Name", placeholder: "Scene Name", text: $scene.text)
-                    .padding([.leading, .trailing], 30)
-                
-                FormTextFieldView(name: "Details Name", placeholder: "Details", text: $scene.details)
-                    .padding([.leading, .trailing], 30)
-            }
-            .navigationBarTitle("Edit Scene", displayMode: .inline)
+        VStack {
+            FormTextFieldView(name: "Scene Number", placeholder: "1", text: $scene.number)
+                .padding([.leading, .trailing], 30)
+                .keyboardType(.numberPad)
+            
+            FormTextFieldView(name: "Scene Name", placeholder: "Scene Name", text: $scene.text)
+                .padding([.leading, .trailing], 30)
+            
+            FormTextFieldView(name: "Details Name", placeholder: "Details", text: $scene.details)
+                .padding([.leading, .trailing], 30)
         }
+        .navigationBarTitle("Edit Scene", displayMode: .inline)
     }
 }
 

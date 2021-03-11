@@ -92,7 +92,7 @@ struct AddNoteView: View {
                                         creatorId: session.session?.uid ?? "",
                                         lastUpdated: Date(),
                                         createdTime: nil)
-                        viewModel.add(object: note)
+                        viewModel.add(object: note) { _ in }
                     }
                     showSheet = false
                 }) {

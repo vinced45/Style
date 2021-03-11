@@ -106,7 +106,7 @@ extension AddProjectView {
                               lastUpdated: Date(),
                               createdTime: nil)
         
-        viewModel.add(object: project)
+        viewModel.add(object: project) { _ in }
         self.showSheetView = false
     }
     

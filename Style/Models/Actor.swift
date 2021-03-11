@@ -83,4 +83,14 @@ extension Actor {
                      clothesSize: 32,
                      images: [])
     }
+    
+    static func none() -> Actor {
+        return Actor(id: "1111",
+                     projectId: "121111345",
+                     realName: "No Actor",
+                     screenName: "",
+                     image: "",
+                     clothesSize: 0,
+                     images: [])
+    }
 }

@@ -108,8 +108,12 @@ struct ProjectDetailView: View {
         )
         .onAppear {
             viewModel.currentProject = self.currentProject
-            viewModel.fetchActors(for: currentProject.id ?? "")
-            viewModel.fetchScenes(for: currentProject.id ?? "")
+            if let id = currentProject.id {
+                viewModel.fetchActors(for: id)
+                viewModel.fetchScenes(for: id)
+                viewModel.fetchProjectImagess(projectId: id)
+                viewModel.fetchSceneContinuities(projectId: id)
+            }
         }
         .onReceive(viewModel.didChange) { _ in
             viewModel.fetchActors(for: currentProject.id ?? "")

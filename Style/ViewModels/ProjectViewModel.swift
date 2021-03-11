@@ -36,6 +36,10 @@ class ProjectViewModel: ObservableObject {
     @Published var actorLooks: [ActorLook] = []
     @Published var currentActorLook: ActorLook?
     
+    @Published var projectImages: [ProjectImage] = []
+    
+    @Published var sceneContinuities: [SceneContinuity] = []
+    
     @Published var currentActorSize: ActorSize?
     
     var didChange = PassthroughSubject<Void, Never>()
@@ -60,6 +64,38 @@ class ProjectViewModel: ObservableObject {
                 return try? queryDocumentSnapshot.data(as: Project.self)
             }
             .filter { $0.admins.contains(uid) }
+        }
+    }
+    
+    func fetchProjectImagess(projectId: String) {
+        database.collection("projectImages")
+            .whereField("projectId", isEqualTo: projectId)
+            .addSnapshotListener { (querySnapshot, error) in
+          guard let documents = querySnapshot?.documents else {
+            print("No Project Images")
+            return
+          }
+            
+            self.projectImages = documents.compactMap { queryDocumentSnapshot -> ProjectImage? in
+                return try? queryDocumentSnapshot.data(as: ProjectImage.self)
+            }
+            //.filter { $0.admins.contains(uid) }
+        }
+    }
+    
+    func fetchSceneContinuities(projectId: String) {
+        database.collection("sceneContinuities")
+            .whereField("projectId", isEqualTo: projectId)
+            .addSnapshotListener { (querySnapshot, error) in
+          guard let documents = querySnapshot?.documents else {
+            print("No Project Images")
+            return
+          }
+            
+            self.sceneContinuities = documents.compactMap { queryDocumentSnapshot -> SceneContinuity? in
+                return try? queryDocumentSnapshot.data(as: SceneContinuity.self)
+            }
+            //.filter { $0.admins.contains(uid) }
         }
     }
     
@@ -211,7 +247,7 @@ class ProjectViewModel: ObservableObject {
         }
     }
 
-    func add(object: FirebaseObjectable) {
+    func add(object: FirebaseObjectable, completion: @escaping (String) -> ()) {
         var ref: DocumentReference? = nil
         ref = database.collection(object.objectName).addDocument(data: object.dict) { err in
             if let err = err {
@@ -220,6 +256,7 @@ class ProjectViewModel: ObservableObject {
                 print("Document added with ID: \(ref!.documentID)")
                 self.didChange.send()
                 self.message.send(object.successMessage)
+                completion(ref!.documentID)
             }
         }
     }
@@ -297,7 +334,7 @@ class ProjectViewModel: ObservableObject {
             } else {
                 for pdfScene in pdfScenes {
                     let scene = MovieScene(id: nil, projectId: ref!.documentID, name: pdfScene.text, number: Int(pdfScene.number) ?? 0, actors: [], images: [], createdTime: nil)
-                    self.add(object: scene)
+                    self.add(object: scene) { _ in }
                 }
                 completion()
             }
@@ -454,6 +491,42 @@ extension ProjectViewModel {
     }
 }
 
+struct SceneContinuity: Identifiable, Codable, FirebaseObjectable {
+    @DocumentID var id: String?
+    var projectId: String
+    var scene1: String
+    var scene2: String
+    
+    @ServerTimestamp var createdTime: Timestamp?
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case projectId
+        case scene1
+        case scene2
+    }
+    
+    var objectName: String {
+        return "sceneContinuities"
+    }
+    
+    var objectId: String? {
+        return id
+    }
+    
+    var dict: [String: Any] {
+        return [
+            "projectId": projectId,
+            "scene1": scene1,
+            "scene2": scene2,
+        ]
+    }
+    
+    var successMessage: String {
+        return "Scene Continuity added"
+    }
+}
+
 struct ActorImage: Identifiable, Codable, FirebaseObjectable {
     @DocumentID var id: String?
     var actorId: String
@@ -502,5 +575,50 @@ struct ActorImage: Identifiable, Codable, FirebaseObjectable {
     
     var successMessage: String {
         return "Image Details added"
+    }
+}
+
+struct ProjectImage: Identifiable, Codable, FirebaseObjectable {
+    @DocumentID var id: String?
+    var projectId: String
+    var actorIds: [String]
+    var sceneIds: [String]
+    var deptId: Int
+    var notes: String
+    var image: String
+    
+    @ServerTimestamp var createdTime: Timestamp?
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case projectId
+        case actorIds
+        case sceneIds
+        case deptId
+        case notes
+        case image
+    }
+    
+    var objectName: String {
+        return "projectImages"
+    }
+    
+    var objectId: String? {
+        return id
+    }
+    
+    var dict: [String: Any] {
+        return [
+            "projectId": projectId,
+            "actorIds": actorIds,
+            "sceneIds": sceneIds,
+            "deptId": deptId,
+            "notes": notes,
+            "image": image
+        ]
+    }
+    
+    var successMessage: String {
+        return "Project Image(s) added"
     }
 }

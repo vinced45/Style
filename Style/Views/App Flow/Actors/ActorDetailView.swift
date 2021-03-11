@@ -28,6 +28,8 @@ struct ActorDetailView: View {
     @State var message: String = ""
     @State private var showMessageHUD = false
     
+    @State var images: [ProjectImage] = []
+    
     enum SheetType {
         case camera
         case photoAlbum
@@ -39,6 +41,7 @@ struct ActorDetailView: View {
         case addLook
         case updateActor
         case sizeChart
+        case bulkImageUpload
     }
     
     @ObservedObject var sheet = SheetState<ActorDetailView.SheetType>()
@@ -83,6 +86,8 @@ struct ActorDetailView: View {
             VStack {
                 ActorProfileView(actor: currentActor) {
                     sheet.state = .sizeChart
+                } deptTapped: { deptId in
+                    deptChoice = deptId
                 }
                 .padding()
                 .padding(.top, 50)
@@ -98,15 +103,15 @@ struct ActorDetailView: View {
                 
                 ScrollView {
                     if choice == 0 /* Pre Prod */ {
-                        Picker("Dept", selection: $deptChoice) {
-                            ForEach(0 ..< deptType.count) { index in
-                                Text(self.deptType[index])
-                                    .tag(index)
-                            }
-                        }
-                        .pickerStyle(SegmentedPickerStyle())
-                        .padding(.leading)
-                        .padding(.trailing)
+//                        Picker("Dept", selection: $deptChoice) {
+//                            ForEach(0 ..< deptType.count) { index in
+//                                Text(self.deptType[index])
+//                                    .tag(index)
+//                            }
+//                        }
+//                        .pickerStyle(SegmentedPickerStyle())
+//                        .padding(.leading)
+//                        .padding(.trailing)
                         
                         Picker("List Type", selection: $listChoice) {
                             ForEach(0 ..< listType.count) { index in
@@ -118,7 +123,8 @@ struct ActorDetailView: View {
                         .padding(.leading)
                         .padding(.trailing)
                         
-                        if viewModel.currentActorImages.count == 0 {
+                        //if viewModel.currentActorImages.count == 0 {
+                        if images.count == 0 {
                             Spacer(minLength: emptySpacerHeight)
                             if isLoading {
                                 LoadingCircleView().frame(width: 100, height: 100, alignment: .center)
@@ -132,8 +138,9 @@ struct ActorDetailView: View {
                             
                             if listChoice == 0 {
                                 LazyVGrid(columns: gridColumns, alignment: .center) {
-                                    ForEach(viewModel.currentActorImages, id: \.self) { image in
-                                        KFImage(URL(string: image))
+                                    ForEach(images) { image in
+                                    //ForEach(viewModel.currentActorImages, id: \.self) { image in
+                                        KFImage(URL(string: image.image))
                                             .placeholder {
                                                 Image(systemName: "photo.on.rectangle.angled")
                                                     .resizable()
@@ -147,17 +154,17 @@ struct ActorDetailView: View {
                                             .frame(width: UIScreen.main.bounds.width / 3, height: UIScreen.main.bounds.width / 3)
                                             //.aspectRatio(1, contentMode: .fill)
                                             .clipped()
-                                            .matchedGeometryEffect(id: image, in: animation)
+                                            .matchedGeometryEffect(id: image.image, in: animation)
                                             .contextMenu {
                                                 Button(action: {
-                                                    tappedImage = image
+                                                    tappedImage = image.image
                                                     self.sheet.state = .editImage
                                                 }) {
                                                     Image(systemName: "square.and.pencil")
                                                     Text("Edit Notes")
                                                 }
                                                 Button(action: {
-                                                    tappedImage = image
+                                                    tappedImage = image.image
                                                     self.sheet.state = .selectScene
                                                 }) {
                                                     Image(systemName: "film")
@@ -167,7 +174,7 @@ struct ActorDetailView: View {
                                             }
                                             .onTapGesture {
                                                 withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
-                                                    tappedImage = image
+                                                    tappedImage = image.image
                                                     showImage.toggle()
                                                 }
                                             }
@@ -177,8 +184,9 @@ struct ActorDetailView: View {
                             }
                             else {
                                 LazyVGrid(columns: oneColumn, alignment: .center) {
-                                    ForEach(viewModel.currentActorImages, id: \.self) { image in
-                                        ImageUploadView(image: image)
+                                    ForEach(images) { image in
+                                    //ForEach(viewModel.currentActorImages, id: \.self) { image in
+                                        ImageUploadView(image: image.image)
                                     }
                                 }
                             }
@@ -339,9 +347,19 @@ struct ActorDetailView: View {
             viewModel.fetchNotes(for: currentActor.id ?? "")
             viewModel.fetchActorLooks(for: currentActor.id ?? "")
             viewModel.fetchActorSize(for: currentActor.id ?? "")
+            images = viewModel.projectImages.filter { $0.actorIds.contains(currentActor.id ?? "") }
         }
         .onChange(of: deptChoice) { newValue in
-            viewModel.getActorImages(section: newValue)
+            //viewModel.getActorImages(section: newValue)
+            
+            if deptChoice == 0 {
+                images = viewModel.projectImages.filter { $0.actorIds.contains(currentActor.id ?? "") }
+            } else {
+                images = viewModel.projectImages.filter {
+                    $0.actorIds.contains(currentActor.id ?? "") &&
+                    $0.deptId == deptChoice
+                }
+            }
         }
         .sheet(isPresented: self.$sheet.isShowing, onDismiss: handleDismiss) {
             sheetContent()
@@ -404,6 +422,11 @@ extension ActorDetailView {
             UpdateActorView(showSheet: $sheet.isShowing, actor: $currentActor, viewModel: viewModel)
         case .sizeChart:
             ActorSizeChartView(showSheet: $sheet.isShowing, actorId: currentActor.id ?? "", viewModel: viewModel)
+        case .bulkImageUpload:
+            BulkImageUploadView(showSheet: $sheet.isShowing,
+                                actor: currentActor,
+                                sceneIDs: [],
+                                viewModel: viewModel)
         case .none:
             EmptyView()
         }
@@ -448,11 +471,13 @@ extension ActorDetailView {
     @ViewBuilder
     private func editMenuView() -> some View {
         Menu {
-            Menu("Add Pictures") {
-                Button("Camera", action: { sheet.state = .camera })
-                
-                Button("Photo Album", action: { sheet.state = .photoAlbum })
-            }
+//            Menu("Add Pictures") {
+//                Button("Camera", action: { sheet.state = .camera })
+//
+//                Button("Photo Album", action: { sheet.state = .photoAlbum })
+//            }
+            
+            Button("Add Picture", action: { sheet.state = .bulkImageUpload })
             
             Button("Edit Actor", action: { sheet.state = .updateActor })
             

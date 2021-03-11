@@ -16,11 +16,13 @@ struct SceneDetailView: View {
     @State var sceneType: String = "Internal"
     
     @State var sceneActors: [Actor] = []
+    @State var sceneContinuities: [MovieScene] = []
     @State var sceneImages: [String] = []
     @State var showAddActor: Bool = false
     
     @State var isImagesExpanded = true
     @State var isActorsExpanded = true
+    @State var isContinuityExpanded = true
     @State var isDetailsExpanded = true
     
     enum SheetType {
@@ -93,6 +95,26 @@ struct SceneDetailView: View {
                         sheet.state = .updateActors
                     }
                 }
+                
+                Section {
+                    DisclosureGroup(isExpanded: $isContinuityExpanded) {
+                        ForEach(sceneContinuities) { scene in
+                            NavigationLink(destination: SceneDetailView(viewModel: viewModel, currentScene: scene)) {
+                                
+                                ImageTextRowView(config: scene)
+                                    .frame(height: 60)
+                            }
+                        }
+                    } label: {
+                        Text("Scene Continuity (\(sceneContinuities.count))")
+                            .font(.headline)
+                    }
+                    
+//                    Button("Add Actor") {
+//                        sheet.state = .updateActors
+//                    }
+                }
+                
                 Section {
                     DisclosureGroup(isExpanded: $isDetailsExpanded) {
                         HStack {
@@ -128,6 +150,7 @@ struct SceneDetailView: View {
         .onAppear {
             sceneActors = viewModel.getActors(for: currentScene)
             sceneImages = currentScene.images
+            sceneContinuities = getScenes(for: currentScene.id ?? "")
         }
         .sheet(isPresented: $sheet.isShowing,
                onDismiss: {
@@ -145,6 +168,33 @@ extension SceneDetailView {
         sceneActors.remove(atOffsets: offsets)
         self.currentScene.actors.remove(atOffsets: offsets)
         viewModel.update(object: currentScene, with: ["actors": currentScene.actors])
+    }
+    
+    func getScenes(for sceneId: String) -> [MovieScene] {
+        var allScenes: [MovieScene] = []
+        
+        let scenes = viewModel.sceneContinuities.filter {
+            $0.scene1 == sceneId ||
+            $0.scene2 == sceneId
+        }
+        
+        for scene in scenes where scene.scene1 == sceneId {
+            allScenes.append(getScene(for: scene.scene2))
+        }
+        
+        for scene in scenes where scene.scene2 == sceneId {
+            allScenes.append(getScene(for: scene.scene1))
+        }
+        
+        return allScenes
+    }
+    
+    func getScene(for sceneId: String) -> MovieScene {
+        if let scene = viewModel.scenes.filter({ $0.id ?? "" == sceneId }).first {
+            return scene
+        } else {
+            return MovieScene.preview()
+        }
     }
 }
 

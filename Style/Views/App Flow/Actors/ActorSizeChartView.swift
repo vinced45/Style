@@ -208,7 +208,7 @@ extension ActorSizeChartView {
         actorSize.otherNotes = otherNotes
         
         if isNew {
-            viewModel.add(object: actorSize)
+            viewModel.add(object: actorSize) { _ in }
         } else {
             viewModel.update(object: actorSize, with: actorSize.dict)
         }
