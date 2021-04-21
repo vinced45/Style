@@ -16,9 +16,12 @@ struct ScriptView: View {
     
     @State var title = ""
     @State var scenes: [PDFScene] = []
+    @State var scenesWithoutNumbers: [PDFScene] = []
     @State private var isImporting: Bool = false
     
     @State private var isUploading: Bool = false
+    
+    @State var showPdf: Bool = false
     
     @EnvironmentObject var session: SessionStore
     
@@ -34,28 +37,59 @@ struct ScriptView: View {
                         .multilineTextAlignment(.center)
                         .padding(.top)
                     
+                    Button(action: { showPdf.toggle() }) {
+                        Text("Show Script")
+                    }
+                    .sheet(isPresented: $showPdf, content: {
+                        PDFKitView(url: URL(string: fileUrl)!, showSheet: $showPdf)
+                    })
+                    
                     List {
-                        ForEach(scenes.indices, id: \.self) { i in
-                            let scene = scenes[i]
-                            NavigationLink(destination: ScriptSceneUpdateView(scene: $scenes[i])) {
-                                HStack {
-                                    Text(scene.number)
-                                        .font(.largeTitle)
-                                    
-                                    VStack(alignment: .leading) {
-                                        Text((scene.text))
-                                            .bold()
+                        Section(header: Text("Scenes with Numbers")) {
+                            ForEach(scenes.indices, id: \.self) { i in
+                                let scene = scenes[i]
+                                NavigationLink(destination: ScriptSceneUpdateView(scene: $scenes[i])) {
+                                    HStack {
+                                        Text(scene.number)
+                                            .font(.largeTitle)
                                         
-                                        Text(scene.details)
-                                            .font(.subheadline)
-                                            .foregroundColor(.gray)
+                                        VStack(alignment: .leading) {
+                                            Text((scene.text))
+                                                .bold()
+                                            
+                                            Text(scene.details)
+                                                .font(.subheadline)
+                                                .foregroundColor(.gray)
+                                        }
                                     }
                                 }
                             }
-                            
-                            
+                            .onDelete(perform: removeRows)
                         }
-                    }
+                        
+                        Section(header: Text("Scenes without Numbers")) {
+                            ForEach(scenesWithoutNumbers.indices, id: \.self) { i in
+                                let scene = scenesWithoutNumbers[i]
+                                NavigationLink(destination: ScriptSceneUpdateView(scene: $scenesWithoutNumbers[i])) {
+                                    HStack {
+                                        Text(scene.number)
+                                            .font(.largeTitle)
+                                        
+                                        VStack(alignment: .leading) {
+                                            Text((scene.text))
+                                                .bold()
+                                            
+                                            Text(scene.details)
+                                                .font(.subheadline)
+                                                .foregroundColor(.gray)
+                                        }
+                                    }
+                                }
+                            }
+                            .onDelete(perform: removeRows2)
+                        }
+                        
+                    }.listStyle(GroupedListStyle())
                 }
                 .zIndex(2.0)
             }
@@ -66,7 +100,8 @@ struct ScriptView: View {
                 Text("Cancel").bold()
             }, trailing: Button(action: {
                 isUploading = true
-                viewModel.save(pdfScenes: scenes, with: getFirstLine(from: title), user: session.session?.uid ?? "") {
+                let saveScenes = scenes + scenesWithoutNumbers
+                viewModel.save(pdfScenes: saveScenes, with: getFirstLine(from: title), user: session.session?.uid ?? "") {
                     self.showSheetView = false
                     isUploading = false
                 }
@@ -80,6 +115,14 @@ struct ScriptView: View {
         }
     }
     
+    func removeRows(at offsets: IndexSet) {
+        scenes.remove(atOffsets: offsets)
+    }
+    
+    func removeRows2(at offsets: IndexSet) {
+        scenesWithoutNumbers.remove(atOffsets: offsets)
+    }
+    
     func parse() {
         guard let url = URL(string: fileUrl) else { return
             print("import script - unable to find url")
@@ -89,7 +132,13 @@ struct ScriptView: View {
         }
         
         PDFReader.parseScenes(for: url) { scene in
-            scenes.append(scene)
+            if !scenes.contains(scene) && !scene.number.isEmpty {
+                scenes.append(scene)
+            }
+            
+            if !scenesWithoutNumbers.contains(scene) && scene.number.isEmpty {
+                scenesWithoutNumbers.append(scene)
+            }
         }
     }
     
@@ -108,10 +157,14 @@ struct ScriptView: View {
 //    }
 //}
 
-struct PDFScene: Hashable {
+struct PDFScene: Hashable, Equatable {
     var number: String
     var text: String
     var details: String
+    
+    static func ==(lhs:PDFScene, rhs:PDFScene) -> Bool {
+        return (lhs.number == rhs.number) && (lhs.text == rhs.text) && (lhs.details == rhs.details)
+    }
 }
 
 struct PDFReader {
@@ -245,3 +298,38 @@ extension Text {
 //        return result
 //    }
 //}
+
+
+struct PDFKitRepresentedView: UIViewRepresentable {
+    let url: URL
+
+    init(_ url: URL) {
+        self.url = url
+    }
+
+    func makeUIView(context: UIViewRepresentableContext<PDFKitRepresentedView>) -> PDFKitRepresentedView.UIViewType {
+        // Create a `PDFView` and set its `PDFDocument`.
+        let pdfView = PDFView()
+        pdfView.document = PDFDocument(url: self.url)
+        return pdfView
+    }
+
+    func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<PDFKitRepresentedView>) {
+        // Update the view.
+    }
+}
+
+struct PDFKitView: View {
+    var url: URL
+    @Binding var showSheet: Bool
+
+    var body: some View {
+        PDFKitRepresentedView(url)
+            .navigationBarTitle(Text("Script"), displayMode: .inline)
+            .navigationBarItems(leading: Button(action: {
+                self.showSheet = false
+            }) {
+                Text("Done").bold()
+            })
+    }
+}

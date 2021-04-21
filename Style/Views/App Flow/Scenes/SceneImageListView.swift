@@ -42,7 +42,7 @@ struct SceneImageListView: View {
             //DispatchQueue.main.asy
             index = 5
         }
-        .navigationTitle("Scene Images")
+        .navigationTitle("Images")
         
     }
 }

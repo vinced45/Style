@@ -27,6 +27,9 @@ class SessionStore: ObservableObject {
                 return
             }
             self.session = User(uid: user.uid, email: user.email)
+            
+            let pushManager = PushNotificationManager(userID: user.uid)
+            pushManager.registerForPushNotifications()
         })
     }
     

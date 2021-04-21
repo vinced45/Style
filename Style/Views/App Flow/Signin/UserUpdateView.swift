@@ -147,7 +147,6 @@ extension UserUpdateView {
                                    "title" : title,
                                    "image" : imageUrlString]
         
-        
 //        session.updateUserDetails(for: user) { success in
 //            print("User was update \(success)")
 //        }
@@ -161,6 +160,7 @@ extension UserUpdateView {
                                    phone: phone,
                                    title: title,
                                    image: imageUrlString,
+                                   msgToken: [],
                                    createdTime: nil)
 
             viewModel.add(object: user) { _ in }

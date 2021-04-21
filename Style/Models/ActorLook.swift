@@ -15,7 +15,7 @@ import FirebaseStorage
 struct ActorLook: Identifiable, Codable {
     @DocumentID var id: String?
     var actorId: String
-    var image: String
+    var images: [String]
     var text: String
     var completed: Bool
     var creatorId: String
@@ -26,7 +26,7 @@ struct ActorLook: Identifiable, Codable {
     enum CodingKeys: String, CodingKey {
         case id
         case actorId
-        case image
+        case images
         case text
         case completed
         case creatorId
@@ -47,7 +47,7 @@ extension ActorLook: FirebaseObjectable {
     var dict: [String: Any] {
         return [
             "actorId": actorId,
-            "image": image,
+            "images": images,
             "text": text,
             "completed": completed,
             "creatorId": creatorId,
@@ -70,7 +70,7 @@ extension ActorLook {
     static func preview() -> ActorLook {
         return ActorLook(id: "12345",
                      actorId: "12345",
-                     image: "https://static.gofugyourself.com/uploads/2013/10/185512559_10-820x1292.jpg",
+                     images: ["https://static.gofugyourself.com/uploads/2013/10/185512559_10-820x1292.jpg"],
                      text: "Look for Viola Davis",
                      completed: false,
                      creatorId: "12345",

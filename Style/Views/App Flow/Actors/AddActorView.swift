@@ -72,14 +72,14 @@ struct AddActorView: View {
                         
                         FormTextFieldView(name: "Screen Name", placeholder: "Screen Name", text: $screenName)
                         
-                        Picker(selection: $sizeSelection, label:
-                                Text("Size Chart").bold()
-                                        , content: {
-                                            Text("Small").tag(0)
-                                            Text("Medium").tag(1)
-                                            Text("Large").tag(2)
-                                            Text("Extra Large").tag(3)
-                                    })
+//                        Picker(selection: $sizeSelection, label:
+//                                Text("Size Chart").bold()
+//                                        , content: {
+//                                            Text("Small").tag(0)
+//                                            Text("Medium").tag(1)
+//                                            Text("Large").tag(2)
+//                                            Text("Extra Large").tag(3)
+//                                    })
                     }
                     .padding([.leading, .trailing], 30)
                     

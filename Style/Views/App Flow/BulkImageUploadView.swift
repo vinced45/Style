@@ -66,21 +66,23 @@ struct BulkImageUploadView: View {
                         .padding(.trailing)
                     }
                     
-                    Section(header: Text("Actor"), footer: Text("Tap to update Actor for scene")) {
-                        NavigationLink(destination: ActorListView(actor: $actor, viewModel: viewModel)) {
-                            HStack {
-                                KFImage(URL(string: actor.image))
-                                    .resizable()
-                                    .frame(width: 44, height: 44)
-                                    .clipShape(Circle())
-                                    .shadow(radius: 10)
-                                    .overlay(Circle().stroke(Color.black, lineWidth: 3))
-                                VStack(alignment: .leading) {
-                                    Text(actor.realName)
-                                    Text(actor.screenName).font(.subheadline).foregroundColor(.gray)
+                    if actor.id ?? "" == "1111" {
+                        Section(header: Text("Actor"), footer: Text("Tap to update Actor for scene")) {
+                            NavigationLink(destination: ActorListView(actor: $actor, viewModel: viewModel)) {
+                                HStack {
+                                    KFImage(URL(string: actor.image))
+                                        .resizable()
+                                        .frame(width: 44, height: 44)
+                                        .clipShape(Circle())
+                                        .shadow(radius: 10)
+                                        .overlay(Circle().stroke(Color.black, lineWidth: 3))
+                                    VStack(alignment: .leading) {
+                                        Text(actor.realName)
+                                        Text(actor.screenName).font(.subheadline).foregroundColor(.gray)
+                                    }
                                 }
+                                .frame(height: 60)
                             }
-                            .frame(height: 60)
                         }
                     }
                     

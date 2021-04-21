@@ -14,6 +14,7 @@ enum EmptyType {
     case photo
     case note
     case actorLook
+    case message
         
     var image: String {
         switch self {
@@ -23,6 +24,7 @@ enum EmptyType {
         case .photo: return "photo.on.rectangle.angled"
         case .note: return "note.text"
         case .actorLook: return "binoculars"
+        case .message: return "message.fill"
         }
     }
     
@@ -34,6 +36,7 @@ enum EmptyType {
         case .photo: return "No Pictures"
         case .note: return "No Notes"
         case .actorLook: return "No Looks"
+        case .message: return "No Messages"
         }
     }
     
@@ -45,6 +48,7 @@ enum EmptyType {
         case .photo: return "Tap to add some pictures."
         case .note: return "Tap to add some notes."
         case .actorLook: return "Tap to add some looks for actor."
+        case .message: return ""
         }
     }
 }

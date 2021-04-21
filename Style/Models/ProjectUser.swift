@@ -12,7 +12,7 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import FirebaseStorage
 
-struct ProjectUser: Identifiable, Codable {
+struct ProjectUser: Identifiable, Codable, Hashable {
     @DocumentID var id: String?
     var uid: String
     var firstName: String
@@ -20,6 +20,7 @@ struct ProjectUser: Identifiable, Codable {
     var phone: String
     var title: String
     var image: String
+    var msgToken: [String]
     
     @ServerTimestamp var createdTime: Timestamp?
     
@@ -31,6 +32,7 @@ struct ProjectUser: Identifiable, Codable {
         case phone
         case title
         case image
+        case msgToken
     }
 }
 
@@ -52,6 +54,7 @@ extension ProjectUser: FirebaseObjectable {
             "phone": phone,
             "title": title,
             "image": image,
+            "msgToken": msgToken
         ]
     }
     
@@ -75,6 +78,7 @@ extension ProjectUser {
                            phone: "8472128597",
                            title: "Software Engineer",
                            image: "",
+                           msgToken: [],
                            createdTime: nil)
     }
 }

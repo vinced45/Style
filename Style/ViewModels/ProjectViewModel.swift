@@ -40,6 +40,8 @@ class ProjectViewModel: ObservableObject {
     
     @Published var sceneContinuities: [SceneContinuity] = []
     
+    @Published var messages: [ProjectMessage] = []
+    
     @Published var currentActorSize: ActorSize?
     
     var didChange = PassthroughSubject<Void, Never>()
@@ -80,6 +82,22 @@ class ProjectViewModel: ObservableObject {
                 return try? queryDocumentSnapshot.data(as: ProjectImage.self)
             }
             //.filter { $0.admins.contains(uid) }
+        }
+    }
+    
+    func fetchProjectMessages(projectId: String, uid: String) {
+        database.collection("projectMessages")
+            .whereField("projectId", isEqualTo: projectId)
+            .addSnapshotListener { (querySnapshot, error) in
+          guard let documents = querySnapshot?.documents else {
+            print("No Project Messages")
+            return
+          }
+            
+            self.messages = documents.compactMap { queryDocumentSnapshot -> ProjectMessage? in
+                return try? queryDocumentSnapshot.data(as: ProjectMessage.self)
+            }
+            .filter { $0.to == uid }
         }
     }
     
@@ -487,6 +505,8 @@ extension ProjectViewModel {
         vm.scenes = [MovieScene.preview(), MovieScene.preview()]
         vm.currentScene = MovieScene.preview()
         
+        vm.messages = [ProjectMessage.preview()]
+        
         return vm
     }
 }
@@ -620,5 +640,77 @@ struct ProjectImage: Identifiable, Codable, FirebaseObjectable {
     
     var successMessage: String {
         return "Project Image(s) added"
+    }
+}
+
+struct ProjectMessage: Identifiable, Codable, FirebaseObjectable {
+    @DocumentID var id: String?
+    var projectId: String
+    var messageId: String
+    var from: String
+    var to: String
+    var title: String
+    var text: String
+    var image: String
+    var read: Bool
+    var created: Date
+    var createdBy: String
+    
+    @ServerTimestamp var createdTime: Timestamp?
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case projectId
+        case messageId
+        case from
+        case to
+        case title
+        case text
+        case image
+        case read
+        case created
+        case createdBy
+    }
+    
+    var objectName: String {
+        return "projectMessages"
+    }
+    
+    var objectId: String? {
+        return id
+    }
+    
+    var dict: [String: Any] {
+        return [
+            "projectId": projectId,
+            "messageId": messageId,
+            "from": from,
+            "to": to,
+            "title": title,
+            "text": text,
+            "image": image,
+            "read": read,
+            "created": created,
+            "createdBy": createdBy
+        ]
+    }
+    
+    var successMessage: String {
+        return "Project Message added"
+    }
+    
+    static func preview() -> ProjectMessage {
+        return ProjectMessage(id: nil,
+                              projectId: "1111",
+                              messageId: "1111",
+                              from: "Vince Davis",
+                              to: "1111",
+                              title: "Cool Title",
+                              text: "This is my demo text. this needs to be a couple of lines long so that I can see if it will cut off like I think it should.",
+                              image: "",
+                              read: false,
+                              created: Date(),
+                              createdBy: "1111",
+                              createdTime: nil)
     }
 }

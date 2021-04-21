@@ -17,12 +17,15 @@ struct ProjectDetailView: View {
         case scene
         case editProject
         case admin
+        case messages
     }
     
     @ObservedObject var sheet = SheetState<ProjectDetailView.SheetType>()
     
     @State var isActorsExpanded = true
     @State var isScenesExpanded = true
+    
+    @EnvironmentObject var session: SessionStore
 
     var body: some View {
         ZStack {
@@ -77,34 +80,43 @@ struct ProjectDetailView: View {
         }
         .navigationBarTitle(currentProject.name, displayMode: .inline)
         .navigationBarItems(trailing:
-            Menu {
-                Button(action: {
-                    sheet.state = .editProject
-                }) {
-                    Label("Edit Project", systemImage: "video.fill")
+            HStack {
+                Button(action: { sheet.state = .messages }) {
+                    Image(systemName: "message.circle.fill")
+                        .renderingMode(.original)
+                        .font(.largeTitle)
                 }
                 
-                Button(action: {
-                    sheet.state = .admin
-                }) {
-                    Label("Manage Users", systemImage: "person.3.fill")
+                Menu {
+                    Button(action: {
+                        sheet.state = .editProject
+                    }) {
+                        Label("Edit Project", systemImage: "video.fill")
+                    }
+                    
+                    Button(action: {
+                        sheet.state = .admin
+                    }) {
+                        Label("Manage Users", systemImage: "person.3.fill")
+                    }
+                    
+                    Button(action: {
+                        sheet.state = .actor
+                    }) {
+                        Label("Add Actor", systemImage: "person.fill")
+                    }
+                    
+                    Button(action: {
+                        sheet.state = .scene
+                    }) {
+                        Label("Add Scene", systemImage: "film.fill")
+                    }
+                } label: {
+                    Image(systemName: "ellipsis")
+                        .font(.title)
                 }
-                
-                Button(action: {
-                    sheet.state = .actor
-                }) {
-                    Label("Add Actor", systemImage: "person.fill")
-                }
-                
-                Button(action: {
-                    sheet.state = .scene
-                }) {
-                    Label("Add Scene", systemImage: "film.fill")
-                }
-            } label: {
-                Image(systemName: "ellipsis")
-                    .font(.title)
             }
+            
         )
         .onAppear {
             viewModel.currentProject = self.currentProject
@@ -113,6 +125,8 @@ struct ProjectDetailView: View {
                 viewModel.fetchScenes(for: id)
                 viewModel.fetchProjectImagess(projectId: id)
                 viewModel.fetchSceneContinuities(projectId: id)
+                viewModel.fetchProjectMessages(projectId: id, uid: session.session?.uid ?? "")
+                viewModel.fetchUsers(exclude: session.session?.uid ?? "")
             }
         }
         .onReceive(viewModel.didChange) { _ in
@@ -133,6 +147,7 @@ extension ProjectDetailView {
         case .scene: AddSceneView(showAddScene: $sheet.isShowing, viewModel: viewModel)
         case .editProject: EditProjectView(showSheetView: $sheet.isShowing, project: $currentProject, viewModel: viewModel)
         case .admin: ProjectAdminView(showSheet: $sheet.isShowing, project: $currentProject, viewModel: viewModel)
+        case .messages: MessageListView(showSheet: $sheet.isShowing, viewModel: viewModel)
         case .none: EmptyView()
         }
     }

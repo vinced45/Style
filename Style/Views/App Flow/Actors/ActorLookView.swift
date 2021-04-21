@@ -35,11 +35,11 @@ struct ActorLookView: View {
                 
                 Spacer()
                 
-                StackedImageView(images: [actorLook.image, actorLook.image])
-                    .frame(width: 80, height: 80)
-    //                .onTapGesture {
-    //                    selection = 1
-    //                }
+                NavigationLink(destination: SceneImageListView(images: actorLook.images, index: 0)) {
+                    StackedImageView(images: actorLook.images)
+                        .frame(width: 80, height: 80)
+                }
+                
             }
             .zIndex(2.0)
         }

@@ -30,11 +30,16 @@ struct ActorProfileView: View {
                 VStack(alignment: .leading) {
                     Text(actor.screenName)
                         .bold()
+                    
                     Text(actor.realName)
                         .font(.subheadline)
                         .foregroundColor(.gray)
-                    //Text("Show ").font(.subheadline).foregroundColor(.gray)
-                    Button("Show Charts >", action: { sizeChartTapped() })
+                        //.padding(.bottom)
+
+                    Button(action: { sizeChartTapped() }) {
+                        Label("Size Charts", systemImage: "ruler")
+                    }
+                    
                     Menu {
                         Button(action: {
                             deptTapped(0)
@@ -111,12 +116,22 @@ struct ActorProfileView: View {
                             }
                         }
                     } label: {
-                        Label("Filter", systemImage: "slider.horizontal.3")
+                        Label("Filter -> \(deptName(for: deptId))", systemImage: "slider.horizontal.3")
                     }
                 }
             }
             
             Spacer()
+        }
+    }
+    
+    func deptName(for id: Int) -> String {
+        switch id {
+        case 0: return "All"
+        case 1: return "Wardrobe"
+        case 2: return "Hair"
+        case 3: return "Make Up"
+        default: return "Props"
         }
     }
 }

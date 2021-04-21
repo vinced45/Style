@@ -19,6 +19,8 @@ struct Message: Hashable {
     var type: MessageType
     var text: String
     var replies: [Message]
+    var images: [String]
+    var attachments: [String]
     
     static func preview() -> Message {
         return Message(jobName: "Cool Job Name",
@@ -29,7 +31,9 @@ struct Message: Hashable {
                        viewableBy: "Managers and Up",
                        type: .message,
                        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                       replies: [Message.replyPreview(), Message.replyPreview2()])
+                       replies: [Message.replyPreview(), Message.replyPreview2()],
+                       images: ["house", "house", "house", "house", "house", "house", "house", "house"],
+                       attachments: ["cool_file_name.pdf"])
     }
     
     static func preview2() -> Message {
@@ -41,7 +45,9 @@ struct Message: Hashable {
                        viewableBy: "Managers and Up",
                        type: .sms,
                        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                       replies: [Message.replyPreview2(), Message.replyPreview()])
+                       replies: [Message.replyPreview2(), Message.replyPreview()],
+                       images: [],
+                       attachments: [])
     }
     
     static func replyPreview() -> Message {
@@ -53,7 +59,9 @@ struct Message: Hashable {
                        viewableBy: "",
                        type: .reply,
                        text: "Looks good to me",
-                       replies: [])
+                       replies: [],
+                       images: [],
+                       attachments: [])
     }
     
     static func replyPreview2() -> Message {
@@ -65,7 +73,9 @@ struct Message: Hashable {
                        viewableBy: "",
                        type: .reply,
                        text: "This needs to be longer so that we can see how long this screen will go.",
-                       replies: [])
+                       replies: [],
+                       images: [],
+                       attachments: [])
     }
 }
 
@@ -201,6 +211,29 @@ struct MessageView: View {
                     Text(message.text)
                         .lineLimit(nil)
                         .padding([.top, .bottom], 4)
+                    
+                    if message.images.count > 0 {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 10) {
+                                ForEach(message.images, id: \.self) { image in
+                                    Image(image)
+                                        .resizable()
+                                        .frame(width: 50, height: 50)
+                                }
+                            }
+                        }
+                    }
+                    
+                    if message.attachments.count > 0 {
+                        HStack {
+                            ForEach(message.attachments, id: \.self) { attachment in
+                                Button(action: {}) {
+                                    Text(attachment)
+                                }
+                            }
+                        }
+                        .padding(.top)
+                    }
                 }
                 .padding(.trailing)
             }

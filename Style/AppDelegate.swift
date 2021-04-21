@@ -22,6 +22,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         return true
     }
     
+    func application(_ application: UIApplication,
+                     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        print("token - got apns token")
+        Messaging.messaging().apnsToken = deviceToken
+    }
+    
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         //return GIDSignIn.sharedInstance().handle(url)
         

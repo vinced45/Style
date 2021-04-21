@@ -95,6 +95,8 @@ struct UpdateMultipleImageView: View {
     
     @Binding var images: [String]
     
+    @State var showGallery: Bool = false
+    
     let imageData: (Data) -> Void
     
     enum SheetType {
@@ -149,7 +151,8 @@ struct UpdateMultipleImageView: View {
             case .camera:
                 ImagePicker(image: $inputImage, showCamera: $sheet.isShowing)
             case .photoAlbum:
-                PhotoPicker(result: $photoList)
+                //PhotoPicker(result: $photoList)
+                ImagePicker(image: $inputImage, showCamera: .constant(false))
             case .none: EmptyView()
             }
         }
