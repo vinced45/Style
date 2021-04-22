@@ -9,6 +9,9 @@ import SwiftUI
 
 struct ScriptSceneUpdateView: View {
     @Binding var scene: PDFScene
+    var scriptUrl: String
+    
+    @State var showScript: Bool = false
     
     var body: some View {
         VStack {
@@ -23,11 +26,18 @@ struct ScriptSceneUpdateView: View {
                 .padding([.leading, .trailing], 30)
         }
         .navigationBarTitle("Edit Scene", displayMode: .inline)
+        .navigationBarItems(trailing: Button(action: { showScript = true }) {
+            Text("ShowScript").bold()
+        }
+        .sheet(isPresented: $showScript, content: {
+            PDFKitView(url: URL(string: scriptUrl)!, showSheet: $showScript)
+        })
+        )
     }
 }
 
 struct ScriptSceneUpdateView_Previews: PreviewProvider {
     static var previews: some View {
-        ScriptSceneUpdateView(scene: .constant(PDFScene(number: "2", text: "coool", details: "huh")))
+        ScriptSceneUpdateView(scene: .constant(PDFScene(number: "2", text: "coool", details: "huh")), scriptUrl: "")
     }
 }

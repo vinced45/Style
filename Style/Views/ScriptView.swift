@@ -48,7 +48,7 @@ struct ScriptView: View {
                         Section(header: Text("Scenes with Numbers")) {
                             ForEach(scenes.indices, id: \.self) { i in
                                 let scene = scenes[i]
-                                NavigationLink(destination: ScriptSceneUpdateView(scene: $scenes[i])) {
+                                NavigationLink(destination: ScriptSceneUpdateView(scene: $scenes[i], scriptUrl: fileUrl)) {
                                     HStack {
                                         Text(scene.number)
                                             .font(.largeTitle)
@@ -70,7 +70,7 @@ struct ScriptView: View {
                         Section(header: Text("Scenes without Numbers")) {
                             ForEach(scenesWithoutNumbers.indices, id: \.self) { i in
                                 let scene = scenesWithoutNumbers[i]
-                                NavigationLink(destination: ScriptSceneUpdateView(scene: $scenesWithoutNumbers[i])) {
+                                NavigationLink(destination: ScriptSceneUpdateView(scene: $scenesWithoutNumbers[i], scriptUrl: fileUrl)) {
                                     HStack {
                                         Text(scene.number)
                                             .font(.largeTitle)
@@ -88,7 +88,6 @@ struct ScriptView: View {
                             }
                             .onDelete(perform: removeRows2)
                         }
-                        
                     }.listStyle(GroupedListStyle())
                 }
                 .zIndex(2.0)
@@ -324,12 +323,14 @@ struct PDFKitView: View {
     @Binding var showSheet: Bool
 
     var body: some View {
-        PDFKitRepresentedView(url)
-            .navigationBarTitle(Text("Script"), displayMode: .inline)
-            .navigationBarItems(leading: Button(action: {
-                self.showSheet = false
-            }) {
-                Text("Done").bold()
-            })
+        NavigationView {
+            PDFKitRepresentedView(url)
+                .navigationBarTitle(Text("Script"), displayMode: .inline)
+                .navigationBarItems(leading: Button(action: {
+                    self.showSheet = false
+                }) {
+                    Text("Done").bold()
+                })
+        }
     }
 }

@@ -144,6 +144,7 @@ extension UserUpdateView {
         let user: [String: Any] = ["firstName": firstName,
                                    "lastName": lastName,
                                    "phone" : phone,
+                                   "msgToken": [],
                                    "title" : title,
                                    "image" : imageUrlString]
         
