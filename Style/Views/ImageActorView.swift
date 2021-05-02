@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import KingfisherSwiftUI
+import Kingfisher
 
 struct ImageActorView: View {
     var actor: Actor
@@ -176,6 +176,7 @@ struct ImageUploadView: View {
 //            .padding()
             
             KFImage(URL(string: image))
+                .cacheOriginalImage(true)
                 .resizable()
                 .scaledToFit()
                 .frame(maxWidth: 500)

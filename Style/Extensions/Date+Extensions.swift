@@ -18,4 +18,11 @@ extension Date {
 
         return relativeDate
     }
+    
+    static func createFrom(_ dateString: String) -> Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd-MM-yyyy"
+        let date = dateFormatter.date(from: dateString)
+        return date ?? Date()
+    }
 }

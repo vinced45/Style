@@ -6,25 +6,43 @@
 //
 
 import SwiftUI
-import KingfisherSwiftUI
+import Kingfisher
 
 struct ActorProfileView: View {
-    var actor: Actor
+    @Binding var actor: Actor
     
     let sizeChartTapped: () -> Void
     
     let deptTapped: (Int) -> Void
     
     @State var deptId: Int = 0
+    @State var imageUrl = ""
     
     var body: some View {
         HStack {
-            KFImage(URL(string: actor.image))
-                .resizable()
-                .frame(width: 88, height: 88)
-                .clipShape(Circle())
-                .shadow(radius: 10)
-                .overlay(Circle().stroke(Color.black, lineWidth: 3))
+            if actor.image.isEmpty {
+                Image(systemName: "person.crop.circle.fill")
+                    .resizable()
+                    .renderingMode(.template)
+                    .foregroundColor(Color("dark"))
+                    .frame(width: 88, height: 88)
+            } else {
+                KFImage(URL(string: imageUrl))
+                    .cacheOriginalImage()
+                    .placeholder {
+                        Image(systemName: "person.crop.circle.fill")
+                            .resizable()
+                            .renderingMode(.template)
+                            .foregroundColor(Color("dark"))
+                            .frame(width: 88, height: 88)
+                    }
+                    .resizable()
+                    
+                    .frame(width: 88, height: 88)
+                    .clipShape(Circle())
+                    .shadow(radius: 10)
+                    .overlay(Circle().stroke(Color.black, lineWidth: 3))
+            }
             
             VStack {
                 VStack(alignment: .leading) {
@@ -123,6 +141,9 @@ struct ActorProfileView: View {
             
             Spacer()
         }
+        .onAppear {
+            imageUrl = actor.image
+        }
     }
     
     func deptName(for id: Int) -> String {
@@ -138,7 +159,7 @@ struct ActorProfileView: View {
 
 struct ActorProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        ActorProfileView(actor: Actor.preview()) {
+        ActorProfileView(actor: .constant(Actor.preview())) {
             
         } deptTapped: { deptId in
             

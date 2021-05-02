@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import KingfisherSwiftUI
+import Kingfisher
 
 struct ProjectDetailView: View {
     @ObservedObject var viewModel: ProjectViewModel

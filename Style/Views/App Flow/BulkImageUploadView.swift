@@ -6,7 +6,8 @@
 //
 
 import SwiftUI
-import KingfisherSwiftUI
+import Kingfisher
+import AlertToast
 
 struct BulkImageUploadView: View {
     @Binding var showSheet: Bool
@@ -25,6 +26,8 @@ struct BulkImageUploadView: View {
     @State var deptChoice = 0
     var deptType = ["Wardrobe", "Hair", "Make Up", "Props"]
     
+    @State var showToast: Bool = false
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -35,11 +38,14 @@ struct BulkImageUploadView: View {
                     Section {
                         DisclosureGroup(isExpanded: $isImagesExpanded) {
                             UpdateMultipleImageView(isEditing: true, images: $sceneImages) { imageData in
-                                self.viewModel.upload(data: imageData, to: "image/\(UUID().uuidString).jpg") { url in
-                                    guard let imageUrl = url else { return }
-                                    
-                                    self.sceneImages.append(imageUrl.absoluteString)
-                                }
+                                showToast = true
+                                upload(imageData: imageData)
+                            }
+                            .toast(isPresenting: $showToast) {
+                                //AlertToast(type: .regular, title: "Uploading Image")
+                                AlertToast(type: .loading, title: "Please Wait", subTitle: "Uplaoding Images")
+                                //Choose .hud to toast alert from the top of the screen
+                                //AlertToast(displayMode: .hud, type: .regular, title: "Uploading Image")
                             }
                         } label: {
                             Text("Images (\(sceneImages.count))")
@@ -120,6 +126,7 @@ struct BulkImageUploadView: View {
                 .listStyle(InsetGroupedListStyle())
                 .zIndex(2.0)
                 .padding(.top, 50)
+                
             }
             .navigationBarTitle(Text("Add Image(s)"), displayMode: .inline)
             .navigationBarItems(leading: Button(action: {
@@ -149,6 +156,14 @@ extension BulkImageUploadView {
             viewModel.add(object: projectImage) { _ in }
         }
         showSheet = false
+    }
+    
+    func upload(imageData: Data) {
+        viewModel.upload(data: imageData, to: "images/actors/\(actor.id ?? "")/gallery/\(deptChoice)/\(UUID().uuidString).jpg") { url in
+            guard let imageUrl = url else { return }
+            showToast = false
+            self.sceneImages.append(imageUrl.absoluteString)
+        }
     }
     
     func toggle(scene: MovieScene) {

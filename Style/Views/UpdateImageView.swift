@@ -8,7 +8,7 @@
 import SwiftUI
 import Photos
 import PhotosUI
-import KingfisherSwiftUI
+import Kingfisher
 
 struct UpdateImageView: View {
     @State var showingImagePicker: Bool = false
@@ -146,6 +146,7 @@ struct UpdateMultipleImageView: View {
                 }
             }
         }
+        .padding(.bottom)
         .sheet(isPresented: $sheet.isShowing, onDismiss: handleDismiss) {
             switch sheet.state {
             case .camera:
@@ -163,14 +164,15 @@ extension UpdateMultipleImageView {
     func handleDismiss() {
         switch sheet.state {
         case .camera: loadImage()
-        case .photoAlbum: loadImages()
+        //case .photoAlbum: loadImages()
+        case .photoAlbum: loadImage()
         default: break
         }
     }
     func loadImage() {
         guard let inputImage = inputImage,
-              let watermarkImage = inputImage.watermark(),
-              let imageData = watermarkImage.jpegData(compressionQuality: 0.9) else { return }
+              //let watermarkImage = inputImage.watermark(),
+              let imageData = inputImage.jpegData(compressionQuality: 0.9) else { return }
         
         self.imageData(imageData)
     }

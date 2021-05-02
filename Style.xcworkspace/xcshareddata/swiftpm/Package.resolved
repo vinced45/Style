@@ -7,7 +7,7 @@
         "state": {
           "branch": null,
           "revision": "05d8107f2971a37e6c77245b7c4c6b0a7e97bc99",
-          "version": "0.20200225.0"
+          "version": null
         }
       },
       {
@@ -16,25 +16,25 @@
         "state": {
           "branch": null,
           "revision": "7bcafa2660bc58715c39637494550d1ed7cd7229",
-          "version": "0.0.7"
+          "version": null
         }
       },
       {
         "package": "Facebook",
         "repositoryURL": "https://github.com/facebook/facebook-ios-sdk",
         "state": {
-          "branch": null,
-          "revision": "fa5fab33bb440eed75122459965b82c7b944d9d8",
-          "version": "8.2.0"
+          "branch": "9.3.0-rc",
+          "revision": "c3d367656ae8ced1149c2c6a5e6b5dd91ecad63c",
+          "version": null
         }
       },
       {
         "package": "Firebase",
         "repositoryURL": "https://github.com/firebase/firebase-ios-sdk",
         "state": {
-          "branch": null,
-          "revision": "c227152e84ad215eed0285c9df62f39e0406e455",
-          "version": "7.1.0"
+          "branch": "7.0-spm-beta",
+          "revision": "ab758f2ac842b12560354af0526e21d73235d4d3",
+          "version": null
         }
       },
       {
@@ -42,8 +42,8 @@
         "repositoryURL": "https://github.com/firebase/grpc-SwiftPM.git",
         "state": {
           "branch": null,
-          "revision": "91b62619e6c83bc5f1b99d9d60fe46b2862d3a5a",
-          "version": "1.28.2"
+          "revision": "5bb2669317ae2183f4cb00c675423af1924f0b46",
+          "version": null
         }
       },
       {
@@ -56,12 +56,21 @@
         }
       },
       {
+        "package": "iPhoneNumberField",
+        "repositoryURL": "https://github.com/MojtabaHs/iPhoneNumberField",
+        "state": {
+          "branch": null,
+          "revision": "a6b5fcc6c9b085285932fe4fe754086ab92409cb",
+          "version": "0.6.1"
+        }
+      },
+      {
         "package": "Kingfisher",
         "repositoryURL": "https://github.com/onevcat/Kingfisher",
         "state": {
           "branch": null,
-          "revision": "2a10bf41da75599a9f8e872dbd44fe0155a2e00c",
-          "version": "5.15.8"
+          "revision": "44450a8f564d7c0165f736ba2250649ff8d3e556",
+          "version": "6.3.0"
         }
       },
       {
@@ -70,16 +79,25 @@
         "state": {
           "branch": null,
           "revision": "fa1f25f296a766e5a789c4dacd4798dea798b2c2",
-          "version": "1.22.1"
+          "version": null
         }
       },
       {
         "package": "nanopb",
-        "repositoryURL": "https://github.com/firebase/nanopb.git",
+        "repositoryURL": "https://github.com/nanopb/nanopb.git",
         "state": {
           "branch": null,
           "revision": "8119dfe5631f2616d11e50ead95448d12e816062",
-          "version": "2.30906.0"
+          "version": null
+        }
+      },
+      {
+        "package": "PhoneNumberKit",
+        "repositoryURL": "https://github.com/marmelroy/PhoneNumberKit",
+        "state": {
+          "branch": null,
+          "revision": "1ef0431b971f69c48ca5eb4cdba07f2c5da54c35",
+          "version": "3.3.3"
         }
       },
       {

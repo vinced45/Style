@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 import FirebaseFirestore
 import FirebaseFirestoreSwift
-import KingfisherSwiftUI
+import Kingfisher
 
 struct AddProjectView: View {
     @Binding var showSheetView: Bool

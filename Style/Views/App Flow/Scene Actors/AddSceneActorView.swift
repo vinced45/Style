@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import KingfisherSwiftUI
+import Kingfisher
 
 struct AddSceneActorView: View {
     @Binding var showSheet: Bool

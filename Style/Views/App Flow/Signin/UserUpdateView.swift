@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import KingfisherSwiftUI
+import Kingfisher
 import iPhoneNumberField
 
 struct UserUpdateView: View {
@@ -52,6 +52,7 @@ struct UserUpdateView: View {
                                 KFImage(URL(string: imageUrlString))
                                     .resizable()
                                     .modifier(ProfileImageStyle())
+                                    
                             }
                         }
                         Menu {

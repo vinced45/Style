@@ -161,6 +161,8 @@ class ProjectViewModel: ObservableObject {
       
             self.actors = documents.compactMap { queryDocumentSnapshot -> Actor? in
                 return try? queryDocumentSnapshot.data(as: Actor.self)
+            }.sorted {
+                $0.screenName < $1.screenName
             }
         }
     }
@@ -391,7 +393,7 @@ class ProjectViewModel: ObservableObject {
 //        }
 //    }
     
-    func getActorImages(section: Int) {
+    func getActorImages(section: Int, completion: @escaping () -> Void) {
         loading.send(true)
         self.currentActorImages = []
         var tempList: [String] = []
@@ -415,14 +417,14 @@ class ProjectViewModel: ObservableObject {
                     if let err = error {
                         print(err.localizedDescription)
                     } else {
-                        totalSize += metaData!.size
-
-                        fileCount += 1
-                       
-                       // Once all the files have been counted, print out the total size
-                        if fileCount == result.items.count {
-                            print("The total file size is: \(self.format(bytes: Double(totalSize)))")
-                       }
+//                        totalSize += metaData!.size
+//
+//                        fileCount += 1
+//
+//                       // Once all the files have been counted, print out the total size
+//                        if fileCount == result.items.count {
+//                            print("The total file size is: \(self.format(bytes: Double(totalSize)))")
+//                       }
                     }
                 }
                 
@@ -432,6 +434,7 @@ class ProjectViewModel: ObservableObject {
                         if tempList.count == result.items.count {
                             self.currentActorImages = tempList
                             self.loading.send(false)
+                            completion()
                         }
                     }
                 }

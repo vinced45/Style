@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import KingfisherSwiftUI
+import Kingfisher
 
 struct UpdateSceneActorListView: View {
     @Binding var showAddScene: Bool

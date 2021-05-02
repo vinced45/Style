@@ -8,7 +8,7 @@
 import SwiftUI
 
 import SwiftUI
-import KingfisherSwiftUI
+import Kingfisher
 
 struct ImageEditView: View {
     @Binding var showSheet: Bool

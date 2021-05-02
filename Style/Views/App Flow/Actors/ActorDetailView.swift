@@ -8,7 +8,8 @@
 import SwiftUI
 import Photos
 import PhotosUI
-import KingfisherSwiftUI
+import Kingfisher
+import AlertToast
 
 struct ActorDetailView: View {
     @ObservedObject var viewModel: ProjectViewModel
@@ -84,7 +85,7 @@ struct ActorDetailView: View {
                 .zIndex(0.0)
             
             VStack {
-                ActorProfileView(actor: currentActor) {
+                ActorProfileView(actor: $currentActor) {
                     sheet.state = .sizeChart
                 } deptTapped: { deptId in
                     deptChoice = deptId
@@ -141,6 +142,7 @@ struct ActorDetailView: View {
                                     ForEach(images) { image in
                                     //ForEach(viewModel.currentActorImages, id: \.self) { image in
                                         KFImage(URL(string: image.image))
+                                            .cacheOriginalImage(true)
                                             .placeholder {
                                                 Image(systemName: "photo.on.rectangle.angled")
                                                     .resizable()
@@ -148,6 +150,15 @@ struct ActorDetailView: View {
                                                     .frame(width: 80.0, height: 80.0)
                                                     .colorMultiply(.gray)
                                             }
+//                                            .onProgress { receivedSize, totalSize in
+//                                                print("downlaoding image \(receivedSize) tot \(totalSize)")
+//                                            }
+//                                            .onSuccess { result in
+//                                                print("success on image \(result)")
+//                                            }
+//                                            .onFailure { error in
+//                                                print("error on image \(error.localizedDescription)")
+//                                            }
                                             .resizable()
                                             
                                             .scaledToFill()
@@ -325,10 +336,10 @@ struct ActorDetailView: View {
                 .offset(y: showHUD ? 80 : -400)
                 .animation(.easeOut)
             
-            MessageHUDView(message: $message)
-                .zIndex(98)
-                .offset(y: showMessageHUD ? 80 : -400)
-                .animation(.easeOut)
+//            MessageHUDView(message: $message)
+//                .zIndex(98)
+//                .offset(y: showMessageHUD ? 80 : -400)
+//                .animation(.easeOut)
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(trailing:
@@ -343,11 +354,12 @@ struct ActorDetailView: View {
         .onAppear {
             viewModel.currentActor = currentActor
             scenes = viewModel.filterScene(for: currentActor.id ?? "")
-            viewModel.getActorImages(section: deptChoice)
+            viewModel.getActorImages(section: deptChoice) {
+                images = viewModel.projectImages.filter { $0.actorIds.contains(currentActor.id ?? "") }
+            }
             viewModel.fetchNotes(for: currentActor.id ?? "")
             viewModel.fetchActorLooks(for: currentActor.id ?? "")
             viewModel.fetchActorSize(for: currentActor.id ?? "")
-            images = viewModel.projectImages.filter { $0.actorIds.contains(currentActor.id ?? "") }
         }
         .onChange(of: deptChoice) { newValue in
             //viewModel.getActorImages(section: newValue)
@@ -374,7 +386,7 @@ struct ActorDetailView: View {
                             .default(Text(Image(systemName: "camera")) + Text("Take Picture") , action: {
                                 self.sheet.state = .camera
                             }),
-                            .default(Text(Image(systemName: "photo.on.rectangle")) + Text("Add Pic from Photo Albnum") , action: {
+                            .default(Text(Image(systemName: "photo.on.rectangle")) + Text("Add Pic from Photo Album") , action: {
                                 self.sheet.state = .photoAlbum
                             }),
                             .default(Text(Image(systemName: "binoculars")) + Text("Add Look") , action: {
@@ -390,12 +402,15 @@ struct ActorDetailView: View {
             self.message = msg
             showMessageHUD = true
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                showMessageHUD = false
-            }
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+//                showMessageHUD = false
+//            }
         }
         .onReceive(viewModel.loading) { loading in
             self.isLoading = loading
+        }
+        .toast(isPresenting: $showMessageHUD) {
+            AlertToast(type: .complete(Color.white), title: message, subTitle: nil)
         }
     }
 }
@@ -509,6 +524,10 @@ extension ActorDetailView {
         case .photoAlbum: uploadImages()
         case .editNote: viewModel.fetchNotes(for: currentActor.id ?? "")
         case .addLook: viewModel.fetchActorLooks(for: currentActor.id ?? "")
+        case .bulkImageUpload:
+            viewModel.getActorImages(section: deptChoice) {
+                images = viewModel.projectImages.filter { $0.actorIds.contains(currentActor.id ?? "") }
+            }
         default: break
         }
     }
@@ -524,7 +543,7 @@ extension ActorDetailView {
             
             //imageUrlString = imageUrl.absoluteString
             showHUD = false
-            viewModel.getActorImages(section: deptChoice)
+            viewModel.getActorImages(section: deptChoice) {}
             viewModel.message.send("Image Uploaded")
         }
     }
@@ -546,7 +565,7 @@ extension ActorDetailView {
                         uploadedCount = 0
                         uploadTotal = 0
                         showHUD = false
-                        viewModel.getActorImages(section: deptChoice)
+                        viewModel.getActorImages(section: deptChoice) {}
                         viewModel.message.send("Images Uploaded")
                     }
                 }

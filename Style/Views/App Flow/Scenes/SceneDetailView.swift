@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import KingfisherSwiftUI
+import Kingfisher
 
 struct SceneDetailView: View {
     @ObservedObject var viewModel: ProjectViewModel
@@ -114,7 +114,7 @@ struct SceneDetailView: View {
 //                        sheet.state = .updateActors
 //                    }
                 }
-                
+                /*
                 Section {
                     DisclosureGroup(isExpanded: $isDetailsExpanded) {
                         HStack {
@@ -141,6 +141,7 @@ struct SceneDetailView: View {
                             .font(.headline)
                     }
                 }
+                 */
             }
             .listStyle(InsetGroupedListStyle())
             .zIndex(2.0)

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import KingfisherSwiftUI
+import Kingfisher
 
 protocol ImageTextRowConfigable {
     var imageUrl: String { get }
@@ -27,12 +27,21 @@ struct ImageTextRowView: View {
                     .foregroundColor(Color("dark"))
                     .frame(width: 44, height: 44)
             } else {
-                KFImage(URL(string: config.imageUrl))
-                    .resizable()
-                    .frame(width: 44, height: 44)
-                    .clipShape(Circle())
-                    .shadow(radius: 10)
-                    .overlay(Circle().stroke(Color.black, lineWidth: 3))
+                if config.imageUrl.isEmpty {
+                    Image(systemName: "person.crop.circle.fill")
+                        .resizable()
+                        .renderingMode(.template)
+                        .foregroundColor(Color("dark"))
+                        .frame(width: 44, height: 44)
+                } else {
+                    KFImage(URL(string: config.imageUrl))
+                        .resizable()
+                        .frame(width: 44, height: 44)
+                        .clipShape(Circle())
+                        .shadow(radius: 10)
+                        .overlay(Circle().stroke(Color.black, lineWidth: 3))
+                }
+                
             }
             
             VStack(alignment: .leading) {

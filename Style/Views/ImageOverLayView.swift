@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import KingfisherSwiftUI
+import Kingfisher
 struct ImageOverLayView: View {
     var sceneActor: SceneActor
     @State var showText: Bool = false

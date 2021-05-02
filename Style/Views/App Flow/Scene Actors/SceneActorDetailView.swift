@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import KingfisherSwiftUI
+import Kingfisher
 
 enum SceneActorDetailViewActiveSheet {
     case addLook
