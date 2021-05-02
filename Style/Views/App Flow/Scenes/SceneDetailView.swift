@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Kingfisher
+import AlertToast
 
 struct SceneDetailView: View {
     @ObservedObject var viewModel: ProjectViewModel
@@ -25,6 +26,8 @@ struct SceneDetailView: View {
     @State var isContinuityExpanded = true
     @State var isDetailsExpanded = true
     
+    @State var showToast: Bool = false
+    
     enum SheetType {
         case updateActors
     }
@@ -37,6 +40,13 @@ struct SceneDetailView: View {
         GridItem(.flexible(minimum: 40)),
     ]
     
+//    init(viewModel: ProjectViewModel, currentScene: MovieScene) {
+//        self.viewModel = viewModel
+//        self.currentScene = currentScene
+//
+//        sceneImages = currentScene.images
+//    }
+    
     var body: some View {
         ZStack {
             SlantedBackgroundView()
@@ -46,12 +56,21 @@ struct SceneDetailView: View {
                 Section {
                     DisclosureGroup(isExpanded: $isImagesExpanded) {
                         UpdateMultipleImageView(isEditing: true, images: $sceneImages) { imageData in
+                            showToast = true
                             self.viewModel.upload(data: imageData, to: "image/\(UUID().uuidString).jpg") { url in
                                 guard let imageUrl = url else { return }
                                 
                                 self.sceneImages.append(imageUrl.absoluteString)
+                                currentScene.images.append(imageUrl.absoluteString)
+                                showToast = false
                                 viewModel.update(object: currentScene, with: ["images": sceneImages])
                             }
+                        }
+                        .toast(isPresenting: $showToast) {
+                            //AlertToast(type: .regular, title: "Uploading Image")
+                            AlertToast(type: .loading, title: "Please Wait", subTitle: "Uplaoding Images")
+                            //Choose .hud to toast alert from the top of the screen
+                            //AlertToast(displayMode: .hud, type: .regular, title: "Uploading Image")
                         }
                     } label: {
                         Text("Scene Images")
@@ -61,7 +80,7 @@ struct SceneDetailView: View {
                             }
                     }
                     
-                    NavigationLink(destination: SceneImageListView(images: sceneImages, index: 4)) {
+                    NavigationLink(destination: SceneImageListView2(images: $sceneImages)) {
                         Text("List Images")
                     }
                 }

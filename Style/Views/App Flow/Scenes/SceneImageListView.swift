@@ -28,7 +28,6 @@ struct SceneImageListView: View {
                         }
                     }
                 }
-                
                 .onChange(of: self.index) { _ in
                     withAnimation {
                         scrollProxy.scrollTo(index)
@@ -37,10 +36,9 @@ struct SceneImageListView: View {
             }
             .zIndex(2.0)
         }
-        
         .onAppear {
             //DispatchQueue.main.asy
-            index = 5
+            print(images.count)
         }
         .navigationTitle("Images")
         
@@ -52,3 +50,29 @@ struct SceneImageListView: View {
 //        SceneImageListView()
 //    }
 //}
+
+struct SceneImageListView2: View {
+    @Binding var images: [String]
+    
+    let oneColumn = [
+        GridItem(.flexible(minimum: 40)),
+    ]
+    
+    var body: some View {
+        ZStack {
+            SlantedBackgroundView()
+                .zIndex(1.0)
+            
+            ScrollView {
+                LazyVGrid(columns: oneColumn, alignment: .center) {
+                    ForEach(images, id: \.self) { image in
+                        ImageUploadView(image: image)
+                    }
+                }
+            }
+            .zIndex(2.0)
+        }
+        .navigationTitle("Images")
+        
+    }
+}
