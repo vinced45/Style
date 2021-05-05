@@ -152,8 +152,8 @@ struct UpdateMultipleImageView: View {
             case .camera:
                 ImagePicker(image: $inputImage, showCamera: $sheet.isShowing)
             case .photoAlbum:
-                //PhotoPicker(result: $photoList)
-                ImagePicker(image: $inputImage, showCamera: .constant(false))
+                PhotoPicker(result: $photoList)
+                //ImagePicker(image: $inputImage, showCamera: .constant(false))
             case .none: EmptyView()
             }
         }
@@ -164,8 +164,8 @@ extension UpdateMultipleImageView {
     func handleDismiss() {
         switch sheet.state {
         case .camera: loadImage()
-        //case .photoAlbum: loadImages()
-        case .photoAlbum: loadImage()
+        case .photoAlbum: loadImages()
+        //case .photoAlbum: loadImage()
         default: break
         }
     }

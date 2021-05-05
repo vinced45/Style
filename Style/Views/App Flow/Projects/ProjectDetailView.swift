@@ -81,11 +81,11 @@ struct ProjectDetailView: View {
         .navigationBarTitle(currentProject.name, displayMode: .inline)
         .navigationBarItems(trailing:
             HStack {
-                Button(action: { sheet.state = .messages }) {
-                    Image(systemName: "message.circle.fill")
-                        .renderingMode(.original)
-                        .font(.largeTitle)
-                }
+//                Button(action: { sheet.state = .messages }) {
+//                    Image(systemName: "message.circle.fill")
+//                        .renderingMode(.original)
+//                        .font(.largeTitle)
+//                }
                 
                 Menu {
                     Button(action: {

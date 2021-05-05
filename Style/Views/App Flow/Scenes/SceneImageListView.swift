@@ -52,7 +52,7 @@ struct SceneImageListView: View {
 //}
 
 struct SceneImageListView2: View {
-    @Binding var images: [String]
+    var images: [String]
     
     let oneColumn = [
         GridItem(.flexible(minimum: 40)),

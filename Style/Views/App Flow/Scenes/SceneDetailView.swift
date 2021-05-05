@@ -80,7 +80,7 @@ struct SceneDetailView: View {
                             }
                     }
                     
-                    NavigationLink(destination: SceneImageListView2(images: $sceneImages)) {
+                    NavigationLink(destination: SceneImageListView2(images: sceneImages)) {
                         Text("List Images")
                     }
                 }

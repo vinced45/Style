@@ -35,7 +35,7 @@ struct ActorLookView: View {
                 
                 Spacer()
                 
-                NavigationLink(destination: SceneImageListView(images: actorLook.images, index: 0)) {
+                NavigationLink(destination: SceneImageListView2(images: actorLook.images)) {
                     StackedImageView(images: actorLook.images)
                         .frame(width: 80, height: 80)
                 }

@@ -35,6 +35,18 @@ struct BulkImageUploadView: View {
                     .zIndex(1.0)
                 
                 List {
+                    Section(header: Text("Department"), footer: Text("Select Dept for Image(s)")) {
+                        Picker("Dept", selection: $deptChoice) {
+                            ForEach(0 ..< deptType.count) { index in
+                                Text(self.deptType[index])
+                                    .tag(index)
+                            }
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                        .padding(.leading)
+                        .padding(.trailing)
+                    }
+                    
                     Section {
                         DisclosureGroup(isExpanded: $isImagesExpanded) {
                             UpdateMultipleImageView(isEditing: true, images: $sceneImages) { imageData in
@@ -43,7 +55,7 @@ struct BulkImageUploadView: View {
                             }
                             .toast(isPresenting: $showToast) {
                                 //AlertToast(type: .regular, title: "Uploading Image")
-                                AlertToast(type: .loading, title: "Please Wait", subTitle: "Uplaoding Images")
+                                AlertToast(type: .loading, title: "Please Wait", subTitle: "Uploading Images")
                                 //Choose .hud to toast alert from the top of the screen
                                 //AlertToast(displayMode: .hud, type: .regular, title: "Uploading Image")
                             }
@@ -60,17 +72,7 @@ struct BulkImageUploadView: View {
 //                        }
                     }
                     
-                    Section(header: Text("Department"), footer: Text("Select Dept for Image(s)")) {
-                        Picker("Dept", selection: $deptChoice) {
-                            ForEach(0 ..< deptType.count) { index in
-                                Text(self.deptType[index])
-                                    .tag(index)
-                            }
-                        }
-                        .pickerStyle(SegmentedPickerStyle())
-                        .padding(.leading)
-                        .padding(.trailing)
-                    }
+                    
                     
                     if actor.id ?? "" == "1111" {
                         Section(header: Text("Actor"), footer: Text("Tap to update Actor for scene")) {
