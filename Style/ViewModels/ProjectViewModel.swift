@@ -44,6 +44,8 @@ class ProjectViewModel: ObservableObject {
     
     @Published var currentActorSize: ActorSize?
     
+    @Published var showSceneDetails: Bool = false
+    
     var didChange = PassthroughSubject<Void, Never>()
     var message = PassthroughSubject<String, Never>()
 

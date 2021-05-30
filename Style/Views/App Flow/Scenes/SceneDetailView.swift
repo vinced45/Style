@@ -13,6 +13,8 @@ struct SceneDetailView: View {
     @ObservedObject var viewModel: ProjectViewModel
     @State var currentScene: MovieScene
     
+    @Environment(\.presentationMode) var presentationMode
+    
     @State var sceneTime: String = "Day"
     @State var sceneType: String = "Internal"
     
@@ -29,6 +31,8 @@ struct SceneDetailView: View {
     @State var showToast: Bool = false
     
     @State var showAction: Bool = false
+    
+    @State var showAlert: Bool = false
     
     @State private var currentImage: String = ""
     
@@ -175,12 +179,19 @@ struct SceneDetailView: View {
             .padding(.top, 50)
         }
         .navigationTitle("\(currentScene.number) - \(currentScene.name)")
-        .navigationBarItems(trailing: Button(action: { sheet.state = .editScene }) {
-            Text("Edit").bold()
-        })
+        .navigationBarItems(trailing: menuView())
         .actionSheet(isPresented: $showAction, content: {
             ActionSheet(title: Text("Delete Photo"), message: nil, buttons: [.cancel(), .destructive(Text("Delete"), action: { deleteImage() })])
         })
+        .alert(isPresented: $showAlert) { () -> Alert in
+            let primaryButton = Alert.Button.destructive(Text("Delete")) {
+                deleteScene()
+            }
+            let secondaryButton = Alert.Button.cancel(Text("Cancel")) {
+                print("secondary button pressed")
+            }
+            return Alert(title: Text("Delete Scene?"), message: Text("Are you sure you want to delete this scene?"), primaryButton: primaryButton, secondaryButton: secondaryButton)
+        }
         .onAppear {
             sceneActors = viewModel.getActors(for: currentScene)
             sceneImages = currentScene.images
@@ -196,6 +207,16 @@ struct SceneDetailView: View {
 }
 
 extension SceneDetailView {
+    func deleteScene() {
+        for sceneContinuity in viewModel.sceneContinuities where (sceneContinuity.scene1 == currentScene.id!) || (sceneContinuity.scene2 == currentScene.id!) {
+            viewModel.delete(object: sceneContinuity, completion: { _ in })
+        }
+        
+        viewModel.delete(object: currentScene, completion: { _ in
+            presentationMode.wrappedValue.dismiss()
+        })
+    }
+
     func deleteImage() {
         if let index = sceneImages.firstIndex(of: currentImage) {
             sceneImages.remove(at: index)
@@ -203,6 +224,27 @@ extension SceneDetailView {
         }
         
         showAction = false
+    }
+    
+    @ViewBuilder
+    private func menuView() -> some View {
+        Menu {
+            Button(action: {
+                sheet.state = .editScene
+            }) {
+                Label("Edit Scene", systemImage: "film")
+            }
+            
+            Button(action: {
+                showAlert.toggle()
+            }) {
+                Label("Delete Scene", systemImage: "trash")
+                    .foregroundColor(.red)
+            }
+        } label: {
+            Image(systemName: "ellipsis")
+                .font(.title)
+        }
     }
     
     @ViewBuilder
