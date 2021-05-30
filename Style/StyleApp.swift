@@ -11,10 +11,12 @@ import SwiftUI
 struct StyleApp: App {
     let persistenceController = PersistenceController.shared
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    
+
     var body: some Scene {
         WindowGroup {
             ContentView().environmentObject(SessionStore())
+            //let data = (1...100).map { "Item \($0)" }
+            //MainView()
         }
     }
 }

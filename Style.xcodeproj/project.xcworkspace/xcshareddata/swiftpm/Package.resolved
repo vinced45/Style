@@ -153,6 +153,15 @@
           "revision": "bfe4255ff60f22a41cafa113059668571ed5d461",
           "version": "1.16.0"
         }
+      },
+      {
+        "package": "SwiftlySearch",
+        "repositoryURL": "https://github.com/thislooksfun/SwiftlySearch.git",
+        "state": {
+          "branch": null,
+          "revision": "7741806e979e59e9583962da43d09ec92f598026",
+          "version": "1.2.4"
+        }
       }
     ]
   },

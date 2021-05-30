@@ -281,6 +281,18 @@ class ProjectViewModel: ObservableObject {
         }
     }
     
+    func delete(object: FirebaseObjectable, completion: @escaping (String) -> ()) {
+        let ref = database.collection(object.objectName).document(object.objectId!)
+        
+        ref.delete(completion: { err in
+            if let error = err {
+                print("error updating time: \(error.localizedDescription)")
+            } else {
+                completion("deleted")
+            }
+        })
+    }
+    
     func update(object: FirebaseObjectable, with dict: [String: Any]) {
         let ref = database.collection(object.objectName).document(object.objectId!)
         

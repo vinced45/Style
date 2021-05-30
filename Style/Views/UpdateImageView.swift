@@ -97,6 +97,8 @@ struct UpdateMultipleImageView: View {
     
     @State var showGallery: Bool = false
     
+    var imageTapped: (String) -> Void
+    
     let imageData: (Data) -> Void
     
     enum SheetType {
@@ -124,6 +126,9 @@ struct UpdateMultipleImageView: View {
                     .cornerRadius(10.0)
                     .clipped()
                     .aspectRatio(1, contentMode: .fill)
+                    .onTapGesture {
+                        imageTapped(image)
+                    }
                 
             }
             if isEditing {
@@ -188,7 +193,7 @@ extension UpdateMultipleImageView {
 
 struct UpdateMultipleImageView_Previews: PreviewProvider {
     static var previews: some View {
-        UpdateMultipleImageView(isEditing: true, images: .constant(["https://static.gofugyourself.com/uploads/2013/10/185512559_10-820x1292.jpg", "https://healthyceleb.com/wp-content/uploads/2015/04/Viola-Davis-during-a-casual-moment-in-New-York.jpg"])) { _ in }
+        UpdateMultipleImageView(isEditing: true, images: .constant(["https://static.gofugyourself.com/uploads/2013/10/185512559_10-820x1292.jpg", "https://healthyceleb.com/wp-content/uploads/2015/04/Viola-Davis-during-a-casual-moment-in-New-York.jpg"]), imageTapped: { _ in }, imageData: { _ in })
             .previewLayout(.sizeThatFits)
     }
 }

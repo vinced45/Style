@@ -49,10 +49,10 @@ struct BulkImageUploadView: View {
                     
                     Section {
                         DisclosureGroup(isExpanded: $isImagesExpanded) {
-                            UpdateMultipleImageView(isEditing: true, images: $sceneImages) { imageData in
+                            UpdateMultipleImageView(isEditing: true, images: $sceneImages, imageTapped: { _ in }, imageData: { imageData in
                                 showToast = true
                                 upload(imageData: imageData)
-                            }
+                            })
                             .toast(isPresenting: $showToast) {
                                 //AlertToast(type: .regular, title: "Uploading Image")
                                 AlertToast(type: .loading, title: "Please Wait", subTitle: "Uploading Images")

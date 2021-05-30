@@ -28,8 +28,13 @@ struct SceneDetailView: View {
     
     @State var showToast: Bool = false
     
+    @State var showAction: Bool = false
+    
+    @State private var currentImage: String = ""
+    
     enum SheetType {
         case updateActors
+        case editScene
     }
     
     @ObservedObject var sheet = SheetState<SceneDetailView.SheetType>()
@@ -55,7 +60,10 @@ struct SceneDetailView: View {
             List {
                 Section {
                     DisclosureGroup(isExpanded: $isImagesExpanded) {
-                        UpdateMultipleImageView(isEditing: true, images: $sceneImages) { imageData in
+                        UpdateMultipleImageView(isEditing: true, images: $sceneImages, imageTapped: { imageUrl in
+                            currentImage = imageUrl
+                            showAction = true
+                        }, imageData: { imageData in
                             showToast = true
                             self.viewModel.upload(data: imageData, to: "image/\(UUID().uuidString).jpg") { url in
                                 guard let imageUrl = url else { return }
@@ -65,10 +73,10 @@ struct SceneDetailView: View {
                                 showToast = false
                                 viewModel.update(object: currentScene, with: ["images": sceneImages])
                             }
-                        }
+                        })
                         .toast(isPresenting: $showToast) {
                             //AlertToast(type: .regular, title: "Uploading Image")
-                            AlertToast(type: .loading, title: "Please Wait", subTitle: "Uplaoding Images")
+                            AlertToast(type: .loading, title: "Please Wait", subTitle: "Uploading Images")
                             //Choose .hud to toast alert from the top of the screen
                             //AlertToast(displayMode: .hud, type: .regular, title: "Uploading Image")
                         }
@@ -167,6 +175,12 @@ struct SceneDetailView: View {
             .padding(.top, 50)
         }
         .navigationTitle("\(currentScene.number) - \(currentScene.name)")
+        .navigationBarItems(trailing: Button(action: { sheet.state = .editScene }) {
+            Text("Edit").bold()
+        })
+        .actionSheet(isPresented: $showAction, content: {
+            ActionSheet(title: Text("Delete Photo"), message: nil, buttons: [.cancel(), .destructive(Text("Delete"), action: { deleteImage() })])
+        })
         .onAppear {
             sceneActors = viewModel.getActors(for: currentScene)
             sceneImages = currentScene.images
@@ -176,14 +190,37 @@ struct SceneDetailView: View {
                onDismiss: {
             sceneActors = viewModel.getActors(for: currentScene)
                }, content: {
-            UpdateSceneActorListView(showAddScene: $sheet.isShowing,
-                                     movieScene: $currentScene,
-                                     viewModel: viewModel)
+                sheetContent()
         })
     }
 }
 
 extension SceneDetailView {
+    func deleteImage() {
+        if let index = sceneImages.firstIndex(of: currentImage) {
+            sceneImages.remove(at: index)
+            viewModel.update(object: currentScene, with: ["images": sceneImages])
+        }
+        
+        showAction = false
+    }
+    
+    @ViewBuilder
+    private func sheetContent() -> some View {
+        switch self.sheet.state {
+        case .updateActors:
+            UpdateSceneActorListView(showAddScene: $sheet.isShowing,
+                                     movieScene: $currentScene,
+                                     viewModel: viewModel)
+        case .editScene:
+            EditSceneView(showAddScene: $sheet.isShowing,
+                          viewModel: viewModel,
+                          currentScene: currentScene)
+        case .none:
+            EmptyView()
+        }
+    }
+    
     private func deleteActor(offsets: IndexSet) {
         sceneActors.remove(atOffsets: offsets)
         self.currentScene.actors.remove(atOffsets: offsets)

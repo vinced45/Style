@@ -31,14 +31,14 @@ struct AddSceneActorView: View {
                 
                 Form {
                     Section(header: Text("Photo"), footer: Text("Tap + button to add scene Images")) {
-                        UpdateMultipleImageView(isEditing: true, images: $sceneImages) { imageData in
+                        UpdateMultipleImageView(isEditing: true, images: $sceneImages, imageTapped: { _ in }, imageData: { imageData in
                             self.viewModel.upload(data: imageData, to: "image/\(UUID().uuidString).jpg") { url in
                                 guard let imageUrl = url else { return }
                                 
                                 self.sceneImages.append(imageUrl.absoluteString)
                                 //viewModel.update(object: currentScene, with: ["images": sceneImages])
                             }
-                        }
+                        })
                     }
                     
                     Section(header: Text("Details")) {

@@ -8,6 +8,7 @@
 import SwiftUI
 import Photos
 import PhotosUI
+import AlertToast
 
 struct AddActorLookView: View {
     @Binding var showSheet: Bool
@@ -52,7 +53,7 @@ struct AddActorLookView: View {
                         }
                         Section {
                             DisclosureGroup(isExpanded: $isImagesExpanded) {
-                                UpdateMultipleImageView(isEditing: false, images: $lookImages) { _ in }
+                                UpdateMultipleImageView(isEditing: false, images: $lookImages, imageTapped: { _ in }, imageData: { _ in })
                             } label: {
                                 Text("Look Images")
                                     .font(.headline)
@@ -166,6 +167,12 @@ struct EditActorLookView: View {
     
     @State var inputImage: UIImage? = nil
     
+    @State var showSheet: Bool = false
+    
+    @State private var currentImage: String = ""
+    
+    @State var showToast: Bool = false
+    
     enum SheetType {
         case camera
         case photoAlbum
@@ -191,7 +198,16 @@ struct EditActorLookView: View {
                     }
                     Section {
                         DisclosureGroup(isExpanded: $isImagesExpanded) {
-                            UpdateMultipleImageView(isEditing: false, images: $lookImages) { _ in }
+                            UpdateMultipleImageView(isEditing: false, images: $lookImages, imageTapped: { imageUrl in
+                                currentImage = imageUrl
+                                showSheet = true
+                            }, imageData: { _ in })
+                            .toast(isPresenting: $showToast) {
+                                //AlertToast(type: .regular, title: "Uploading Image")
+                                AlertToast(type: .loading, title: "Please Wait", subTitle: "Uploading Images")
+                                //Choose .hud to toast alert from the top of the screen
+                                //AlertToast(displayMode: .hud, type: .regular, title: "Uploading Image")
+                            }
                         } label: {
                             Text("Look Images")
                                 .font(.headline)
@@ -220,6 +236,19 @@ struct EditActorLookView: View {
             lookImages = actorLook.images
             text = actorLook.text
         }
+        .actionSheet(isPresented: $showSheet, content: {
+            ActionSheet(title: Text("Delete Photo"), message: nil, buttons: [.cancel(), .destructive(Text("Delete"), action: { delete() })])
+        })
+        .sheet(isPresented: $sheet.isShowing, onDismiss: handleDismiss) {
+            switch sheet.state {
+            case .camera:
+                ImagePicker(image: $inputImage, showCamera: $sheet.isShowing)
+            case .photoAlbum:
+                PhotoPicker(result: $photoList)
+            case .none: EmptyView()
+            }
+        }
+        
         .navigationBarItems(trailing: Button(action: {
                 viewModel.update(object: actorLook, with: ["text": text, "images" : lookImages])
                 //viewModel.fetchNotes(for: viewModel.currentActor.id ?? "")
@@ -231,6 +260,15 @@ struct EditActorLookView: View {
 }
 
 extension EditActorLookView {
+    func delete() {
+        if let index = lookImages.firstIndex(of: currentImage) {
+            lookImages.remove(at: index)
+            viewModel.update(object: actorLook, with: ["images": lookImages])
+        }
+        
+        showSheet = false
+    }
+    
     func handleDismiss() {
         switch sheet.state {
         case .camera: loadImage()
@@ -242,13 +280,13 @@ extension EditActorLookView {
         guard let inputImage = inputImage,
               let watermarkImage = inputImage.watermark(),
               let imageData = watermarkImage.jpegData(compressionQuality: 0.9) else { return }
-        
+        showToast = true
         upload(data: imageData)
     }
     
     func loadImages() {
         guard let results = photoList, results.count > 0 else { return }
-
+        showToast = true
         AssetProcessor.process(results: photoList ?? []) { data in
             self.upload(data: data)
         }
@@ -257,7 +295,7 @@ extension EditActorLookView {
     func upload(data: Data) {
         self.viewModel.upload(data: data, to: "image/\(UUID().uuidString).jpg") { url in
             guard let imageUrl = url else { return }
-            
+            showToast = false
             self.lookImages.append(imageUrl.absoluteString)
         }
     }

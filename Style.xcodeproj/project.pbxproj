@@ -35,6 +35,17 @@
 		616D0DA52560CD9E0007F798 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D0DA42560CD9E0007F798 /* AppDelegate.swift */; };
 		616D0DAD2560D0900007F798 /* SessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D0DAC2560D0900007F798 /* SessionStore.swift */; };
 		616D0DB02560D6E10007F798 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616D0DAF2560D6E10007F798 /* AuthView.swift */; };
+		616DDFDA264F33E700FC859B /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616DDFD9264F33E700FC859B /* TabBarView.swift */; };
+		616DDFDC264F352E00FC859B /* GalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616DDFDB264F352E00FC859B /* GalleryView.swift */; };
+		616DDFDF264F361200FC859B /* SwiftlySearch in Frameworks */ = {isa = PBXBuildFile; productRef = 616DDFDE264F361200FC859B /* SwiftlySearch */; };
+		616DDFE1264F695300FC859B /* TokenSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616DDFE0264F695300FC859B /* TokenSearchBar.swift */; };
+		616DDFE4264F819400FC859B /* ViewControllerResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616DDFE2264F819400FC859B /* ViewControllerResolver.swift */; };
+		616DDFE5264F819400FC859B /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616DDFE3264F819400FC859B /* SearchBar.swift */; };
+		616DDFE7264FB27700FC859B /* ActorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616DDFE6264FB27700FC859B /* ActorView.swift */; };
+		616DDFE9264FB2C300FC859B /* SceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616DDFE8264FB2C300FC859B /* SceneView.swift */; };
+		616DDFEB264FB2D900FC859B /* NoteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616DDFEA264FB2D900FC859B /* NoteListView.swift */; };
+		616DDFED2653462300FC859B /* SideBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616DDFEC2653462300FC859B /* SideBarView.swift */; };
+		616DDFEF265348B000FC859B /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616DDFEE265348AF00FC859B /* MainView.swift */; };
 		61756E0C263C7BD10049BE73 /* ProjectListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61756E0B263C7BD10049BE73 /* ProjectListRow.swift */; };
 		61756E30263E01ED0049BE73 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 61756E2F263E01ED0049BE73 /* FirebaseFirestore */; };
 		61756E32263E01F20049BE73 /* FirebaseFirestoreSwift-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 61756E31263E01F20049BE73 /* FirebaseFirestoreSwift-Beta */; };
@@ -150,6 +161,16 @@
 		616D0DA42560CD9E0007F798 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		616D0DAC2560D0900007F798 /* SessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionStore.swift; sourceTree = "<group>"; };
 		616D0DAF2560D6E10007F798 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		616DDFD9264F33E700FC859B /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
+		616DDFDB264F352E00FC859B /* GalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryView.swift; sourceTree = "<group>"; };
+		616DDFE0264F695300FC859B /* TokenSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenSearchBar.swift; sourceTree = "<group>"; };
+		616DDFE2264F819400FC859B /* ViewControllerResolver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerResolver.swift; sourceTree = "<group>"; };
+		616DDFE3264F819400FC859B /* SearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
+		616DDFE6264FB27700FC859B /* ActorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActorView.swift; sourceTree = "<group>"; };
+		616DDFE8264FB2C300FC859B /* SceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneView.swift; sourceTree = "<group>"; };
+		616DDFEA264FB2D900FC859B /* NoteListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteListView.swift; sourceTree = "<group>"; };
+		616DDFEC2653462300FC859B /* SideBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideBarView.swift; sourceTree = "<group>"; };
+		616DDFEE265348AF00FC859B /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		61756E0B263C7BD10049BE73 /* ProjectListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectListRow.swift; sourceTree = "<group>"; };
 		6181707525621C8E0008ED28 /* FBLoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBLoginButton.swift; sourceTree = "<group>"; };
 		618923DD256335DF004184BB /* AppleLoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginButton.swift; sourceTree = "<group>"; };
@@ -219,6 +240,7 @@
 				61756E4E263E07670049BE73 /* FirebaseDatabase in Frameworks */,
 				61756E51263E40640049BE73 /* AlertToast in Frameworks */,
 				61756E30263E01ED0049BE73 /* FirebaseFirestore in Frameworks */,
+				616DDFDF264F361200FC859B /* SwiftlySearch in Frameworks */,
 				61756E44263E068E0049BE73 /* iPhoneNumberField in Frameworks */,
 				61756E4C263E075F0049BE73 /* FirebaseAnalytics in Frameworks */,
 				61756E48263E06A90049BE73 /* FirebaseMessaging in Frameworks */,
@@ -369,6 +391,13 @@
 			isa = PBXGroup;
 			children = (
 				61756E0B263C7BD10049BE73 /* ProjectListRow.swift */,
+				616DDFEE265348AF00FC859B /* MainView.swift */,
+				616DDFD9264F33E700FC859B /* TabBarView.swift */,
+				616DDFEC2653462300FC859B /* SideBarView.swift */,
+				616DDFDB264F352E00FC859B /* GalleryView.swift */,
+				616DDFE6264FB27700FC859B /* ActorView.swift */,
+				616DDFE8264FB2C300FC859B /* SceneView.swift */,
+				616DDFEA264FB2D900FC859B /* NoteListView.swift */,
 			);
 			path = "App Flow 2";
 			sourceTree = "<group>";
@@ -398,6 +427,8 @@
 		618926AD257F066B004184BB /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				616DDFE3264F819400FC859B /* SearchBar.swift */,
+				616DDFE2264F819400FC859B /* ViewControllerResolver.swift */,
 				618923F925636F7A004184BB /* UIPlayerView.swift */,
 				6189253C256BE56E004184BB /* ImagePicker.swift */,
 				618926A5257ED4E0004184BB /* TextView.swift */,
@@ -405,6 +436,7 @@
 				61C6460E2563148D0056D528 /* GoogleLoginButton.swift */,
 				618923DD256335DF004184BB /* AppleLoginButton.swift */,
 				618B690525CC91EA00B7968A /* FilePickerView.swift */,
+				616DDFE0264F695300FC859B /* TokenSearchBar.swift */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -539,6 +571,7 @@
 				61756E4B263E075F0049BE73 /* FirebaseAnalytics */,
 				61756E4D263E07670049BE73 /* FirebaseDatabase */,
 				61756E50263E40640049BE73 /* AlertToast */,
+				616DDFDE264F361200FC859B /* SwiftlySearch */,
 			);
 			productName = Style;
 			productReference = 616D0D772560C7150007F798 /* Scene Me.app */;
@@ -573,6 +606,7 @@
 				613A1EDA259BA35100C1F9D9 /* XCRemoteSwiftPackageReference "iPhoneNumberField" */,
 				61756E40263E04590049BE73 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				61756E4F263E40630049BE73 /* XCRemoteSwiftPackageReference "AlertToast" */,
+				616DDFDD264F361200FC859B /* XCRemoteSwiftPackageReference "SwiftlySearch" */,
 			);
 			productRefGroup = 616D0D782560C7150007F798 /* Products */;
 			projectDirPath = "";
@@ -609,6 +643,7 @@
 				61B8A49525AD338D0010FD75 /* DateStyle.swift in Sources */,
 				616D0DB02560D6E10007F798 /* AuthView.swift in Sources */,
 				618923E22563515F004184BB /* LoginViewModel.swift in Sources */,
+				616DDFE7264FB27700FC859B /* ActorView.swift in Sources */,
 				6189253D256BE56E004184BB /* ImagePicker.swift in Sources */,
 				61D3110D25ACDF2C0031FE91 /* Project.swift in Sources */,
 				611DD28A25B8F1340013FD05 /* StackedImageView.swift in Sources */,
@@ -618,6 +653,7 @@
 				6189254A256BF6CF004184BB /* AddActorView.swift in Sources */,
 				611DD38B25C207880013FD05 /* ScriptView.swift in Sources */,
 				618926B9257F08F2004184BB /* ProjectListView.swift in Sources */,
+				616DDFEB264FB2D900FC859B /* NoteListView.swift in Sources */,
 				6102B19725F9BBA300322777 /* ActorListView.swift in Sources */,
 				61312A25259E83650057CA6B /* ImageOverLayView.swift in Sources */,
 				61DF1BC6258915A3005BDA1D /* AddProjectView.swift in Sources */,
@@ -633,6 +669,7 @@
 				6102B19425F9B1D400322777 /* BulkImageUploadView.swift in Sources */,
 				61DEFFBB25FBC3D50009C375 /* Date+Extensions.swift in Sources */,
 				61DEFFB825FBBD6A0009C375 /* MessageListView.swift in Sources */,
+				616DDFE5264F819400FC859B /* SearchBar.swift in Sources */,
 				613979C325A4E53600498E81 /* EditNoteView.swift in Sources */,
 				616D0DAD2560D0900007F798 /* SessionStore.swift in Sources */,
 				618923DE256335DF004184BB /* AppleLoginButton.swift in Sources */,
@@ -640,11 +677,14 @@
 				61899F9225EC95C300618871 /* ScriptSceneUpdateView.swift in Sources */,
 				618B690D25CE1E7B00B7968A /* WatermarkView.swift in Sources */,
 				618B691025CF587700B7968A /* UIImage+Extensions.swift in Sources */,
+				616DDFDC264F352E00FC859B /* GalleryView.swift in Sources */,
+				616DDFED2653462300FC859B /* SideBarView.swift in Sources */,
 				61892546256BEC5A004184BB /* ActorUpdateView.swift in Sources */,
 				61DF1BCA258922B9005BDA1D /* ProjectDetailView.swift in Sources */,
 				618926C0257F0BA3004184BB /* MultipleSelectionRow.swift in Sources */,
 				611DD28E25B9D7220013FD05 /* View+Extensions.swift in Sources */,
 				61D3111C25AD0CA60031FE91 /* UpdateActorLookView.swift in Sources */,
+				616DDFE9264FB2C300FC859B /* SceneView.swift in Sources */,
 				6189253A256BE1E2004184BB /* UserUpdateView.swift in Sources */,
 				61892543256BE989004184BB /* ViewModifiers.swift in Sources */,
 				611DD3CF25C33A790013FD05 /* File.swift in Sources */,
@@ -652,10 +692,12 @@
 				61D3111F25AD0DAE0031FE91 /* Note.swift in Sources */,
 				616D0D7B2560C7150007F798 /* StyleApp.swift in Sources */,
 				61D3111025ACE0F00031FE91 /* FirebaseObjectable.swift in Sources */,
+				616DDFE4264F819400FC859B /* ViewControllerResolver.swift in Sources */,
 				61892550256BFCDE004184BB /* AddSceneView.swift in Sources */,
 				61899F9625ED83AC00618871 /* MessagesView.swift in Sources */,
 				61312A21259D59120057CA6B /* SceneListView.swift in Sources */,
 				61D310FC25ACAD250031FE91 /* LoadingViews.swift in Sources */,
+				616DDFDA264F33E700FC859B /* TabBarView.swift in Sources */,
 				61DEFFDF25FBFC580009C375 /* NewMessageView.swift in Sources */,
 				61F5E6E9259BB10300263C46 /* ActorDetailView.swift in Sources */,
 				61A9999325B874E900049DAA /* SceneImageListView.swift in Sources */,
@@ -666,6 +708,7 @@
 				61312A1D259D550F0057CA6B /* ImageEditView.swift in Sources */,
 				614DA5CE25EC4E7900E861A0 /* ProjectAdminView.swift in Sources */,
 				61D3111325ACE2EA0031FE91 /* MovieScene.swift in Sources */,
+				616DDFEF265348B000FC859B /* MainView.swift in Sources */,
 				61D3110925ACD8F50031FE91 /* FormTextFieldView.swift in Sources */,
 				616D0DA52560CD9E0007F798 /* AppDelegate.swift in Sources */,
 				616D0D872560C7160007F798 /* Style.xcdatamodeld in Sources */,
@@ -678,6 +721,7 @@
 				6197AE3A25DDF8EB0002D6DC /* ActorSizeChartView.swift in Sources */,
 				618B690625CC91EA00B7968A /* FilePickerView.swift in Sources */,
 				61DF1BCE25894D2E005BDA1D /* AddSceneActorView.swift in Sources */,
+				616DDFE1264F695300FC859B /* TokenSearchBar.swift in Sources */,
 				61397AD425AC8CBF00498E81 /* ImageTextRowView.swift in Sources */,
 				611DD37F25C1CF030013FD05 /* BackgroundView.swift in Sources */,
 				6102B19A25FAF5DD00322777 /* PushManager.swift in Sources */,
@@ -829,6 +873,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.vincedavis.style;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = scenemeDev;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -858,6 +903,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.vincedavis.style;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = scenemeDev;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -903,6 +949,14 @@
 				minimumVersion = 7.11.1;
 			};
 		};
+		616DDFDD264F361200FC859B /* XCRemoteSwiftPackageReference "SwiftlySearch" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/thislooksfun/SwiftlySearch.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.4;
+			};
+		};
 		61756E40263E04590049BE73 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher";
@@ -930,6 +984,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		616DDFDE264F361200FC859B /* SwiftlySearch */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 616DDFDD264F361200FC859B /* XCRemoteSwiftPackageReference "SwiftlySearch" */;
+			productName = SwiftlySearch;
+		};
 		61756E2F263E01ED0049BE73 /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 616D0D8F2560CADF0007F798 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
