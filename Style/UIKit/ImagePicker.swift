@@ -82,8 +82,8 @@ struct PhotoPicker: UIViewControllerRepresentable {
             parent.result = results
 //            let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
 //            fetchRes
-            picker.dismiss(animated: true, completion: nil)
-            //parent.presentationMode.wrappedValue.dismiss()
+            //picker.dismiss(animated: true, completion: nil)
+            parent.presentationMode.wrappedValue.dismiss()
         }
     }
 }

@@ -108,6 +108,8 @@ struct UpdateMultipleImageView: View {
     
     @ObservedObject var sheet = SheetState<UpdateMultipleImageView.SheetType>()
     
+    @State var showPicker = false
+    
     @State var inputImage: UIImage? = nil
     
     @State private var photoList: [PHPickerResult]?
@@ -134,15 +136,17 @@ struct UpdateMultipleImageView: View {
             if isEditing {
                 Menu {
                     Button(action: {
-                        sheet.state = .camera
+                        showPicker = true
                     }) {
                         Label("Take Picture", systemImage: "camera")
                     }
+                    
                     Button(action: {
-                        sheet.state = .photoAlbum
+                        showGallery = true
                     }) {
                         Label("Photo Gallery", systemImage: "photo.on.rectangle")
                     }
+
                 } label: {
                     Image(systemName: "plus.square.fill")
                         .resizable()
@@ -152,15 +156,21 @@ struct UpdateMultipleImageView: View {
             }
         }
         .padding(.bottom)
-        .sheet(isPresented: $sheet.isShowing, onDismiss: handleDismiss) {
-            switch sheet.state {
-            case .camera:
-                ImagePicker(image: $inputImage, showCamera: $sheet.isShowing)
-            case .photoAlbum:
-                PhotoPicker(result: $photoList)
-                //ImagePicker(image: $inputImage, showCamera: .constant(false))
-            case .none: EmptyView()
-            }
+//        .sheet(isPresented: $sheet.isShowing, onDismiss: handleDismiss) {
+//            switch sheet.state {
+//            case .camera:
+//                ImagePicker(image: $inputImage, showCamera: $sheet.isShowing)
+//            case .photoAlbum:
+//                PhotoPicker(result: $photoList)
+//                //ImagePicker(image: $inputImage, showCamera: .constant(false))
+//            case .none: EmptyView()
+//            }
+//        }
+        .sheet(isPresented: $showPicker, onDismiss: loadImage) {
+            ImagePicker(image: $inputImage, showCamera: .constant(true))
+        }
+        .sheet(isPresented: $showGallery, onDismiss: loadImages) {
+            PhotoPicker(result: $photoList)
         }
     }
 }
@@ -174,6 +184,7 @@ extension UpdateMultipleImageView {
         default: break
         }
     }
+    
     func loadImage() {
         guard let inputImage = inputImage,
               //let watermarkImage = inputImage.watermark(),
