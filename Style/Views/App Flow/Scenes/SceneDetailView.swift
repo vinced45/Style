@@ -33,7 +33,7 @@ struct SceneDetailView: View {
     @State var showAction: Bool = false
     
     @State var showAlert: Bool = false
-    
+        
     @State private var currentImage: String = ""
     
     enum SheetType {
@@ -42,6 +42,13 @@ struct SceneDetailView: View {
     }
     
     @ObservedObject var sheet = SheetState<SceneDetailView.SheetType>()
+    
+    enum AlertType {
+        case deleteScene
+        case deleteImage
+    }
+    
+    @ObservedObject var alert = SheetState<SceneDetailView.AlertType>()
     
     let imageColumns = [
         GridItem(.flexible(minimum: 40)),
@@ -181,16 +188,20 @@ struct SceneDetailView: View {
         .navigationTitle("\(currentScene.number) - \(currentScene.name)")
         .navigationBarItems(trailing: menuView())
         .actionSheet(isPresented: $showAction, content: {
-            ActionSheet(title: Text("Delete Photo"), message: nil, buttons: [.cancel(), .destructive(Text("Delete"), action: { deleteImage() })])
+            ActionSheet(title: Text("Delete Photo"), message: nil, buttons: [.cancel(), .destructive(Text("Delete"), action: { alert.state = .deleteImage })])
         })
-        .alert(isPresented: $showAlert) { () -> Alert in
+        .alert(isPresented: $alert.isShowing) { () -> Alert in
             let primaryButton = Alert.Button.destructive(Text("Delete")) {
-                deleteScene()
+                if alert.state == .deleteImage {
+                    deleteImage()
+                } else {
+                    deleteScene()
+                }
             }
             let secondaryButton = Alert.Button.cancel(Text("Cancel")) {
                 print("secondary button pressed")
             }
-            return Alert(title: Text("Delete Scene?"), message: Text("Are you sure you want to delete this scene?"), primaryButton: primaryButton, secondaryButton: secondaryButton)
+            return Alert(title: Text("Delete"), message: Text("Are you sure you want to delete?"), primaryButton: primaryButton, secondaryButton: secondaryButton)
         }
         .onAppear {
             sceneActors = viewModel.getActors(for: currentScene)
@@ -236,7 +247,7 @@ extension SceneDetailView {
             }
             
             Button(action: {
-                showAlert.toggle()
+                alert.state = .deleteScene
             }) {
                 Label("Delete Scene", systemImage: "trash")
                     .foregroundColor(.red)
