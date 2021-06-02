@@ -56,6 +56,8 @@ struct ActorDetailView: View {
     @State private var uploadTotal: Int = 0
     @State private var uploadText = ""
     
+    @State private var refresh: Bool = false
+    
     @State var choice = 0
     var settings = ["Pre Prod", "Scenes", "Looks", "Notes"]
     
@@ -66,6 +68,8 @@ struct ActorDetailView: View {
     var deptType = ["All", "Wardrobe", "Hair", "Make Up", "Props"]
     
     let data = (0...4).map { "viola-\($0)" }
+    
+    let placeholderImage = Image(systemName: "photo.on.rectangle.angled")
 
     let gridColumns = [
         GridItem(.flexible(minimum: 40)),
@@ -141,29 +145,34 @@ struct ActorDetailView: View {
                                 LazyVGrid(columns: gridColumns, alignment: .center) {
                                     ForEach(images) { image in
                                     //ForEach(viewModel.currentActorImages, id: \.self) { image in
-                                        KFImage(URL(string: image.image))
-                                            .cacheOriginalImage(true)
-                                            .placeholder {
+//                                        KFImage(URL(string: image.image))
+//                                            .cacheOriginalImage(true)
+//                                            .placeholder {
+//                                                Image(systemName: "photo.on.rectangle.angled")
+//                                                    .resizable()
+//
+//                                                    .frame(width: 80.0, height: 80.0)
+//                                                    .colorMultiply(.gray)
+//                                            }
+                                        AsyncImage(
+                                            url: URL(string: image.image)!,
+                                            placeholder: {
                                                 Image(systemName: "photo.on.rectangle.angled")
                                                     .resizable()
-                                                    
                                                     .frame(width: 80.0, height: 80.0)
                                                     .colorMultiply(.gray)
+                                            },
+                                            image: {
+                                                Image(uiImage: $0)
+                                                    .resizable()
                                             }
-//                                            .onProgress { receivedSize, totalSize in
-//                                                print("downlaoding image \(receivedSize) tot \(totalSize)")
-//                                            }
-//                                            .onSuccess { result in
-//                                                print("success on image \(result)")
-//                                            }
-//                                            .onFailure { error in
-//                                                print("error on image \(error.localizedDescription)")
-//                                            }
-                                            .resizable()
-                                            
+                                         )
+//                                        RemoteImage(url: image.image, loading: placeholderImage, failure: placeholderImage)
+//                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 200)
                                             .scaledToFill()
                                             .frame(width: UIScreen.main.bounds.width / 3, height: UIScreen.main.bounds.width / 3)
-                                            //.aspectRatio(1, contentMode: .fill)
                                             .clipped()
                                             .matchedGeometryEffect(id: image.image, in: animation)
                                             .contextMenu {
@@ -181,7 +190,6 @@ struct ActorDetailView: View {
                                                     Image(systemName: "film")
                                                     Text("Add to Scene")
                                                 }
-                                                
                                             }
                                             .onTapGesture {
                                                 withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.8)) {
@@ -578,5 +586,67 @@ extension ActorDetailView {
 struct ActorDetailView_Previews: PreviewProvider {
     static var previews: some View {
         ActorDetailView(viewModel: ProjectViewModel.preview(), currentActor: Actor.preview())
+    }
+}
+
+struct RemoteImage: View {
+    private enum LoadState {
+        case loading, success, failure
+    }
+
+    private class Loader: ObservableObject {
+        var data = Data()
+        var state = LoadState.loading
+
+        init(url: String) {
+            guard let parsedURL = URL(string: url) else {
+                fatalError("Invalid URL: \(url)")
+            }
+
+            URLSession.shared.dataTask(with: parsedURL) { data, response, error in
+                if let data = data, data.count > 0 {
+                    self.data = data
+                    self.state = .success
+                } else {
+                    self.state = .failure
+                }
+
+                DispatchQueue.main.async {
+                    self.objectWillChange.send()
+                }
+            }.resume()
+        }
+    }
+
+    @StateObject private var loader: Loader
+    var loading: Image
+    var failure: Image
+
+    var body: some View {
+        selectImage()
+            .resizable()
+            .scaledToFill()
+            .frame(width: UIScreen.main.bounds.width / 3, height: UIScreen.main.bounds.width / 3)
+    }
+
+    init(url: String, loading: Image = Image(systemName: "photo"), failure: Image = Image(systemName: "multiply.circle")) {
+        _loader = StateObject(wrappedValue: Loader(url: url))
+        self.loading = loading
+        self.failure = failure
+    }
+
+    private func selectImage() -> Image {
+        switch loader.state {
+        case .loading:
+            return loading
+        case .failure:
+            return failure
+        default:
+            if let image = UIImage(data: loader.data) {
+                return Image(uiImage: image)
+            } else {
+                return failure
+            }
+        }
     }
 }

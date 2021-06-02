@@ -88,6 +88,10 @@
 		6197AE3D25DE08CC0002D6DC /* ActorSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6197AE3C25DE08CC0002D6DC /* ActorSize.swift */; };
 		61A9999025B2461100049DAA /* UpdateSceneActorListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A9998F25B2461100049DAA /* UpdateSceneActorListView.swift */; };
 		61A9999325B874E900049DAA /* SceneImageListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A9999225B874E800049DAA /* SceneImageListView.swift */; };
+		61AAC2432665F564000E0E46 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AAC23F2665F563000E0E46 /* ImageCache.swift */; };
+		61AAC2442665F564000E0E46 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AAC2402665F563000E0E46 /* ImageLoader.swift */; };
+		61AAC2452665F564000E0E46 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AAC2412665F563000E0E46 /* AsyncImage.swift */; };
+		61AAC2462665F564000E0E46 /* EnvironmentValues+ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AAC2422665F564000E0E46 /* EnvironmentValues+ImageCache.swift */; };
 		61B8A49525AD338D0010FD75 /* DateStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B8A49425AD338D0010FD75 /* DateStyle.swift */; };
 		61B8A49825AD37A90010FD75 /* UpdateImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B8A49725AD37A90010FD75 /* UpdateImageView.swift */; };
 		61B8A49B25AD67B90010FD75 /* SceneActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B8A49A25AD67B90010FD75 /* SceneActor.swift */; };
@@ -203,6 +207,10 @@
 		6197AE3C25DE08CC0002D6DC /* ActorSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActorSize.swift; sourceTree = "<group>"; };
 		61A9998F25B2461100049DAA /* UpdateSceneActorListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateSceneActorListView.swift; sourceTree = "<group>"; };
 		61A9999225B874E800049DAA /* SceneImageListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneImageListView.swift; sourceTree = "<group>"; };
+		61AAC23F2665F563000E0E46 /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
+		61AAC2402665F563000E0E46 /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		61AAC2412665F563000E0E46 /* AsyncImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
+		61AAC2422665F564000E0E46 /* EnvironmentValues+ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EnvironmentValues+ImageCache.swift"; sourceTree = "<group>"; };
 		61B8A49425AD338D0010FD75 /* DateStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateStyle.swift; sourceTree = "<group>"; };
 		61B8A49725AD37A90010FD75 /* UpdateImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateImageView.swift; sourceTree = "<group>"; };
 		61B8A49A25AD67B90010FD75 /* SceneActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneActor.swift; sourceTree = "<group>"; };
@@ -289,10 +297,10 @@
 		61397ACD25AC89A400498E81 /* Projects */ = {
 			isa = PBXGroup;
 			children = (
-				618926B8257F08F2004184BB /* ProjectListView.swift */,
 				61DF1BC5258915A3005BDA1D /* AddProjectView.swift */,
-				61DF1BC9258922B9005BDA1D /* ProjectDetailView.swift */,
 				614DA5CD25EC4E7900E861A0 /* ProjectAdminView.swift */,
+				61DF1BC9258922B9005BDA1D /* ProjectDetailView.swift */,
+				618926B8257F08F2004184BB /* ProjectListView.swift */,
 			);
 			path = Projects;
 			sourceTree = "<group>";
@@ -472,6 +480,10 @@
 				61D435BE25C90C9200FDF8E6 /* LoadingView.swift */,
 				618B690C25CE1E7A00B7968A /* WatermarkView.swift */,
 				61899F9525ED83AC00618871 /* MessagesView.swift */,
+				61AAC2412665F563000E0E46 /* AsyncImage.swift */,
+				61AAC2422665F564000E0E46 /* EnvironmentValues+ImageCache.swift */,
+				61AAC23F2665F563000E0E46 /* ImageCache.swift */,
+				61AAC2402665F563000E0E46 /* ImageLoader.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -654,6 +666,7 @@
 				611DD38B25C207880013FD05 /* ScriptView.swift in Sources */,
 				618926B9257F08F2004184BB /* ProjectListView.swift in Sources */,
 				616DDFEB264FB2D900FC859B /* NoteListView.swift in Sources */,
+				61AAC2452665F564000E0E46 /* AsyncImage.swift in Sources */,
 				6102B19725F9BBA300322777 /* ActorListView.swift in Sources */,
 				61312A25259E83650057CA6B /* ImageOverLayView.swift in Sources */,
 				61DF1BC6258915A3005BDA1D /* AddProjectView.swift in Sources */,
@@ -673,8 +686,10 @@
 				613979C325A4E53600498E81 /* EditNoteView.swift in Sources */,
 				616D0DAD2560D0900007F798 /* SessionStore.swift in Sources */,
 				618923DE256335DF004184BB /* AppleLoginButton.swift in Sources */,
+				61AAC2442665F564000E0E46 /* ImageLoader.swift in Sources */,
 				61312A28259E940D0057CA6B /* ImageActorView.swift in Sources */,
 				61899F9225EC95C300618871 /* ScriptSceneUpdateView.swift in Sources */,
+				61AAC2432665F564000E0E46 /* ImageCache.swift in Sources */,
 				618B690D25CE1E7B00B7968A /* WatermarkView.swift in Sources */,
 				618B691025CF587700B7968A /* UIImage+Extensions.swift in Sources */,
 				616DDFDC264F352E00FC859B /* GalleryView.swift in Sources */,
@@ -692,6 +707,7 @@
 				61D3111F25AD0DAE0031FE91 /* Note.swift in Sources */,
 				616D0D7B2560C7150007F798 /* StyleApp.swift in Sources */,
 				61D3111025ACE0F00031FE91 /* FirebaseObjectable.swift in Sources */,
+				61AAC2462665F564000E0E46 /* EnvironmentValues+ImageCache.swift in Sources */,
 				616DDFE4264F819400FC859B /* ViewControllerResolver.swift in Sources */,
 				61892550256BFCDE004184BB /* AddSceneView.swift in Sources */,
 				61899F9625ED83AC00618871 /* MessagesView.swift in Sources */,
