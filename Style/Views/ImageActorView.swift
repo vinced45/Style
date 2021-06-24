@@ -72,6 +72,7 @@ struct ImageActorView: View {
                 .padding([.leading, .trailing])
         }
         .frame(maxWidth: 500)
+        .frame(height: 400)
         .padding(.bottom)
     }
 }

@@ -38,10 +38,15 @@ struct ProjectListView: View {
                     if viewModel.projects.count > 0 {
                         List {
                             ForEach(viewModel.projects) { project in
-                                NavigationLink(destination: ProjectDetailView(viewModel: viewModel, currentProject: project)) {
+//                                NavigationLink(destination: ProjectDetailView(viewModel: viewModel, currentProject: project)) {
+//                                    SquareImageTextRowView(config: project)
+//                                        .frame(height: 100)
+//                                }
+                                NavigationLink(destination: ProjectAdminView(showSheet: .constant(true), project: .constant(project), viewModel: viewModel)) {
                                     SquareImageTextRowView(config: project)
                                         .frame(height: 100)
                                 }
+                                
                             }
                         }
                         .listStyle(InsetGroupedListStyle())

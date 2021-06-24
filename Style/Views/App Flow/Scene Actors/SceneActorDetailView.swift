@@ -32,10 +32,14 @@ struct SceneActorDetailView: View {
             SlantedBackgroundView()
                 .zIndex(1.0)
             
-            ScrollView {
-                LazyVGrid(columns: columns, alignment: .center) {
-                    ForEach(viewModel.sceneActors) { sceneActor in
-                        ImageActorView(actor: currentActor, sceneActor: sceneActor)
+            VStack {
+                Spacer(minLength: 50)
+                
+                ScrollView {
+                    LazyVGrid(columns: columns, alignment: .center) {
+                        ForEach(viewModel.sceneActors) { sceneActor in
+                            ImageActorView(actor: currentActor, sceneActor: sceneActor)
+                        }
                     }
                 }
             }
@@ -46,7 +50,8 @@ struct SceneActorDetailView: View {
             activeSheet = .addLook
             showSheet.toggle()
         }) {
-            Image(systemName: "camera.fill")
+            Image(systemName: "plus.circle.fill")
+                .font(.title)
         })
         .onAppear {
             viewModel.currentActor = currentActor

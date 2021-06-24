@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Kingfisher
+import AlertToast
 
 struct AddSceneActorView: View {
     @Binding var showSheet: Bool
@@ -21,6 +22,8 @@ struct AddSceneActorView: View {
     @State private var notes: String = ""
     @State private var image: Image = Image("viola")
     
+    @State private var showToast: Bool = false
+    
     @State var sceneImages: [String] = []
     
     var body: some View {
@@ -32,13 +35,20 @@ struct AddSceneActorView: View {
                 Form {
                     Section(header: Text("Photo"), footer: Text("Tap + button to add scene Images")) {
                         UpdateMultipleImageView(isEditing: true, images: $sceneImages, imageTapped: { _ in }, imageData: { imageData in
+                            showToast = true
                             self.viewModel.upload(data: imageData, to: "image/\(UUID().uuidString).jpg") { url in
                                 guard let imageUrl = url else { return }
-                                
+                                showToast = false
                                 self.sceneImages.append(imageUrl.absoluteString)
                                 //viewModel.update(object: currentScene, with: ["images": sceneImages])
                             }
                         })
+                        .toast(isPresenting: $showToast) {
+                            //AlertToast(type: .regular, title: "Uploading Image")
+                            AlertToast(type: .loading, title: "Please Wait", subTitle: "Uploading Images")
+                            //Choose .hud to toast alert from the top of the screen
+                            //AlertToast(displayMode: .hud, type: .regular, title: "Uploading Image")
+                        }
                     }
                     
                     Section(header: Text("Details")) {

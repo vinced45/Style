@@ -21,7 +21,7 @@ struct ProjectAdminView: View {
     @EnvironmentObject var session: SessionStore
     
     var body: some View {
-        NavigationView {
+        //NavigationView {
             ZStack {
                 SlantedBackgroundView()
                     .zIndex(1.0)
@@ -72,7 +72,7 @@ struct ProjectAdminView: View {
                 userIDs = project.admins
                 viewModel.fetchUsers(exclude: session.session?.uid ?? "")
             }
-        }
+        //}
     }
 }
 
